@@ -139,11 +139,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="source\StepWay.h" />
+    <ClInclude Include="source\StepWay\Application.h" />
     <ClInclude Include="source\StepWay\Core.h" />
+    <ClInclude Include="source\StepWay\EntryPoint.h" />
     <ClInclude Include="source\StepWay\Types.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\tmp.cpp" />
+    <ClCompile Include="source\StepWay\Application.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

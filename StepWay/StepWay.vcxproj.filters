@@ -24,9 +24,15 @@
     <ClInclude Include="source\StepWay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="source\StepWay\Application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\StepWay\EntryPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\tmp.cpp">
+    <ClCompile Include="source\StepWay\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
