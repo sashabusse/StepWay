@@ -1,5 +1,6 @@
 #pragma once
 #include "Application.h"
+#include "Log.h"
 
 
 extern StepWay::Application* StepWay::CreateApplication();
@@ -9,8 +10,7 @@ extern StepWay::Application* StepWay::CreateApplication();
 
 int main()
 {
-	//Initialization here
-
+	StepWay::Log::Init();
 
 	StepWay::Application* app = StepWay::CreateApplication();
 	app->Run();

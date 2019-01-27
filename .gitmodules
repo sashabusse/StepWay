@@ -1,0 +1,3 @@
+[submodule "StepWay/vendor/spdlog"]
+	path = StepWay/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git

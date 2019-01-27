@@ -10,7 +10,7 @@ public:
 
 StepWay::Application* StepWay::CreateApplication()
 {
-	printf("Creating Application\n");
+	SW_TRACE("Creatin Application");
 	return new SandboxApp;
 }
 

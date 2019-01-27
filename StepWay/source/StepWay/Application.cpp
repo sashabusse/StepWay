@@ -1,9 +1,10 @@
 #include "Application.h"
 #include <cstdio>
+#include "Log.h"
 
 void StepWay::Application::Run()
 {
-	printf("Running...\n");
+	SW_CORE_TRACE("Running...");
 	while (true);
 }
 
