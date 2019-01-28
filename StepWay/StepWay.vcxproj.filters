@@ -33,6 +33,9 @@
     <ClInclude Include="source\StepWay\Log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="source\StepWay\Memory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\StepWay\Application.cpp">

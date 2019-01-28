@@ -95,7 +95,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>SW_PLATFORM_WINDOWS;SW_BUILD_DLL;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SW_DEBUG;SW_PLATFORM_WINDOWS;SW_BUILD_DLL;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDIr)StepWay\vendor\spdlog\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -105,7 +105,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>SW_PLATFORM_WINDOWS;SW_BUILD_DLL;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SW_DEBUG;SW_PLATFORM_WINDOWS;SW_BUILD_DLL;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDIr)StepWay\vendor\spdlog\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -147,6 +147,7 @@
     <ClInclude Include="source\StepWay\Core.h" />
     <ClInclude Include="source\StepWay\EntryPoint.h" />
     <ClInclude Include="source\StepWay\Log.h" />
+    <ClInclude Include="source\StepWay\Memory.h" />
     <ClInclude Include="source\StepWay\Types.h" />
   </ItemGroup>
   <ItemGroup>

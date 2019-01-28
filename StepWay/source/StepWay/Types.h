@@ -1,6 +1,9 @@
 #pragma once
 #include <cstdint>
 
+typedef unsigned int uint;
+
+
 typedef char		byte;
 typedef int16_t		int16;
 typedef int32_t		int32;

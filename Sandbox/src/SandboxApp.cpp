@@ -1,10 +1,11 @@
 #include "StepWay.h"
 #include <cstdio>
 
+
 class SandboxApp :public StepWay::Application
 {
 public:
-
+	SandboxApp() { new char[1000]; };
 };
 
 
