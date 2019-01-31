@@ -5,13 +5,13 @@
 class SandboxApp :public StepWay::Application
 {
 public:
-	SandboxApp() { new char[1000]; };
+	SandboxApp() { void* ptr = SW_ALIGNED_MALLOC(100, 16); SW_ALIGNED_FREE(ptr); };
 };
 
 
 StepWay::Application* StepWay::CreateApplication()
 {
 	SW_TRACE("Creatin Application");
-	return new SandboxApp;
+	return SW_NEW SandboxApp;
 }
 

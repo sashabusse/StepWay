@@ -1,4 +1,6 @@
+#include "StepWayPCH.h"
 #include "Log.h"
+
 
 std::shared_ptr<spdlog::logger> StepWay::Log::m_CoreLogger = nullptr;
 std::shared_ptr<spdlog::logger> StepWay::Log::m_ClientLogger = nullptr;

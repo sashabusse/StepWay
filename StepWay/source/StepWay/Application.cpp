@@ -1,5 +1,6 @@
+#include "StepWayPCH.h"
 #include "Application.h"
-#include "Log.h"
+
 
 void StepWay::Application::Run()
 {

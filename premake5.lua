@@ -48,6 +48,9 @@ workspace "StepWay"
 
 		kind "SharedLib"
 		staticruntime "Off"
+		
+		pchheader "StepWayPCH.h"
+		pchsource "StepWay/source/StepWay/StepWayPCH.cpp"
 
 		postbuildcommands("{MKDIR} ../bin/" .. outputdirname .. "/Sandbox")
 		postbuildcommands("{COPY} \"%{cfg.buildtarget.relpath}\" \"../bin/" .. outputdirname .. "/Sandbox/\"")
@@ -60,6 +63,7 @@ workspace "StepWay"
 
 		includedirs
 		{
+			"StepWay/source/StepWay/",
 			"StepWay/vendor/spdlog/include/"		
 		}
 		
@@ -105,7 +109,10 @@ workspace "StepWay"
 		filter {} --end of configuration filters
 
 
-
+		filter("action:vs*")
+			defines {"SW_MSVC"}
+			
+		filter {} --end of compiler filters
 
 	project "Sandbox"
 		location "Sandbox"
@@ -129,7 +136,8 @@ workspace "StepWay"
 		includedirs
 		{
 			"StepWay/vendor/spdlog/include/",
-			"StepWay/source/"	
+			"StepWay/source/",
+			"StepWay/source/StepWay/"			
 		}
 		
 		links

@@ -1,4 +1,5 @@
 #pragma once
+#include "Core.h"
 #include <cstdint>
 
 typedef unsigned int uint;

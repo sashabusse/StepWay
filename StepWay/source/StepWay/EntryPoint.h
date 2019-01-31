@@ -12,7 +12,7 @@ extern StepWay::Application* StepWay::CreateApplication();
 int main()
 {
 	//memory leak detection
-#if defined(SW_PLATFORM_WINDOWS) && defined(_DEBUG) && defined(SW_DEBUG)
+#if defined(SW_PLATFORM_WINDOWS) && defined(SW_DEBUG)
 	int tmpFlag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
 	tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
 	_CrtSetDbgFlag(tmpFlag);
