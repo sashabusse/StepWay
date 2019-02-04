@@ -12,3 +12,13 @@
 #endif
 
 
+#define SW_ASSERT(cond, ...)\
+ {if(!(cond)){SW_ERROR("Assertion failed on condition: {}",#cond);\
+			SW_ERROR("assertion message(arg): {}",__VA_ARGS__);__debugbreak();}}
+
+#define SW_CORE_ASSERT(cond, ...)\
+ {if(!cond){SW_ERROR("Assertion failed on condition: {}",#cond);\
+			SW_ERROR("assertion message(arg): {}",__VA_ARGS__);__debugbreak();}}
+
+
+#define BIT(x) (1<<x)

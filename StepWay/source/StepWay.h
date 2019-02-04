@@ -5,6 +5,11 @@
 #include "StepWay/Application.h"
 #include "StepWay/Log.h"
 
-//---------EntryPoint--------------
-#include "StepWay/EntryPoint.h"
-//---------------------------------
+//Events
+#include "StepWay/Events/Event.h"
+#include "StepWay/Events/KeyEvent.h"
+#include "StepWay/Events/MouseEvents.h"
+
+//---------EntryPoint--------------|
+#include "StepWay/EntryPoint.h"//--|
+//---------------------------------|

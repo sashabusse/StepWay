@@ -4,10 +4,28 @@
 #error precompiled header only for internal usage
 #endif
 
-#include "Core.h" //always should be first
+
+#include "Core.h"
 #include "Log.h"
 #include "Types.h"
 
 
-//std includes
+
+//std containers
+#include <vector>
+#include <list>
+#include <map>
+#include <unordered_map>
+#include <set>
+#include <unordered_set>
+#include <stack>
+#include <queue>
 #include <memory.h>
+
+#include <functional>
+#include <algorithm>
+
+
+#ifdef SW_PLATFORM_WINDOWS
+#include <Windows.h>
+#endif // SW_PLATFORM_WINDOWS

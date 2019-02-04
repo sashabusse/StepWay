@@ -1,5 +1,6 @@
 #pragma once
 #include "Core.h"
+#include "Memory/MemoryManager.h"
 
 namespace StepWay
 {
@@ -7,7 +8,10 @@ namespace StepWay
 	{
 	public:
 	private:
+		MemoryManager m_MemoryManager;
 	public:
+		bool Init();
+		void Destroy();
 		void Run();
 		virtual ~Application();
 	private:

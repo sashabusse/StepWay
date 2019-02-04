@@ -11,6 +11,9 @@ public:
 
 StepWay::Application* StepWay::CreateApplication()
 {
+	KeyPressEvent e = KeyPressEvent(10, 10);
+	SW_INFO(e);
+
 	SW_TRACE("Creatin Application");
 	return SW_NEW SandboxApp;
 }

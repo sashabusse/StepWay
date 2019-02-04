@@ -1,6 +1,7 @@
 #pragma once
 #include "Core.h"
 #include "Application.h"
+#include "Memory/Memory.h"
 #include "Log.h"
 
 
@@ -21,8 +22,10 @@ int main()
 	StepWay::Log::Init();
 
 	StepWay::Application* app = StepWay::CreateApplication();
+	app->Init();
 	app->Run();
-	delete app;
+	app->Destroy();
+	SW_DELETE app;
 
 	return 0;
 }
