@@ -31,10 +31,12 @@ workspace "StepWay"
 		defines "SW_PLATFORM_WINDOWS"
 	
 	filter {}
-
-
+	
+	
 	outputdirname = "%{cfg.system}-%{cfg.platform}-%{cfg.buildcfg}"
-
+	
+	include "Tests/Tests.lua"
+	
 	project "StepWay"
 		
 		location "StepWay"
@@ -113,6 +115,10 @@ workspace "StepWay"
 			defines {"SW_MSVC"}
 			
 		filter {} --end of compiler filters
+
+
+
+
 
 	project "Sandbox"
 		location "Sandbox"

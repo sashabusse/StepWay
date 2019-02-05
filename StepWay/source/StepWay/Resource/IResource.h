@@ -10,7 +10,8 @@ namespace StepWay
 	enum class ResourceType : int
 	{
 		INVALID = 0,
-		TEXT_FILE
+		TEXT_FILE,
+		IMAGE, TEXTURE
 	};
 
 
