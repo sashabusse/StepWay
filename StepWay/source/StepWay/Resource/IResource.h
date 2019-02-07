@@ -6,6 +6,7 @@
 
 namespace StepWay
 {
+
 	//types of Resouces should be return in GetResourceType 
 	enum class ResourceType : int
 	{
@@ -13,7 +14,6 @@ namespace StepWay
 		TEXT_FILE,
 		IMAGE, TEXTURE
 	};
-
 
 
 	//this should be super class for all resource types (e.g. Texture Image Mesh)
@@ -27,6 +27,7 @@ namespace StepWay
 	virtual std::string GetResourceTypeString() const override {return #type;}
 
 
+
 	class IResource
 	{
 	public:
@@ -34,7 +35,7 @@ namespace StepWay
 		virtual~IResource() {};
 
 		virtual ResourceType GetResourceType() const = 0;
-		virtual std::string GetResourceTypeString() const = 0
+		virtual std::string GetResourceTypeString() const = 0;
 
 	};
 

@@ -4,7 +4,7 @@
 
 
 //This factory method is not written yet
-StepWay::IResourceBundle * StepWay::IResourceBundle::CreateResourceBank(const std::string & path, BundleType type)
+StepWay::IResourceBundle * StepWay::IResourceBundle::CreateResourceBundle(const std::string & path, BundleType type)
 {
 	SW_ASSERT(type != BundleType::INVALID, "Invalid BankType");
 	switch (type)

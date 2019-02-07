@@ -56,6 +56,9 @@ workspace "StepWay"
 
 		postbuildcommands("{MKDIR} ../bin/" .. outputdirname .. "/Sandbox")
 		postbuildcommands("{COPY} \"%{cfg.buildtarget.relpath}\" \"../bin/" .. outputdirname .. "/Sandbox/\"")
+		
+		postbuildcommands("{MKDIR} ../bin/" .. outputdirname .. "/Tests")
+		postbuildcommands("{COPY} \"%{cfg.buildtarget.relpath}\" \"../bin/" .. outputdirname .. "/Tests/\"")
 
 		files
 		{
