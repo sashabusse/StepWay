@@ -25,17 +25,18 @@ bool StepWay::Application::Init()
 		SW_CORE_ERROR("failed to Init Window");
 		return false;
 	}
-	m_MainWindow->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+	m_MainWindow->SetEventCallback(SW_BIND_METH_1(Application::OnEvent));
 
-	SW_CORE_INFO("Successful App Initialization");
 
-	m_IsRunning = true;
-	return true;
+	m_IsRunning = ImplInit();
+	return m_IsRunning;
 }
 
 
-void StepWay::Application::Destroy()
+void StepWay::Application::ShutDown()
 {
+	ImplShutDown();
+
 	m_MainWindow->Destroy();
 	//make static method for window deletion
 	SW_DELETE m_MainWindow;
@@ -46,9 +47,22 @@ void StepWay::Application::Destroy()
 
 void StepWay::Application::Run()
 {
-	SW_CORE_TRACE("Running...");
+	SW_CORE_TRACE("Entering Main Loop");
 	while (m_IsRunning)
 	{
+		//update layers
+		for(auto it = m_layers.begin(); it != m_layers.end(); ++it)
+		{
+			(*it)->OnUpdate();
+		}
+
+		//update overlays
+		for (auto it = m_overlays.begin(); it != m_overlays.end(); ++it)
+		{
+			(*it)->OnUpdate();
+		}
+
+
 		m_MainWindow->OnUpdate();
 	}
 }
@@ -56,8 +70,44 @@ void StepWay::Application::Run()
 void StepWay::Application::OnEvent(Event & e)
 {
 	EventDispatcher dispatcher(e);
-	dispatcher.Dispatch<WindowDestroyEvent>
-		(std::bind(&Application::OnMainWindowClose,this,std::placeholders::_1));
+	dispatcher.Dispatch<WindowDestroyEvent>(SW_BIND_METH_1(Application::OnMainWindowClose));
+
+	//Messaging overlays
+	for (auto it = m_overlays.end(); it != m_overlays.begin();)
+	{
+		--it;
+		(*it)->OnEvent(e);
+	}
+
+	//Messaging layers
+	for (auto it = m_layers.end(); it != m_layers.begin();)
+	{
+		--it;
+		(*it)->OnEvent(e);
+	}
+
+}
+
+void StepWay::Application::PushLayer(Layer * layer)
+{
+	SW_CORE_TRACE("(Layer)");
+	m_layers.PushLayer(layer);
+}
+
+void StepWay::Application::PopLayer(Layer * layer)
+{
+	m_layers.PopLayer(layer);
+}
+
+void StepWay::Application::PushOverLay(Layer * overlay)
+{
+	SW_CORE_TRACE("(Overlay)");
+	m_overlays.PushLayer(overlay);
+}
+
+void StepWay::Application::PopOverlay(Layer * overlay)
+{
+	m_overlays.PopLayer(overlay);
 }
 
 

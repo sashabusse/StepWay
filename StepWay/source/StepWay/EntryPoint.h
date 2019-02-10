@@ -22,9 +22,16 @@ int main()
 	StepWay::Log::Init();
 
 	StepWay::Application* app = StepWay::CreateApplication();
-	app->Init();
+	if (!app->Init())
+	{
+		SW_CORE_FATAL("App Initialization failed going down");
+		return -1;
+	}
+
+	SW_CORE_INFO("Successful App Initialization");
+
 	app->Run();
-	app->Destroy();
+	app->ShutDown();
 	SW_DELETE app;
 
 	return 0;

@@ -57,7 +57,7 @@ namespace StepWay
 		inline bool IsOfCategories(EventCategory OredCategories) const { return GetEventCategory()&OredCategories; };
 
 		bool IsHandled() const { return m_isHandled; }
-		void SetHandled() { m_isHandled = true; }
+		void MarkHandled() { m_isHandled = true; }
 	protected:
 		bool m_isHandled = false;
 	};

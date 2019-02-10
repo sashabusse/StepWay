@@ -21,6 +21,7 @@ protected:
 
 	static void TearDownTestSuite()
 	{
+		StepWay::Log::ShutDown();
 	}
 };
 

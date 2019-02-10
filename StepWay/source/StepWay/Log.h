@@ -15,6 +15,7 @@ namespace StepWay
 		static std::shared_ptr<spdlog::logger> m_ClientLogger;
 	public:
 		static void Init();
+		static void ShutDown();//mainly for testing
 		static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return m_CoreLogger; };
 		static std::shared_ptr<spdlog::logger>& GetClientLogger() { return m_ClientLogger; };
 	};

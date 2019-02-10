@@ -17,3 +17,11 @@ void StepWay::Log::Init()
 	m_CoreLogger->set_pattern("%^[%H:%M:%S.%e](%n)%$: %v");
 	m_ClientLogger->set_pattern("%^[%H:%M:%S.%e](%n)%$: %v");
 }
+
+void StepWay::Log::ShutDown()
+{
+	spdlog::drop(m_CoreLogger->name());
+	spdlog::drop(m_ClientLogger->name());
+	m_CoreLogger = nullptr;
+	m_ClientLogger = nullptr;
+}

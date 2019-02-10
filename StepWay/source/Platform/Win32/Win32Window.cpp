@@ -13,24 +13,27 @@ StepWay::Window* StepWay::Window::Create() { return new Win32Window; }
 
 LRESULT WindowProcedure(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
-	static StepWay::Win32Window* pWindow = nullptr;
 	if (msg == WM_CREATE)
 	{
 		CREATESTRUCT* pStruct = (CREATESTRUCT*)lparam;
-		pWindow = static_cast<StepWay::Win32Window*>(pStruct->lpCreateParams);
+		SetWindowLongPtrW(wnd, 0,reinterpret_cast<LONG_PTR>(pStruct->lpCreateParams));
 		return 0;
 	}
 
+	StepWay::Win32Window* pWindow = reinterpret_cast<StepWay::Win32Window*>(GetWindowLongPtrW(wnd, 0));
+
 	switch (msg)
 	{
-	case WM_DESTROY:
-	{
-		StepWay::WindowDestroyEvent destrEvent(pWindow);
-		pWindow->m_callback(destrEvent);
-		break;
-	}
-	default:
-		break;
+		case WM_DESTROY:
+		{
+			StepWay::WindowDestroyEvent destrEvent(pWindow);
+			pWindow->m_callback(destrEvent);
+			break;
+		}
+		default:
+		{
+			break;
+		}
 	}
 
 	return DefWindowProc(wnd, msg, wparam, lparam);
@@ -70,6 +73,8 @@ bool StepWay::Win32Window::Init(WindowProp & prop)
 		wndclass.lpfnWndProc = WindowProcedure;
 		wndclass.lpszClassName = SW_MAIN_APP_WND_CLASS_NAME;
 		wndclass.hInstance = NULL;
+		wndclass.hCursor = LoadCursorW(NULL, IDC_ARROW);
+		wndclass.hIcon = LoadIconW(NULL, IDI_APPLICATION);
 
 		wndclass.cbWndExtra = sizeof(Win32Window*);
 

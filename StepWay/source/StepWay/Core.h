@@ -24,6 +24,7 @@
  {if(!(cond)){SW_ERROR("Assertion failed on condition: {}",#cond);\
 			SW_ERROR("assertion message(arg): {}",__VA_ARGS__);DBG_BREAK();}}
 
-
+#define SW_BIND_METH(meth, ...) std::bind(&meth,this,__VA_ARGS__)
+#define SW_BIND_METH_1(meth) std::bind(&meth,this,std::placeholders::_1)
 
 #define BIT(x) (1<<x)
