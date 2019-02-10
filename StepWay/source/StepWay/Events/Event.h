@@ -1,6 +1,7 @@
 #pragma once
 #include "Core.h"
 #include <string>
+#include <functional>
 
 
 namespace StepWay
@@ -10,7 +11,8 @@ namespace StepWay
 	{
 		EMPTY = 0,
 		KEY_PRESS, KEY_RELEASE,
-		MOUSE_MOVE, MOUSE_SCROLL, MOUSE_BUTTON_PRESS, MOUSE_BUTTON_RELEASE
+		MOUSE_MOVE, MOUSE_SCROLL, MOUSE_BUTTON_PRESS, MOUSE_BUTTON_RELEASE,
+		WINDOW_DESTROY,WINDOW_MOVE,WINDOW_RESIZE
 		//Add here window events later
 	};
 
@@ -20,7 +22,7 @@ namespace StepWay
 		INPUT_CATEGORY			= BIT(1),
 		KEYBOARD_CATEGORY		= BIT(2),
 		MOUSE_CATEGORY			= BIT(3),
-		MOUSE_BUTTON			= BIT(4)
+		WINDOW_CATEGORY			= BIT(4)
 	};
 
 
@@ -33,25 +35,51 @@ namespace StepWay
 #define SW_DECLARE_EVENT_TYPE(type)\
 		static EventType GetStaticEventType(){return type;}\
 		virtual EventType GetEventType() const override { return GetStaticEventType(); }\
-		virtual std::string GetTypeString() const override { return #type; }
+		virtual std::string GetTypeString() const override { return #type; }\
+		virtual std::wstring GetTypeWString() const override { return L#type; }
 
 
 
 	class Event
 	{
 	public:
-		virtual EventType GetEventType() const = 0;
 		virtual int GetEventCategory() const = 0;
+
+		virtual EventType GetEventType() const = 0;
 		virtual std::string GetTypeString() const = 0;
+		virtual std::wstring GetTypeWString() const = 0;
 
 		virtual std::string ToString() const { return GetTypeString(); };
+		virtual std::wstring ToWString() const { return GetTypeWString(); };
+
 		virtual ~Event() {};
 
 		inline bool IsOfCategories(EventCategory OredCategories) const { return GetEventCategory()&OredCategories; };
 
+		bool IsHandled() const { return m_isHandled; }
+		void SetHandled() { m_isHandled = true; }
 	protected:
+		bool m_isHandled = false;
 	};
 
-	std::ostream& operator<<(std::ostream& ost,const Event& e) { ost << e.ToString(); return ost; }
+	//Danger reference storage
+	class EventDispatcher
+	{
+	public:
+		EventDispatcher(Event& e):
+			m_event(e)
+		{
+		}
+		template<typename EventArg>
+		void Dispatch(const std::function<void(EventArg&)>& fun)
+		{
+			if (m_event.GetEventType() == EventArg::GetStaticEventType())
+				fun(static_cast<EventArg&>(m_event));
+		}
+	private:
+		Event& m_event;
+	};
 
 }
+inline std::ostream& operator<<(std::ostream& ost, const StepWay::Event& e) { ost << e.ToString(); return ost; }
+

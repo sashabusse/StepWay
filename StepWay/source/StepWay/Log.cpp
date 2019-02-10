@@ -7,6 +7,7 @@ std::shared_ptr<spdlog::logger> StepWay::Log::m_ClientLogger = nullptr;
 
 void StepWay::Log::Init()
 {
+	SW_CORE_ASSERT(m_CoreLogger == nullptr || m_ClientLogger == nullptr, "multiple initialization");
 	m_CoreLogger = spdlog::stdout_color_mt("CORE");
 	m_ClientLogger = spdlog::stdout_color_mt("APP");
 

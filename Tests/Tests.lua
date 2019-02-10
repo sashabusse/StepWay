@@ -18,7 +18,8 @@ project "Tests"
 	{
 		"**.cpp",
 		"**.h",
-		"../Dependencies/google_test/googletest/src/gtest-all.cc"
+		"../Dependencies/google_test/googletest/src/gtest-all.cc",
+		"../StepWay/source/**.cpp"
 	}
 	
 	includedirs
@@ -27,12 +28,11 @@ project "Tests"
 		"../Dependencies/google_test/googletest/",
 		"../StepWay/source/",
 		"../StepWay/source/StepWay/",
-		"StepWay/vendor/spdlog/include/"
+		"../StepWay/vendor/spdlog/include/"
 	}
 	
 	links
 	{
-		"StepWay"
 	}
 	
 	defines

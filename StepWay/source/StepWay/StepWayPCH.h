@@ -1,8 +1,8 @@
 #pragma once
 //it's precompiled header
-#ifndef SW_BUILD_DLL
-#error precompiled header only for internal usage
-#endif
+//#ifndef SW_BUILD_DLL
+//#error precompiled header only for internal usage
+//#endif
 
 
 #include "Core.h"

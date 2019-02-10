@@ -156,6 +156,7 @@ workspace "StepWay"
 		
 		defines
 		{
+			"SW_USE_DLL"
 		}
 
 		filter("configurations:Debug")

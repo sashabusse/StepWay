@@ -4,6 +4,7 @@
 #include "StepWay/Memory/Memory.h"
 #include "StepWay/Application.h"
 #include "StepWay/Log.h"
+#include "StepWay/Window.h"
 
 //Events
 #include "StepWay/Events/Event.h"
