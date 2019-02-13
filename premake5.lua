@@ -35,6 +35,12 @@ workspace "StepWay"
 	
 	outputdirname = "%{cfg.system}-%{cfg.platform}-%{cfg.buildcfg}"
 	
+	AddIncludeDirs = {}
+	AddIncludeDirs["spdlog"] =  "StepWay/vendor/spdlog/include/"
+	AddIncludeDirs["imgui"] = "StepWay/vendor/imgui/"
+	AddIncludeDirs["glad"] = "StepWay/vendor/glad/"
+	
+	
 	include "Tests/Tests.lua"
 	
 	project "StepWay"
@@ -57,19 +63,20 @@ workspace "StepWay"
 		postbuildcommands("{MKDIR} ../bin/" .. outputdirname .. "/Sandbox")
 		postbuildcommands("{COPY} \"%{cfg.buildtarget.relpath}\" \"../bin/" .. outputdirname .. "/Sandbox/\"")
 		
-		postbuildcommands("{MKDIR} ../bin/" .. outputdirname .. "/Tests")
-		postbuildcommands("{COPY} \"%{cfg.buildtarget.relpath}\" \"../bin/" .. outputdirname .. "/Tests/\"")
-
+		
 		files
 		{
 			"%{prj.name}/source/**.cpp",
-			"%{prj.name}/source/**.h"
+			"%{prj.name}/source/**.h",
+			"%{AddIncludeDirs.imgui}" .. "*.cpp",
+			"%{AddIncludeDirs.imgui}" .. "*.h"
 		}
 
 		includedirs
 		{
 			"StepWay/source/StepWay/",
-			"StepWay/vendor/spdlog/include/"		
+			"%{AddIncludeDirs.spdlog}",
+			"%{AddIncludeDirs.imgui}"
 		}
 		
 		links
@@ -144,7 +151,8 @@ workspace "StepWay"
 
 		includedirs
 		{
-			"StepWay/vendor/spdlog/include/",
+			"%{AddIncludeDirs.spdlog}",
+			"%{AddIncludeDirs.imgui}",
 			"StepWay/source/",
 			"StepWay/source/StepWay/"			
 		}

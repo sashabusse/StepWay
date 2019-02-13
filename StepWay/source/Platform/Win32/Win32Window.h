@@ -44,6 +44,11 @@ namespace StepWay
 		//Events related
 		virtual void SetEventCallback(const EventCallback& callback) override;
 
+		//graphics context
+		void MakeContextCurrent() override;
+		void Present() override;
+
+		HWND GetHWND() const;
 
 	private:
 		void PollEvents();

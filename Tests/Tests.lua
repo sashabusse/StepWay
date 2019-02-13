@@ -28,7 +28,9 @@ project "Tests"
 		"../Dependencies/google_test/googletest/",
 		"../StepWay/source/",
 		"../StepWay/source/StepWay/",
-		"../StepWay/vendor/spdlog/include/"
+		"../" .. "%{AddIncludeDirs.spdlog}",
+		"../" .. "%{AddIncludeDirs.imgui}",
+		"../" .. "%{AddIncludeDirs.glad}" .. "include/"
 	}
 	
 	links

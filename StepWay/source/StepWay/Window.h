@@ -21,6 +21,8 @@ namespace StepWay
 	class SW_API Window
 	{
 	public:
+		static Window* Create();
+
 		virtual bool Init(WindowProp& prop) = 0;
 		virtual void Destroy() = 0;
 
@@ -50,10 +52,14 @@ namespace StepWay
 		//TODO:
 		//virtual void PollQuedEvents()const = 0;
 
-		static Window* Create();
+		//graphics context
+		virtual void MakeContextCurrent() = 0;
+		virtual void Present() = 0;
+
 
 	protected:
 		Window() {};
+
 		//Here may be callbacks later
 	};
 

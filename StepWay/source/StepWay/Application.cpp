@@ -3,6 +3,10 @@
 #include "Events/KeyEvent.h"
 #include "Events/WindowEvent.h"
 #include "Memory/Memory.h"
+#include "Graphics/API/Context.h"
+
+//for test rendering
+#include "../../vendor/glad/include/glad/glad.h"
 
 
 bool StepWay::Application::Init()
@@ -10,6 +14,9 @@ bool StepWay::Application::Init()
 	m_IsRunning = false;
 
 	m_MemoryManager.Init();
+
+	StepWay::graphics::API::Context::CreateNew(StepWay::graphics::GraphicsAPIType::OPENGL);
+
 	m_MainWindow = Window::Create();
 
 	//main window initialization
@@ -26,7 +33,7 @@ bool StepWay::Application::Init()
 		return false;
 	}
 	m_MainWindow->SetEventCallback(SW_BIND_METH_1(Application::OnEvent));
-
+	m_MainWindow->MakeContextCurrent();
 
 	m_IsRunning = ImplInit();
 	return m_IsRunning;
@@ -40,6 +47,9 @@ void StepWay::Application::ShutDown()
 	m_MainWindow->Destroy();
 	//make static method for window deletion
 	SW_DELETE m_MainWindow;
+
+	StepWay::graphics::API::Context::ReleaseGlobal();
+
 	m_MemoryManager.Destroy();
 	SW_TRACE("Successful App Destruction");
 }
@@ -62,6 +72,31 @@ void StepWay::Application::Run()
 			(*it)->OnUpdate();
 		}
 
+		//some test rendering here
+		glClear(GL_COLOR_BUFFER_BIT);
+		GLuint buffer;
+		glGenBuffers(1, &buffer);
+		glBindBuffer(GL_VERTEX_ARRAY, buffer);
+
+		struct vec2
+		{
+			float x, y;
+		};
+		vec2 pos[3] =
+		{
+			-0.5f,-0.5f,
+			0.5f,-0.5f,
+			0.0f,0.5f,
+		};
+
+		glBufferData(GL_VERTEX_ARRAY, sizeof(float) * 2 * 3, pos, GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		
 
 		m_MainWindow->OnUpdate();
 	}

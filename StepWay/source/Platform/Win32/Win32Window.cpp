@@ -3,6 +3,7 @@
 #include "Win32Window.h"
 #include "Win32Common.h"
 #include "Events/WindowEvent.h"
+#include "Graphics/API/Context.h"
 
 
 //TODO create resize method
@@ -126,6 +127,7 @@ void StepWay::Win32Window::Destroy()
 void StepWay::Win32Window::OnUpdate()
 {
 	PollEvents();
+	Present();
 }
 
 std::wstring StepWay::Win32Window::GetTitle() const
@@ -186,6 +188,25 @@ void StepWay::Win32Window::SetEventCallback(const EventCallback & callback)
 	m_callback = callback;
 }
 
+void StepWay::Win32Window::MakeContextCurrent()
+{
+	StepWay::graphics::API::Context* context = StepWay::graphics::API::Context::GetContextPtr();
+	SW_CORE_ASSERT(context != nullptr, "no context");
+	context->SetRenderTarget(this);
+}
+
+void StepWay::Win32Window::Present()
+{
+	StepWay::graphics::API::Context* context = StepWay::graphics::API::Context::GetContextPtr();
+	SW_CORE_ASSERT(context != nullptr, "no context");
+	context->Present();
+}
+
+HWND StepWay::Win32Window::GetHWND() const
+{
+	return m_wnd;
+}
+
 void StepWay::Win32Window::PollEvents()
 {
 	MSG msg;
@@ -195,4 +216,3 @@ void StepWay::Win32Window::PollEvents()
 		DispatchMessageW(&msg);
 	}
 }
-
