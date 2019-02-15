@@ -22,7 +22,7 @@ int main()
 	StepWay::Log::Init();
 
 	StepWay::Application* app = StepWay::CreateApplication();
-	if (!app->Init())
+	if (!app->SetUp())
 	{
 		SW_CORE_FATAL("App Initialization failed going down");
 		return -1;

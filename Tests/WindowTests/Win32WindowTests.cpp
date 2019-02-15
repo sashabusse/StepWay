@@ -35,8 +35,8 @@ TEST_F(Win32WindowFixture, InitializationTest)
 	prop.width = 1200;
 	prop.luX = 0;
 	prop.luY = 0;
-	EXPECT_TRUE(window->Init(prop));
-	window->Destroy();
+	EXPECT_TRUE(window->SetUp(prop));
+	window->ShutDown();
 	delete window;
 }
 
@@ -53,11 +53,11 @@ TEST_F(Win32WindowFixture, MultipleInitializationTest)
 	prop.luX = 0;
 	prop.luY = 0;
 
-	EXPECT_TRUE(window->Init(prop));
-	EXPECT_TRUE(window2->Init(prop));
+	EXPECT_TRUE(window->SetUp(prop));
+	EXPECT_TRUE(window2->SetUp(prop));
 
-	window2->Destroy();
-	window->Destroy();
+	window2->ShutDown();
+	window->ShutDown();
 
 	delete window2;
 	delete window;
@@ -74,14 +74,14 @@ TEST_F(Win32WindowFixture, InitialState)
 	prop.luX = 0;
 	prop.luY = 0;
 
-	window->Init(prop);
+	window->SetUp(prop);
 
 	EXPECT_EQ(prop.height, window->GetHeight());
 	EXPECT_EQ(prop.width, window->GetWidth());
 	EXPECT_EQ(prop.luX, window->GetX());
 	EXPECT_EQ(prop.luY, window->GetY());
 
-	window->Destroy();
+	window->ShutDown();
 	delete window;
 
 }
@@ -97,7 +97,7 @@ TEST_F(Win32WindowFixture, Move)
 	prop.luX = 0;
 	prop.luY = 0;
 
-	window->Init(prop);
+	window->SetUp(prop);
 
 	int x = 450, y = 120;
 
@@ -111,7 +111,7 @@ TEST_F(Win32WindowFixture, Move)
 		EXPECT_EQ(y, window->GetY());
 	}
 
-	window->Destroy();
+	window->ShutDown();
 	delete window;
 }
 
@@ -125,7 +125,7 @@ TEST_F(Win32WindowFixture, WindowDestroyCallback)
 	prop.luX = 0;
 	prop.luY = 0;
 
-	window->Init(prop);
+	window->SetUp(prop);
 	bool is_destroyed = false;
 	window->SetEventCallback
 	(
@@ -136,6 +136,6 @@ TEST_F(Win32WindowFixture, WindowDestroyCallback)
 	
 	EXPECT_TRUE(is_destroyed);
 
-	window->Destroy();
+	window->ShutDown();
 	delete window;
 }

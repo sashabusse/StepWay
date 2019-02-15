@@ -52,7 +52,7 @@ namespace StepWay
 				DBG_BREAK();
 				return NULL;
 			}
-			return HWND();
+			return wnd;
 		}
 
 		void DeleteDummyWindow(HWND hwnd)

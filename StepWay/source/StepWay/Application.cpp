@@ -3,39 +3,43 @@
 #include "Events/KeyEvent.h"
 #include "Events/WindowEvent.h"
 #include "Memory/Memory.h"
-#include "Graphics/API/Context.h"
 
 //for test rendering
 #include "../../vendor/glad/include/glad/glad.h"
 
 
-bool StepWay::Application::Init()
+bool StepWay::Application::SetUp()
 {
 	m_IsRunning = false;
 
-	m_MemoryManager.Init();
+	m_MemoryManager.Init();//rename it
 
-	StepWay::graphics::API::Context::CreateNew(StepWay::graphics::GraphicsAPIType::OPENGL);
+	//TODO:
+	//decide where to SetUp call!!!
+	m_MainContext = graphics::API::Context::Create(graphics::API::GraphicsAPIType::OPENGL);//same as next
+	m_MainContext->SetUp();
+	m_MainWindow = Window::Create();//think about protected constructors
 
-	m_MainWindow = Window::Create();
 
 	//main window initialization
 	WindowProp prop;
-	prop.height = 600;
-	prop.width = 1000;
+	prop.height = 500;
+	prop.width = 500;
 	prop.luX = 100;
 	prop.luY = 100;
 	prop.title = L"Main App Window";
 
-	if (!m_MainWindow->Init(prop))
+	if (!m_MainWindow->SetUp(prop))
 	{
 		SW_CORE_ERROR("failed to Init Window");
 		return false;
 	}
 	m_MainWindow->SetEventCallback(SW_BIND_METH_1(Application::OnEvent));
+	m_MainWindow->BindContext(m_MainContext);
 	m_MainWindow->MakeContextCurrent();
 
-	m_IsRunning = ImplInit();
+
+	m_IsRunning = ImplSetUp();
 	return m_IsRunning;
 }
 
@@ -44,11 +48,13 @@ void StepWay::Application::ShutDown()
 {
 	ImplShutDown();
 
-	m_MainWindow->Destroy();
+	m_MainWindow->ShutDown();
+
 	//make static method for window deletion
 	SW_DELETE m_MainWindow;
 
-	StepWay::graphics::API::Context::ReleaseGlobal();
+	m_MainContext->ShutDown();//same as prev
+	SW_DELETE m_MainContext;
 
 	m_MemoryManager.Destroy();
 	SW_TRACE("Successful App Destruction");
@@ -73,11 +79,17 @@ void StepWay::Application::Run()
 		}
 
 		//some test rendering here
+		glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+		GLuint err = glGetError();
 		glClear(GL_COLOR_BUFFER_BIT);
+		err = glGetError();
+		/*err = glGetError();
 		GLuint buffer;
 		glGenBuffers(1, &buffer);
+		err = glGetError();
 		glBindBuffer(GL_VERTEX_ARRAY, buffer);
-
+		err = glGetError();
+		GL_NO_ERROR
 		struct vec2
 		{
 			float x, y;
@@ -94,9 +106,26 @@ void StepWay::Application::Run()
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 		
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 3);*/
+		glBegin(GL_QUADS);
 
-		
+		glVertex2f(-0.8, -0.8);
+
+		glVertex2f(0.8, -0.8);
+
+		glVertex2f(0.8, 0.8);
+
+		glVertex2f(-0.8, 0.8);
+
+		glEnd();
+		//glBegin(GL_TRIANGLES);
+		//
+		//glVertex2f(-1, -1);
+		//glVertex2f(0, 1);
+		//glVertex2f(1, -1);
+		//
+		//glEnd();
+	
 
 		m_MainWindow->OnUpdate();
 	}

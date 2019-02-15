@@ -4,6 +4,7 @@
 #include "Window.h"
 #include "Events/WindowEvent.h"
 #include "Layers/LayerStack.h"
+#include "Graphics/API/Context.h"
 
 
 namespace StepWay
@@ -16,8 +17,8 @@ namespace StepWay
 	private:
 		MemoryManager m_MemoryManager;
 	public:
-		bool Init();
-		virtual bool ImplInit() = 0;
+		bool SetUp();
+		virtual bool ImplSetUp() = 0;
 		void ShutDown();
 		virtual void ImplShutDown() = 0;
 		void Run();
@@ -37,6 +38,7 @@ namespace StepWay
 		bool m_IsRunning;
 
 		Window* m_MainWindow;
+		graphics::API::Context* m_MainContext;
 
 		LayerStack m_layers;
 		LayerStack m_overlays;

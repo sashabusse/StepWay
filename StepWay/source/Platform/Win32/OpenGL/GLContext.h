@@ -1,42 +1,50 @@
 #pragma once
 #include "Graphics/API/Context.h"
-
-#ifdef SW_PLATFORM_WINDOWS
 #include <Windows.h>
-#include "../Win32Common.h"
-#else
-#error opengl is only for windows now
-#endif
-
 
 namespace StepWay
 {
+	//forward declaration for Context binding
+	class Win32Window;
+
 	namespace graphics
 	{
-		namespace API
+		namespace platform
 		{
 
-			class GLContext : public Context
+			class GLContext :public API::Context
 			{
 			public:
+				GLContext(API::GraphicsAPIType type);
 
-				bool Init() override;
-				void Destroy() override;
+				bool SetUp() override;
+				void ShutDown() override;
+				
+				void SetRenderTarget(HDC wndDC);
 
-
-				void SetRenderTarget(::StepWay::Window* wnd) override;
-				void Present() override;
-
-
-				~GLContext() override;
+				PIXELFORMATDESCRIPTOR GetPFD() const;//may be return const reference
+				int GetPixFormat() const;//rework this two methods
 
 			private:
 				HGLRC m_hGLContext;
-
-				HDC m_CurTarget;
+				PIXELFORMATDESCRIPTOR m_pfd;
+				int m_wndPixFormat;
 			};
 
-		}
+			
 
+			class GLContextBinding : public API::ContextBinding
+			{
+			public:
+				GLContextBinding(Win32Window* wnd, GLContext* context);
+
+				void Present() override;
+				void MakeCurrent() override;
+			private:
+				HDC m_wndDC;
+				GLContext* m_GLContext;
+				Win32Window* m_wnd;
+			};
+		}
 	}
 }

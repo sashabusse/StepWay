@@ -7,7 +7,7 @@ class SandboxApp :public StepWay::Application
 public:
 	SandboxApp() {};
 
-	bool ImplInit() override;
+	bool ImplSetUp() override;
 	void ImplShutDown() override;
 
 	StepWay::graphics::Layer* layer;
@@ -38,7 +38,7 @@ protected:
 };
 
 
-bool SandboxApp::ImplInit()
+bool SandboxApp::ImplSetUp()
 {
 	layer = SW_NEW ExampleLayer;
 	PushLayer(layer);

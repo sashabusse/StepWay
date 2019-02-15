@@ -1,7 +1,10 @@
 #include "StepWayPCH.h"
 #include "Context.h"
-#include "Memory/Memory.h"
+
+//WinHeaders
+#ifdef SW_PLATFORM_WINDOWS
 #include "../Platform/Win32/OpenGL/GLContext.h"
+#endif
 
 
 
@@ -12,71 +15,35 @@ namespace StepWay
 		namespace API
 		{
 
-			Context* Context::CurrentContext = nullptr;
-			GraphicsAPIType Context::CurrentContextType = GraphicsAPIType::NONE;
-			
 
-			Context * Context::GetContextPtr()
+			Context::Context(GraphicsAPIType type) :
+				m_type(type)
 			{
-				return CurrentContext;
 			}
 
-			Context & Context::GetContext()
-			{
-				SW_CORE_ASSERT(CurrentContext != nullptr, "trying to get unitialized singleton");
-				return *CurrentContext;
-			}
 
-			bool Context::CreateNew(GraphicsAPIType type)
+			Context * StepWay::graphics::API::Context::Create(GraphicsAPIType type)
 			{
-
-				Context* NewContext = nullptr;
 				switch (type)
 				{
-
-#ifdef SW_PLATFORM_WINDOWS//gl windows only now
-				case StepWay::graphics::GraphicsAPIType::OPENGL:
-					NewContext = SW_NEW GLContext;
-					break;
-#endif
-
-#ifdef SW_PLATFORM_WINDOWS//diret windows only
-				case StepWay::graphics::GraphicsAPIType::DIRECTX11:
-					SW_CORE_ASSERT(false, "directX not Available yet");
-					break;
-#endif
-
-				default:
-					SW_CORE_ASSERT(false, "wrong API type");
-					return false;
-					break;
-				}
-				SW_CORE_ASSERT(NewContext != nullptr, "nullptr failure");
-				if (NewContext == nullptr) return false;
-
-				if (CurrentContext != nullptr)
-				{
-					CurrentContext->Destroy();
-					SW_DELETE CurrentContext;
+#ifdef SW_PLATFORM_WINDOWS //gl windows only for now
+				case StepWay::graphics::API::GraphicsAPIType::OPENGL:	return new platform::GLContext(type);
+#endif // DEBUG
 				}
 
-				CurrentContext = NewContext;
-				CurrentContextType = type;
-
-				return true;
+				SW_CORE_WARNING("wrong API type in RenderingAPI::Create");
+				SW_CORE_ASSERT(false, "wrong API type");
+				return nullptr;
 			}
 
-			void Context::ReleaseGlobal()
+			GraphicsAPIType Context::GetType() const
 			{
-				CurrentContextType = GraphicsAPIType::NONE;
-				if (CurrentContext == nullptr)
-				{
-					SW_CORE_WARNING("attemp to Release Context while not exist");
-					return;
-				}
-				CurrentContext->Destroy();
-				SW_DELETE CurrentContext;
-				CurrentContext = nullptr;
+				return m_type;
+			}
+
+			ContextBinding::ContextBinding(GraphicsAPIType type) :
+				m_type(type)
+			{
 			}
 
 		}

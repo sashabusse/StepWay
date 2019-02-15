@@ -3,6 +3,7 @@
 #include "Events/Event.h"
 #include <string>
 #include <functional>
+#include "Graphics/API/Context.h"
 
 
 namespace StepWay
@@ -23,8 +24,8 @@ namespace StepWay
 	public:
 		static Window* Create();
 
-		virtual bool Init(WindowProp& prop) = 0;
-		virtual void Destroy() = 0;
+		virtual bool SetUp(WindowProp& prop) = 0;
+		virtual void ShutDown() = 0;
 
 		virtual void OnUpdate() = 0;
 
@@ -53,6 +54,7 @@ namespace StepWay
 		//virtual void PollQuedEvents()const = 0;
 
 		//graphics context
+		virtual void BindContext(::StepWay::graphics::API::Context* context) = 0;
 		virtual void MakeContextCurrent() = 0;
 		virtual void Present() = 0;
 

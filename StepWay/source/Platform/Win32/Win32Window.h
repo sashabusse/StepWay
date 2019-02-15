@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include "Window.h"
 #include <string>
+#include "OpenGL/GLContext.h"
 
 
 
@@ -21,8 +22,8 @@ namespace StepWay
 		//May bee destroy here if still not
 		~Win32Window();
 
-		virtual bool Init(WindowProp& prop);
-		virtual void Destroy();
+		virtual bool SetUp(WindowProp& prop);
+		virtual void ShutDown();
 
 		virtual void OnUpdate() override;
 
@@ -45,6 +46,7 @@ namespace StepWay
 		virtual void SetEventCallback(const EventCallback& callback) override;
 
 		//graphics context
+		virtual void BindContext(graphics::API::Context* context) override;
 		void MakeContextCurrent() override;
 		void Present() override;
 
@@ -57,6 +59,9 @@ namespace StepWay
 		EventCallback m_callback;
 		//-------------
 
+		graphics::API::ContextBinding* m_contextBinding;//rework it (namespaces)
+
+		//HGLRC m_hGLContext;
 
 		HWND m_wnd;
 
