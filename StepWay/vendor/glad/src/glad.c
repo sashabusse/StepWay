@@ -18,11 +18,11 @@
     Online:
         https://glad.dav1d.de/#profile=compatibility&language=c&specification=gl&loader=on&api=gl%3D4.6
 */
-#include "StepWayPCH.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../include/glad/glad.h"
+#include <glad/glad.h>
 
 static void* get_proc(const char *namez);
 

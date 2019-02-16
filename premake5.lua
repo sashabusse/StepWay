@@ -27,6 +27,8 @@ workspace "StepWay"
 
 	filter {}
 
+	--TODO:
+	--ADD comand line arg to choose--------------------------------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!--------------------------------
 	filter("system:windows")
 		defines "SW_PLATFORM_WINDOWS"
 	
@@ -38,10 +40,13 @@ workspace "StepWay"
 	AddIncludeDirs = {}
 	AddIncludeDirs["spdlog"] =  "StepWay/vendor/spdlog/include/"
 	AddIncludeDirs["imgui"] = "StepWay/vendor/imgui/"
-	AddIncludeDirs["glad"] = "StepWay/vendor/glad/"
+	AddIncludeDirs["glad"] = "StepWay/vendor/glad/include/"
 	
 	
 	include "Tests/Tests.lua"
+	include "StepWay/vendor/glad/glad.lua"
+	--TODO:
+	--add imgui later---------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-------------------------------------
 	
 	project "StepWay"
 		
@@ -63,25 +68,47 @@ workspace "StepWay"
 		postbuildcommands("{MKDIR} ../bin/" .. outputdirname .. "/Sandbox")
 		postbuildcommands("{COPY} \"%{cfg.buildtarget.relpath}\" \"../bin/" .. outputdirname .. "/Sandbox/\"")
 		
-		
+		------------------------------------------------------------------------
 		files
 		{
-			"%{prj.name}/source/**.cpp",
-			"%{prj.name}/source/**.h",
-			"%{AddIncludeDirs.imgui}" .. "*.cpp",
-			"%{AddIncludeDirs.imgui}" .. "*.h"
+			"%{prj.name}/source/StepWay/**.cpp",	--main engine files
+			"%{prj.name}/source/StepWay/**.h",		--main engine files
+			"%{prj.name}/source/Platform/OpenGL/**.cpp",
+			"%{prj.name}/source/Platform/OpenGL/**.h"
 		}
+		filter("system:windows")
+			files
+			{
+				"%{prj.name}/source/Platform/Win32/**.cpp",
+				"%{prj.name}/source/Platform/Win32/**.h",
+				"%{prj.name}/source/Platform/Direct3D11/**.cpp",
+				"%{prj.name}/source/Platform/Direct3D11/**.h"
+			}
+		
+		filter{}
+		------------------------------------------------------------------------
 
 		includedirs
 		{
 			"StepWay/source/StepWay/",
+			"StepWay/source/Platform",
 			"%{AddIncludeDirs.spdlog}",
-			"%{AddIncludeDirs.imgui}"
+			"%{AddIncludeDirs.imgui}",
+			"%{AddIncludeDirs.glad}"
 		}
-		
+		-- Links---------------------------------------------------------------------------------------
 		links
 		{
+			"glad" --Add imgui later-----------------------------
 		}
+		filter("system:windows")
+			links
+			{
+				"Opengl32.lib" --wglCreateContext e.t.c.
+			}
+			
+		filter{}
+		------------------------------------------------------------------------------------------------
 
 		defines 
 		{
@@ -153,6 +180,7 @@ workspace "StepWay"
 		{
 			"%{AddIncludeDirs.spdlog}",
 			"%{AddIncludeDirs.imgui}",
+			"%{AddIncludeDirs.glad}",
 			"StepWay/source/",
 			"StepWay/source/StepWay/"			
 		}
