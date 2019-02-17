@@ -4,47 +4,60 @@
 
 namespace StepWay
 {
-	//forward declaration for Context binding
-	class Win32Window;
-
-	namespace graphics
+	namespace Win32
 	{
-		namespace platform
-		{
 
-			class GLContext :public API::Context
+		//forward declaration for Context binding
+		class Win32Window;
+
+}}
+
+namespace StepWay
+{	namespace graphics
+	{	namespace API
+		{	namespace platform
 			{
-			public:
-				GLContext(API::GraphicsAPIType type);
 
-				bool SetUp() override;
-				void ShutDown() override;
-				
-				void SetRenderTarget(HDC wndDC);
 
-				PIXELFORMATDESCRIPTOR GetPFD() const;//may be return const reference
-				int GetPixFormat() const;//rework this two methods
+				//Win32 Realization of OpenGL context
+				class GLContext :public Context
+				{
+				public:
+					SW_DECLARE_CONTEXT_TYPE(GraphicsAPIType::OPENGL);
 
-			private:
-				HGLRC m_hGLContext;
-				PIXELFORMATDESCRIPTOR m_pfd;
-				int m_wndPixFormat;
-			};
+					GLContext(GraphicsAPIType type);
 
-			
+					bool SetUp() override;
+					void ShutDown() override;
 
-			class GLContextBinding : public API::ContextBinding
-			{
-			public:
-				GLContextBinding(Win32Window* wnd, GLContext* context);
+					void SetRenderTarget(HDC wndDC);
 
-				void Present() override;
-				void MakeCurrent() override;
-			private:
-				HDC m_wndDC;
-				GLContext* m_GLContext;
-				Win32Window* m_wnd;
-			};
-		}
-	}
-}
+					const PIXELFORMATDESCRIPTOR& GetPFD() const;
+					int GetPixFormat() const;
+
+				private:
+					HGLRC m_hGLContext;
+					PIXELFORMATDESCRIPTOR m_pfd;
+					int m_wndPixFormat;
+				};
+
+
+
+				//Win32 Realization of OpenGL window binding
+				class GLContextBinding : public ContextBinding
+				{
+				public:
+					SW_DECLARE_CONTEXT_BINDING_TYPE(GraphicsAPIType::OPENGL);
+
+					GLContextBinding(Win32::Win32Window* wnd, GLContext* context);
+
+					void Present() override;
+					void MakeCurrent() override;
+				private:
+					HDC m_wndDC;
+					GLContext* m_GLContext;
+					Win32::Win32Window* m_wnd;
+				};
+
+
+}}}}//closing all namespaces

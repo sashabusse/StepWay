@@ -3,15 +3,14 @@
 
 
 namespace StepWay
-{
-	namespace  Utility
-	{
+{	namespace Win32
+	{	namespace  Util
+		{
 
-		HWND DummyWindow();
-		void DeleteDummyWindow(HWND hwnd);
+			HWND DummyWindow();
+			void DeleteDummyWindow(HWND hwnd);
 
-
-
-	}
+		}
+	}	
 }
 

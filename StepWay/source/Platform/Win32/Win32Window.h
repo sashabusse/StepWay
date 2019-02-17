@@ -1,84 +1,104 @@
 #pragma once
+
 #include <Windows.h>
-#include "Window.h"
 #include <string>
+
+#include "Window.h"
 #include "OpenGL/GLContext.h"
 
 
 
-#define SW_MAIN_APP_WND_CLASS_NAME L"StepWayMainWindowClass"
+#define SW_DEFAULT_WND_CLASS_NAME L"StepWayDefaultWindowClass"
 
-LRESULT CALLBACK WindowProcedure(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 namespace StepWay
-{
-	class SW_API Win32Window : public StepWay::Window
+{	namespace Win32
 	{
-	public:
-		friend LRESULT CALLBACK ::WindowProcedure(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam);
-
-		Win32Window();
-		//TODO:
-		//May bee destroy here if still not
-		~Win32Window();
-
-		virtual bool SetUp(WindowProp& prop);
-		virtual void ShutDown();
-
-		virtual void OnUpdate() override;
-
-		virtual std::wstring GetTitle() const override;
-
-		//Position
-		virtual int GetX() const override;
-		virtual int GetY() const override;
-		virtual int GetWidth() const override;
-		virtual int GetHeight() const override;
-		virtual void Resize(int width, int height) override;
-		virtual void SetPosition(int x, int y) override;
+		
+		LRESULT CALLBACK WindowProcedure(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 
-		//Control
-		virtual void Close() override;
-
-
-		//Events related
-		virtual void SetEventCallback(const EventCallback& callback) override;
-
-		//graphics context
-		virtual void BindContext(graphics::API::Context* context) override;
-		void MakeContextCurrent() override;
-		void Present() override;
-
-		HWND GetHWND() const;
-
-	private:
-		void PollEvents();
-
-		//Event Related
-		EventCallback m_callback;
-		//-------------
-
-		graphics::API::ContextBinding* m_contextBinding;//rework it (namespaces)
-
-		//HGLRC m_hGLContext;
-
-		HWND m_wnd;
-
-		std::wstring m_title;
-
-		struct Position
+		class Win32Window : public Window
 		{
-			int x, y;
-		} m_position;
+		public:
+			friend LRESULT CALLBACK WindowProcedure(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
-		struct Size
-		{
-			int width, height;
-		} m_size;
-	};
+			Win32Window();
+			~Win32Window();
 
 
+			bool SetUp(const WindowProp& prop);
+			void ShutDown();
+
+			void OnUpdate() override;
 
 
-}
+			//Position (origin is assumed to be a left upper corner of client area)
+			int GetX() const override;
+			int GetY() const override;
+
+			//Size of client area
+			int GetWidth() const override;
+			int GetHeight() const override;
+			std::wstring GetTitle() const override;
+
+
+			//Control
+			void Close() override;
+			void Resize(int width, int height) override;
+			void SetPosition(int x, int y) override;
+			void Minimize() override;//-----------------------not overriden-------------
+			void Maximize() override;
+			void Show() override;
+			void Hide() override;
+
+
+
+			//Events related
+			virtual void SetEventCallback(const EventCallback& callback) override;
+
+
+
+			//graphics context
+			virtual void BindContext(graphics::API::Context* context) override;
+			void MakeContextCurrent() override;
+			void Present() override;
+
+
+
+			//Windows Specific
+			HWND GetHWND() const;
+
+		private:
+			void PollEvents();
+
+			graphics::API::ContextBinding* m_contextBinding;
+
+
+			std::wstring m_title;
+
+			//left upper corner of client area
+			struct Position
+			{
+				int x;
+				int	y;
+			}m_position;
+
+			//size of client area
+			struct Size
+			{
+				int width;
+				int height;
+			} m_size;
+
+			//Event Related
+			EventCallback m_callback;
+
+			//windows specific
+			HWND m_wnd;
+
+		};
+
+
+
+}}

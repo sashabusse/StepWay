@@ -80,33 +80,10 @@ void StepWay::Application::Run()
 
 		//some test rendering here
 		glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-		GLuint err = glGetError();
+
 		glClear(GL_COLOR_BUFFER_BIT);
-		err = glGetError();
-		/*err = glGetError();
-		GLuint buffer;
-		glGenBuffers(1, &buffer);
-		err = glGetError();
-		glBindBuffer(GL_VERTEX_ARRAY, buffer);
-		err = glGetError();
-		GL_NO_ERROR
-		struct vec2
-		{
-			float x, y;
-		};
-		vec2 pos[3] =
-		{
-			-0.5f,-0.5f,
-			0.5f,-0.5f,
-			0.0f,0.5f,
-		};
 
-		glBufferData(GL_VERTEX_ARRAY, sizeof(float) * 2 * 3, pos, GL_STATIC_DRAW);
-
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 		
-		glDrawArrays(GL_TRIANGLES, 0, 3);*/
 		glBegin(GL_QUADS);
 
 		glVertex2f(-0.8, -0.8);
@@ -118,13 +95,6 @@ void StepWay::Application::Run()
 		glVertex2f(-0.8, 0.8);
 
 		glEnd();
-		//glBegin(GL_TRIANGLES);
-		//
-		//glVertex2f(-1, -1);
-		//glVertex2f(0, 1);
-		//glVertex2f(1, -1);
-		//
-		//glEnd();
 	
 
 		m_MainWindow->OnUpdate();

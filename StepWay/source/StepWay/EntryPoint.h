@@ -32,6 +32,7 @@ int main()
 
 	app->Run();
 	app->ShutDown();
+
 	SW_DELETE app;
 
 	return 0;
