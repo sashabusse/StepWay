@@ -3,20 +3,25 @@
 #include "Memory/MemoryManager.h"
 #include "Window.h"
 #include "Events/WindowEvent.h"
+#include "Events/WindowEvent.h"
 #include "Layers/LayerStack.h"
 #include "Graphics/API/Context.h"
+#include "Input/InputSystem.h"
 
 
 namespace StepWay
 {
-	using graphics::LayerStack;
-	using graphics::Layer;
+
+
 	class SW_API Application
 	{
-	public:
 	private:
-		MemoryManager m_MemoryManager;
+		static Application* m_Instance;
 	public:
+		static Application* GetInstance() { return m_Instance; }
+
+	public:
+		Application();
 		bool SetUp();
 		virtual bool ImplSetUp() = 0;
 		void ShutDown();
@@ -38,7 +43,9 @@ namespace StepWay
 		bool m_IsRunning;
 
 		Window* m_MainWindow;
-		graphics::API::Context* m_MainContext;
+		Graphics::API::GraphicsContext* m_MainContext;
+		Input::InputSystem* m_InputSystem;
+		MemoryManager m_MemoryManager;
 
 		LayerStack m_layers;
 		LayerStack m_overlays;

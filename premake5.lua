@@ -45,6 +45,7 @@ workspace "StepWay"
 	
 	include "Tests/Tests.lua"
 	include "StepWay/vendor/glad/glad.lua"
+	include "StepWay/vendor/imgui/imgui.lua"
 	--TODO:
 	--add imgui later---------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-------------------------------------
 	
@@ -99,7 +100,8 @@ workspace "StepWay"
 		-- Links---------------------------------------------------------------------------------------
 		links
 		{
-			"glad" --Add imgui later-----------------------------
+			"glad",
+			"imgui"
 		}
 		filter("system:windows")
 			links

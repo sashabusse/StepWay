@@ -4,26 +4,25 @@
 
 namespace StepWay
 {
-	namespace graphics
+	
+
+	class SW_API LayerStack
 	{
+	public:
+		void PushLayer(Layer* layer);
+		void PopLayer(Layer* layer);
 
-		class SW_API LayerStack
-		{
-		public:
-			void PushLayer(Layer* layer);
-			void PopLayer(Layer* layer);
+		typedef std::vector<Layer*>::iterator		Iterator;
+		typedef std::vector<Layer*>::const_iterator ConstIterator;
 
-			typedef std::vector<Layer*>::iterator		Iterator;
-			typedef std::vector<Layer*>::const_iterator ConstIterator;
+		Iterator begin();
+		ConstIterator begin() const;
+		Iterator end();
+		ConstIterator end() const;
 
-			Iterator begin();
-			ConstIterator begin() const;
-			Iterator end();
-			ConstIterator end() const;
+	private:
+		std::vector<Layer*> m_Layers;
+	};
 
-		private:
-			std::vector<Layer*> m_Layers;
-		};
 
-	}
 }

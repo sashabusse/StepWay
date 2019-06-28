@@ -1,10 +1,6 @@
 #include "StepWayPCH.h"
-#include "Memory/Memory.h"
 #include "Win32Window.h"
-#include "Win32Common.h"
-#include "Events/WindowEvent.h"
-#include "glad/glad.h"
-
+#include "Utility.h"
 
 //overriding platform specific Creation function from Window.h
 StepWay::Window* StepWay::Window::Create() { return new StepWay::Win32::Win32Window; }
@@ -12,59 +8,23 @@ StepWay::Window* StepWay::Window::Create() { return new StepWay::Win32::Win32Win
 namespace StepWay
 {	namespace Win32
 	{
-
-
-		LRESULT WindowProcedure(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam)
-		{
-			if (msg == WM_CREATE)
-			{
-				//may be store in some other form
-				CREATESTRUCT* pStruct = (CREATESTRUCT*)lparam;
-				SetWindowLongPtrW(wnd, 0, reinterpret_cast<LONG_PTR>(pStruct->lpCreateParams));
-				return 0;
-			}
-
-
-			//may be store in some other form
-			Win32Window* pWindow = reinterpret_cast<Win32Window*>(GetWindowLongPtrW(wnd, 0));
-
-
-			//unroll to if later
-			switch (msg)
-			{
-				case WM_DESTROY:
-				{
-					StepWay::WindowDestroyEvent destrEvent(pWindow);
-					pWindow->m_callback(destrEvent);
-					break;
-				}
-
-				default:
-				{
-					break;
-				}
-			}
-
-			return DefWindowProc(wnd, msg, wparam, lparam);
-		}
-
-
+		
 
 		Win32Window::Win32Window() :
 			m_callback([](Event&) {}),
 			m_position({ 0,0 }),
+			m_IsMoving(false),
 			m_size({ 0,0 }),
-			m_wnd(NULL),
-			m_contextBinding(nullptr)
+			m_IsResizing(false),
+			m_wnd(NULL)
 		{
-		}
 
+		}
 
 
 		Win32Window::~Win32Window()
 		{
 		}
-
 
 
 		bool Win32Window::SetUp(const WindowProp & prop)
@@ -91,7 +51,7 @@ namespace StepWay
 				wndclass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 
 				wndclass.cbWndExtra = sizeof(Win32Window*);
-
+				
 
 				if (!RegisterClassExW(&wndclass))
 				{
@@ -107,7 +67,7 @@ namespace StepWay
 			m_position.x = prop.luX;
 			m_position.y = prop.luY;
 
-			//calculating window area
+			//calculating window rect of area + border
 			RECT newRect;
 			newRect.left = prop.luX;
 			newRect.right = prop.luX + prop.width;
@@ -115,8 +75,10 @@ namespace StepWay
 			newRect.bottom = prop.luY + prop.height;
 			AdjustWindowRectEx(&newRect, WS_OVERLAPPEDWINDOW, NULL, NULL);
 
+			m_BorderSize = { prop.luX - newRect.left,prop.luY - newRect.top };
 
-			m_wnd = CreateWindowExW(NULL, SW_DEFAULT_WND_CLASS_NAME, prop.title.c_str(), WS_OVERLAPPEDWINDOW,
+			m_wnd = CreateWindowExW(NULL, SW_DEFAULT_WND_CLASS_NAME, 
+				Utility::StrToWstr(m_title).c_str(), WS_OVERLAPPEDWINDOW,
 				newRect.left, newRect.top,//position
 				newRect.right - newRect.left,//width
 				newRect.bottom - newRect.top,//height
@@ -134,10 +96,12 @@ namespace StepWay
 		//Delete binding and destroys window
 		void Win32Window::ShutDown()
 		{
-			if(m_contextBinding!=nullptr)
-				SW_DELETE m_contextBinding;
-
 			Close();
+		}
+
+		bool Win32Window::IsInitialized()
+		{
+			return m_wnd != NULL;
 		}
 
 
@@ -146,38 +110,33 @@ namespace StepWay
 		void Win32Window::OnUpdate()
 		{
 			PollEvents();
-			Present();
 		}
 
 
-
-		std::wstring Win32Window::GetTitle() const
+		std::string Win32Window::GetTitle() const
 		{
 			return m_title;
 		}
 
-
+		std::wstring Win32Window::GetWTitle() const
+		{
+			return Utility::StrToWstr(m_title);
+		}
 
 		int Win32Window::GetX() const
 		{
 			return m_position.x;
 		}
 
-
-
 		int Win32Window::GetY() const
 		{
 			return m_position.y;
 		}
 
-
-
 		int Win32Window::GetWidth() const
 		{
 			return m_size.width;
 		}
-
-
 
 		int Win32Window::GetHeight() const
 		{
@@ -193,12 +152,10 @@ namespace StepWay
 		}
 
 
-
-		void Win32Window::SetPosition(int x, int y)//pay attention on review
+		//pay attention on review
+		//position of client area
+		void Win32Window::SetPosition(int x, int y)
 		{
-			SW_CORE_ASSERT(false, "Resize is not done yet");
-			//TODO:
-			//drop window move event here
 			m_position.x = x;
 			m_position.y = y;
 
@@ -208,11 +165,35 @@ namespace StepWay
 			Rect.left = x;
 			Rect.right = x + m_size.width;
 
-			AdjustWindowRectEx(&Rect, WS_OVERLAPPEDWINDOW, NULL, NULL);
+			//AdjustWindowRectEx(&Rect, WS_OVERLAPPEDWINDOW, NULL, NULL);
 
 			SetWindowPos(m_wnd, NULL, Rect.left, Rect.top, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
 		}
 
+		void Win32Window::Minimize()
+		{
+			ShowWindow(m_wnd, SW_MINIMIZE);
+		}
+
+		void Win32Window::Maximize()
+		{
+			ShowWindow(m_wnd, SW_MAXIMIZE);
+		}
+
+		void Win32Window::RestoreSize()
+		{
+			ShowWindow(m_wnd, SW_RESTORE);
+		}
+
+		void Win32Window::Show()
+		{
+			SW_CORE_ASSERT(false, "Show is not done yet");
+		}
+
+		void Win32Window::Hide()
+		{
+			ShowWindow(m_wnd, SW_HIDE);
+		}
 
 
 		void Win32Window::Close()
@@ -221,7 +202,6 @@ namespace StepWay
 			{
 				DestroyWindow(m_wnd);
 				m_wnd = NULL;
-				//need unbinding on destroy
 			}
 		}
 
@@ -234,56 +214,16 @@ namespace StepWay
 
 
 
-		void Win32Window::BindContext(graphics::API::Context * context)
-		{
-
-			if (m_contextBinding != nullptr)
-			{
-				SW_DELETE m_contextBinding;
-				m_contextBinding = nullptr;
-			}
-
-#define SW_APISpace graphics::API::platform
-
-			switch (context->GetType())
-			{
-
-			case graphics::API::GraphicsAPIType::OPENGL:
-				m_contextBinding = SW_NEW SW_APISpace::GLContextBinding(this, reinterpret_cast<SW_APISpace::GLContext*>(context));
-				return;
-
-			}
-			SW_CORE_ERROR("failed to create ContextBinding for window");
-			SW_CORE_ASSERT(false, "wrong type or return missing");
-		}
-
-
-
-		void Win32Window::MakeContextCurrent()
-		{
-			SW_CORE_ASSERT(m_contextBinding != nullptr, "cant make current without context");
-			m_contextBinding->MakeCurrent();
-		}
-
-
-
-		void Win32Window::Present()
-		{
-
-			if (m_contextBinding == nullptr)
-			{
-				SW_CORE_WARNING("swapping without context {default SwapBuffers}");
-				SwapBuffers(GetDC(m_wnd));
-				return;
-			}
-			m_contextBinding->Present();
-		}
-
 
 
 		HWND Win32Window::GetHWND() const
 		{
 			return m_wnd;
+		}
+
+		HDC Win32Window::GetDC() const
+		{
+			return ::GetDC(m_wnd);
 		}
 
 

@@ -11,12 +11,12 @@ StepWay::MemoryManager::~MemoryManager()
 
 
 
-void StepWay::MemoryManager::Init()
+void StepWay::MemoryManager::SetUp()
 {
 	m_SysMemInfo = UpdateSystemMemoryInfo();
 }
 
-void StepWay::MemoryManager::Destroy()
+void StepWay::MemoryManager::ShutDown()
 {
 }
 

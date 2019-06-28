@@ -1,78 +1,54 @@
 #pragma once
 #include "Core.h"
+#include <string>
+#include "Window.h"
+
 
 
 namespace StepWay
-{	namespace graphics
+{	namespace Graphics
 	{	namespace API
 		{
 
-			
-			enum class SW_API GraphicsAPIType : int
-			{
-				NONE = 0,
-				OPENGL,
-				DIRECTX11
-			};
+	enum class SW_API GAPI_TYPE : int
+	{
+		NONE = 0,
+		OPENGL,
+		D3D11
+	};
 
-			//let premake do it
-#define SW_DEFAULT_GR_API	::StepWay::graphics::GraphicsAPI::OPENGL
-
-
-
-			//overrides type functions(only 1 for now
-#define SW_DECLARE_CONTEXT_TYPE(type)\
-	::StepWay::graphics::API::GraphicsAPIType GetType() const final\
-	{ return type; }
+#define SW_DECLARE_GAPI_TYPE(type)\
+	static Graphics::API::GAPI_TYPE GetStaticGAPI_TYPE(){return type;}\
+	virtual Graphics::API::GAPI_TYPE GetGAPI_TYPE()const override {return GetStaticGAPI_TYPE();}\
+	virtual std::string GetGAPIString()const override {return #type;}\
+	virtual std::wstring GetGAPIWString()const override {return L#type;}
 
 
-			//Interface for Rendering Context
-			//Realization Incapsulates Context needed to rendering
-			//For example on realization check Platform/Win32/OpenGL/GLContext.h/cpp
-			class SW_API Context
-			{
-			public:
-				explicit Context();
+	class SW_API GraphicsContext
+	{
+	public:
+		static GraphicsContext* Create(GAPI_TYPE type, Window* window);
+		static GraphicsContext* CreateGLContext(Window* window);
+		//add other APIS later
+		static void Destroy(GraphicsContext* context);
+		static bool IsAPISupportedByOS(GAPI_TYPE type);
 
-				//factory method
-				static Context* Create(GraphicsAPIType type);//add default
+		virtual ~GraphicsContext() {};
 
-				virtual bool SetUp() = 0;
-				virtual void ShutDown() = 0;
+		//define in children
+		virtual void SetUp() = 0;
+		virtual void ShutDown() = 0;
+		virtual void SwapBuffers() = 0;
+		virtual void MakeCurrent() = 0;
 
-				virtual GraphicsAPIType GetType() const = 0;
-
-				virtual ~Context() {};
-			private:
-
-			};
-
-
-
-			//overrides type functions(only 1 for now
-#define SW_DECLARE_CONTEXT_BINDING_TYPE(type)\
-	::StepWay::graphics::API::GraphicsAPIType GetType() const final\
-	{ return type; }
+		//declare in child by macros SW_DECLARE_GAPI_TYPE
+		virtual GAPI_TYPE GetGAPI_TYPE()const = 0;
+		virtual std::string GetGAPIString()const = 0;
+		virtual std::wstring GetGAPIWString()const = 0;
+	protected:
+		GraphicsContext() {};
+	private:
+	};
 
 
-			//Interface for binding to context
-			//Incapsulates information to share context among diffrent windows(Render Targets later)
-			class ContextBinding
-			{
-			public:
-				explicit ContextBinding();
-
-				virtual void Present() = 0;
-				virtual void MakeCurrent() = 0;
-
-				virtual GraphicsAPIType GetType() const = 0;
-
-				virtual ~ContextBinding() {};
-			private:
-			};
-
-
-
-		}
-	}
-}
+}}}

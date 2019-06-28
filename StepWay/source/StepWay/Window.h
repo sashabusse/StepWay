@@ -1,9 +1,9 @@
 #pragma once
 #include "Core.h"
 #include "Events/Event.h"
+#include "Input/Mouse.h"
 #include <string>
 #include <functional>
-#include "Graphics/API/Context.h"
 
 
 namespace StepWay
@@ -13,7 +13,7 @@ namespace StepWay
 	//Initialization properties of the window
 	struct SW_API WindowProp
 	{
-		std::wstring title;
+		std::string title;
 		int luX;
 		int luY;
 		int width;
@@ -27,20 +27,25 @@ namespace StepWay
 	{
 	public:
 		static Window* Create();
+		static void Destroy(Window* window) { delete window; };
 
+		virtual ~Window() {};
 
 		virtual bool SetUp(const WindowProp& prop) = 0;
 		virtual void ShutDown() = 0;
+		virtual bool IsInitialized() = 0;
 
 		virtual void OnUpdate() = 0;
 
-		//Gettera
+		//getters
 		//Position (origin is assumed to be in upper left corner)
 		virtual int GetX() const = 0;
 		virtual int GetY() const = 0;
+		//just working zone no borders
 		virtual int GetWidth() const = 0;
 		virtual int GetHeight() const = 0;
-		virtual std::wstring GetTitle() const = 0;
+		virtual std::string GetTitle() const = 0;
+		virtual std::wstring GetWTitle() const = 0;
 
 
 		//Control functions
@@ -49,27 +54,20 @@ namespace StepWay
 		virtual void SetPosition(int x, int y) = 0;
 		virtual void Minimize() = 0;
 		virtual void Maximize() = 0;
+		virtual void RestoreSize() = 0;
 		virtual void Show() = 0;
 		virtual void Hide() = 0;
 
 
 		//Events related
-		typedef std::function<void(Event&)> EventCallback;
-
 		virtual void SetEventCallback(const EventCallback& callback) = 0;
-		//TODO:
-		//virtual void PollQuedEvents()const = 0;
 
-
-		//graphics context
-		virtual void BindContext(graphics::API::Context* context) = 0;
-		virtual void MakeContextCurrent() = 0;
-		virtual void Present() = 0;
-
-
+		Input::MouseClientInterface GetMouse() { return m_Mouse.GetClientInterface(); }
+		
 	protected:
 		Window() {};
 
+		Input::Mouse m_Mouse;
 	};
 
 }

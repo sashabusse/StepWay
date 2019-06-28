@@ -27,8 +27,8 @@ namespace StepWay
 		MemoryManager();
 		~MemoryManager();
 
-		void Init();
-		void Destroy();
+		void SetUp();
+		void ShutDown();
 
 		inline SystemMemoryInfo GetSystemMemoryInfo() { return m_SysMemInfo; };
 

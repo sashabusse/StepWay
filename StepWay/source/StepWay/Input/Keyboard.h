@@ -1,15 +1,17 @@
 #pragma once
+#include "Core.h"
+
+
+
 
 
 
 namespace StepWay
-{
-	namespace graphics
+{	namespace Input
 	{
 
 
 
 
-	}
-}
 
+}}

@@ -11,12 +11,12 @@ namespace StepWay
 	{
 		EMPTY = 0,
 		KEY_PRESS, KEY_RELEASE,
-		MOUSE_MOVE, MOUSE_SCROLL, MOUSE_BUTTON_PRESS, MOUSE_BUTTON_RELEASE,
-		WINDOW_DESTROY,WINDOW_MOVE,WINDOW_RESIZE
+		MOUSE_MOVE,MOUSE_RAW_MOVE, MOUSE_SCROLL, MOUSE_BUTTON_PRESS, MOUSE_BUTTON_RELEASE,
+		WINDOW_DESTROY, WINDOW_MOVE, WINDOW_MOVE_END, WINDOW_RESIZE, WINDOW_RESIZE_END
 		//Add here window events later
 	};
 
-	enum EventCategory
+	enum EventCategory : int
 	{
 		WINDOW_CONTROL_CATEGORY	= BIT(0),
 		INPUT_CATEGORY			= BIT(1),
@@ -61,6 +61,8 @@ namespace StepWay
 	protected:
 		bool m_isHandled = false;
 	};
+
+	typedef std::function<void(Event&)> EventCallback;
 
 	//Danger reference storage
 	class EventDispatcher

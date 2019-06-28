@@ -2,3 +2,9 @@
 #include "Layer.h"
 
 
+namespace StepWay
+{
+
+
+}
+

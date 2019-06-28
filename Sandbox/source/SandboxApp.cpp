@@ -10,7 +10,7 @@ public:
 	bool ImplSetUp() override;
 	void ImplShutDown() override;
 
-	StepWay::graphics::Layer* layer;
+	StepWay::Layer* layer;
 };
 
 
@@ -22,7 +22,7 @@ StepWay::Application* StepWay::CreateApplication()
 	return sandboxApp;
 }
 
-class ExampleLayer : public StepWay::graphics::Layer
+class ExampleLayer : public StepWay::Layer
 {
 public:
 	~ExampleLayer() {};
@@ -41,12 +41,12 @@ protected:
 bool SandboxApp::ImplSetUp()
 {
 	layer = SW_NEW ExampleLayer;
-	PushLayer(layer);
+	//PushLayer(layer);
 	return true;
 }
 
 void SandboxApp::ImplShutDown()
 {
-	PopLayer(layer);
+	//PopLayer(layer);
 	SW_DELETE layer;
 }
