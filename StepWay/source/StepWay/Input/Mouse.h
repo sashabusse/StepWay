@@ -6,6 +6,9 @@
 #include <memory>
 
 
+//may be not the best practice
+#pragma warning(push)
+#pragma warning(disable:4251)
 
 
 
@@ -47,6 +50,8 @@ namespace StepWay
 
 		void OnMouseScroll(float offset);
 		
+
+		EventCallback GetEventCallback() const { return m_callback; };
 	protected:
 		EventCallback m_callback;
 		float m_x, m_y;
@@ -69,3 +74,6 @@ namespace StepWay
 	};
 
 }}
+
+
+#pragma warning(pop)

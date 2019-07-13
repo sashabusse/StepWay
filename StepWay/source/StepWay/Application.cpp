@@ -5,7 +5,7 @@
 #include "Input/InputSystem.h"
 #include "Memory/Memory.h"
 //Just WTF is it doing here?
-#include "Layers/DebugGUI/Win32Opengl/DebugGUILayer.h"
+#include "Layers/DebugGUI/DebugGUILayer.h"
 #include "glad/glad.h"
 
 

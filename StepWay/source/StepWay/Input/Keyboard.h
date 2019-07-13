@@ -6,6 +6,10 @@
 
 
 
+//may be not the best practice
+#pragma warning(push)
+#pragma warning(disable:4251)
+
 
 
 namespace StepWay
@@ -50,3 +54,6 @@ namespace StepWay
 
 
 }}
+
+
+#pragma warning(pop)

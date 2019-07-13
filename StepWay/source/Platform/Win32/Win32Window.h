@@ -55,6 +55,7 @@ namespace StepWay
 			//Capture
 			virtual void SetInputCapture() override;
 			virtual void ReleaseInputCapture() override;
+			virtual bool HaveInputCapture() const override;
 
 			//Events related
 			virtual void SetEventCallback(const EventCallback& callback) override;

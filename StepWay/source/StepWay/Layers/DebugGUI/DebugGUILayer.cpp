@@ -3,11 +3,9 @@
 #include "Events/MouseEvents.h"
 #include "Events/KeyEvent.h"
 #include "imgui.h"
-#include "ImGuiImpl/imgui_impl_win32.h"
-#include "ImGuiImpl/imgui_impl_opengl3.h"
-#include "glad/glad.h"
+#include "OpenGL/imgui_impl_opengl3.h"
 
-const char* glsl_version = "#version 130";
+static char* glsl_version = "#version 130";
 
 namespace StepWay
 {
@@ -15,9 +13,9 @@ namespace StepWay
 
 	DebugGUILayer::DebugGUILayer(Window * window, GraphicsContext* Context):
 		m_Context(Context),
-		m_show_demo_window(true)
+		m_show_demo_window(true),
+		m_pWindow(window)
 	{
-		m_pWindow = (Win32::Win32Window*) window;
 	}
 
 	DebugGUILayer::~DebugGUILayer()
@@ -36,23 +34,43 @@ namespace StepWay
 		//ImGui::StyleColorsClassic();
 
 		// Setup Platform/Renderer bindings
-		ImGui_ImplWin32_Init(m_pWindow->GetHWND());
-		ImGui_ImplOpenGL3_Init(glsl_version);
+		OS_SetUp();
+		if (m_Context->GetGAPI_TYPE() == Graphics::API::GAPI_TYPE::OPENGL)
+		{
+			ImGui_ImplOpenGL3_Init(glsl_version);
+		}
+		else
+		{
+			SW_CORE_ASSERT(false, "no realization of debug gui for such GAPI type");
+		}
 	}
 
 	void DebugGUILayer::OnDetach()
 	{
-		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplWin32_Shutdown();
+		if (m_Context->GetGAPI_TYPE() == Graphics::API::GAPI_TYPE::OPENGL)
+		{
+			ImGui_ImplOpenGL3_Shutdown();
+		}
+		else
+		{
+			SW_CORE_ASSERT(false, "something wrong with gui Detaching");
+		}
 		ImGui::DestroyContext();
 
 	}
 
 	void DebugGUILayer::OnUpdate()
 	{
+		if (m_Context->GetGAPI_TYPE() == Graphics::API::GAPI_TYPE::OPENGL)
+		{
+			ImGui_ImplOpenGL3_NewFrame();
+		}
+		else
+		{
+			SW_CORE_ASSERT(false, "something wrong with NewFrame");
+		}
 
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplWin32_NewFrame();
+		OS_NewFrame();
 		ImGui::NewFrame();
 
 		if (m_show_demo_window)
@@ -64,8 +82,15 @@ namespace StepWay
 
 		m_Context->MakeCurrent();
 		
-		//glViewport(0, 0, display_w, display_h);
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		if (m_Context->GetGAPI_TYPE() == Graphics::API::GAPI_TYPE::OPENGL)
+		{
+			//glViewport(0, 0, display_w, display_h);
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		}
+		else
+		{
+			SW_CORE_ASSERT(false, "something wrong with gui render");
+		}
 	}
 
 	void DebugGUILayer::OnEvent(Event & e)
@@ -115,7 +140,7 @@ namespace StepWay
 		if (keyCode == MouseKey::MID_BUTTON) { button = 2; }
 		//if (keyCode == WM_XBUTTONUP) { button = (GET_XBUTTON_WPARAM(wParam) == XBUTTON1) ? 3 : 4; }
 		io.MouseDown[button] = false;
-		if (!ImGui::IsAnyMouseDown() && ::GetCapture() == m_pWindow->GetHWND())
+		if (!ImGui::IsAnyMouseDown() && m_pWindow->HaveInputCapture())
 			m_pWindow->ReleaseInputCapture();
 	}
 

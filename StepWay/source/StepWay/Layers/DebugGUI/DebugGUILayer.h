@@ -1,7 +1,7 @@
 #pragma once
 #include "Layers/Layer.h"
 #include "Core.h"
-#include "Win32/Win32Window.h"
+#include "Window.h"
 #include "Graphics/API/Context.h"
 
 namespace StepWay
@@ -25,6 +25,9 @@ namespace StepWay
 
 
 	private:
+		void OS_SetUp();
+		void OS_ShutDown();
+		void OS_NewFrame();
 
 		void OnMouseButtonPress(Event& e);
 		void OnMouseButtonRelease(Event& e);
@@ -34,7 +37,7 @@ namespace StepWay
 		void OnCharInput(Event& e);
 
 	private:
-		Win32::Win32Window* m_pWindow;
+		Window* m_pWindow;
 		GraphicsContext* m_Context;
 
 

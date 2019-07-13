@@ -62,6 +62,7 @@ namespace StepWay
 		//Capture may be bool
 		virtual void SetInputCapture() = 0;
 		virtual void ReleaseInputCapture() = 0;
+		virtual bool HaveInputCapture()const = 0;
 
 		//Events related
 		virtual void SetEventCallback(const EventCallback& callback) = 0;

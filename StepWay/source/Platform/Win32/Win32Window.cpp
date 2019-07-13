@@ -210,6 +210,11 @@ namespace StepWay
 			ReleaseCapture();
 		}
 
+		bool Win32Window::HaveInputCapture() const
+		{
+			return ::GetCapture() == GetHWND();
+		}
+
 
 		void Win32Window::Close()
 		{
