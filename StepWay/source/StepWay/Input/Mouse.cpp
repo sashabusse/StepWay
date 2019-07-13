@@ -17,7 +17,7 @@ namespace StepWay
 		m_y(y),
 		m_callback([](Event&) {})
 	{
-		memset(m_ButtonPressed, 0, sizeof(bool)*MOUSE_MAX_BUTTON_VAL);
+		memset(m_ButtonPressed, 0, sizeof(bool)*(int)MouseKey::MOUSE_MAX_BUTTON_VAL);
 	}
 
 	MouseClientInterface Mouse::GetClientInterface()
@@ -39,15 +39,15 @@ namespace StepWay
 		m_callback(MouseRawMoveEvent(dx, dy));
 	}
 
-	void Mouse::OnMousePress(MouseKeyCode KeyCode)
+	void Mouse::OnMousePress(MouseKey KeyCode)
 	{
-		m_ButtonPressed[KeyCode] = true;
+		m_ButtonPressed[(int)KeyCode] = true;
 		m_callback(MouseButtonPressEvent(KeyCode, 0, m_x, m_y));
 	}
 
-	void Mouse::OnMouseRelease(MouseKeyCode KeyCode)
+	void Mouse::OnMouseRelease(MouseKey KeyCode)
 	{
-		m_ButtonPressed[KeyCode] = false;
+		m_ButtonPressed[(int)KeyCode] = false;
 		m_callback(MouseButtonReleaseEvent(KeyCode, 0, m_x, m_y));
 	}
 

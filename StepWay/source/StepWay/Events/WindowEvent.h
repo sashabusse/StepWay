@@ -6,13 +6,15 @@
 namespace StepWay
 {
 
-	class SW_API WindowEvent :public Event
+	class WindowEvent :public Event
 	{
 	public:
+		SW_DECLARE_EVENT_CATEGORY(WINDOW_CATEGORY)
+
+
 		explicit WindowEvent(Window* window) :
 			m_window(window)
 		{};
-		SW_DECLARE_EVENT_CATEGORY(WINDOW_CATEGORY)
 
 		inline Window* GetWindowPtr() { return m_window; }
 	protected:
@@ -20,69 +22,96 @@ namespace StepWay
 	};
 
 
-	class SW_API WindowDestroyEvent : public WindowEvent
+	class WindowDestroyEvent : public WindowEvent
 	{
 	public:
+		SW_DECLARE_EVENT_TYPE(EventType::WINDOW_DESTROY)
+
+
 		explicit WindowDestroyEvent(Window* window) :
 			WindowEvent(window)
 		{};
-		SW_DECLARE_EVENT_TYPE(EventType::WINDOW_DESTROY)
+
+		~WindowDestroyEvent() override {};
 	private:
 
 	};
 
 
-	class SW_API WindowResizeEvent : public WindowEvent
+	class WindowResizeEvent : public WindowEvent
 	{
 	public:
+		SW_DECLARE_EVENT_TYPE(EventType::WINDOW_RESIZE);
+
+
 		explicit WindowResizeEvent(Window* window, int width, int height) :
 			WindowEvent(window),
 			m_width(width),
 			m_height(height)
 		{};
-		SW_DECLARE_EVENT_TYPE(EventType::WINDOW_RESIZE);
 		inline int GetWidth()const { return m_width; }
 		inline int GetHeight()const { return m_height; }
+
+		~WindowResizeEvent() override {};
 	private:
 		int m_width, m_height;
 	};
 	
-	class SW_API WindowResizeEndEvent : public WindowResizeEvent
+	class WindowResizeEndEvent : public WindowResizeEvent
 	{
 	public:
+		SW_DECLARE_EVENT_TYPE(EventType::WINDOW_RESIZE_END);
+
+
 		explicit WindowResizeEndEvent(Window* window, int width, int height) :
 			WindowResizeEvent(window,width,height)
 		{};
-		SW_DECLARE_EVENT_TYPE(EventType::WINDOW_RESIZE_END);
+
+		~WindowResizeEndEvent() override {};
 	private:
 	};
 
-	class SW_API WindowMoveEvent : public WindowEvent
+	class WindowMoveEvent : public WindowEvent
 	{
 	public:
+		SW_DECLARE_EVENT_TYPE(EventType::WINDOW_MOVE);
+
+
+		virtual std::string ToString() const
+		{
+			return GetTypeString() + "(dx=" + std::to_string(GetX()) + " , dy=" + std::to_string(GetY()) + ")";
+		};
+		virtual std::wstring ToWString() const
+		{
+			return GetTypeWString() + L"(dx=" + std::to_wstring(GetX()) + L" , dy=" + std::to_wstring(GetY()) + L")";
+		};
+
+
 		explicit WindowMoveEvent(Window* window, int x, int y):
 			WindowEvent(window),
 			m_x(x),
 			m_y(y)
 		{};
-		SW_DECLARE_EVENT_TYPE(EventType::WINDOW_MOVE);
+
 		inline int GetX()const{return m_x;}
 		inline int GetY()const{return m_y;}
 
-		virtual std::string ToString() const { return GetTypeString() + "(dx=" + std::to_string(GetX()) + " , dy=" + std::to_string(GetY()) + ")"; };
-		virtual std::wstring ToWString() const { return GetTypeWString() + L"(dx=" + std::to_wstring(GetX()) + L" , dy=" + std::to_wstring(GetY()) + L")"; };
-
+		~WindowMoveEvent() override {};
 	private:
 		int m_x, m_y;
 	};
 
-	class SW_API WindowMoveEndEvent : public WindowMoveEvent
+	class WindowMoveEndEvent : public WindowMoveEvent
 	{
 	public:
+		SW_DECLARE_EVENT_TYPE(EventType::WINDOW_MOVE_END);
+
+
 		explicit WindowMoveEndEvent(Window* window, int x, int y) :
 			WindowMoveEvent(window, x, y)
 		{};
-		SW_DECLARE_EVENT_TYPE(EventType::WINDOW_MOVE_END);
+
+		~WindowMoveEndEvent() override {};
 	private:
 	};
 

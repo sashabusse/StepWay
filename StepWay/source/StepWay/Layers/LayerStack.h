@@ -6,10 +6,11 @@ namespace StepWay
 {
 	
 
-	class SW_API LayerStack
+	class LayerStack
 	{
 	public:
 		void PushLayer(Layer* layer);
+		Layer* PopLayer();
 		void PopLayer(Layer* layer);
 
 		typedef std::vector<Layer*>::iterator		Iterator;
@@ -19,6 +20,8 @@ namespace StepWay
 		ConstIterator begin() const;
 		Iterator end();
 		ConstIterator end() const;
+
+		int size()const;
 
 	private:
 		std::vector<Layer*> m_Layers;

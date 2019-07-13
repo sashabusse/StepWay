@@ -29,6 +29,10 @@ namespace StepWay
 		void OnMouseButtonPress(Event& e);
 		void OnMouseButtonRelease(Event& e);
 		void OnMouseScroll(Event& e);
+		void OnKeyPress(Event& e);
+		void OnKeyRelease(Event& e);
+		void OnCharInput(Event& e);
+
 	private:
 		Win32::Win32Window* m_pWindow;
 		GraphicsContext* m_Context;

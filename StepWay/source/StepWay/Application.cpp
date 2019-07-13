@@ -25,6 +25,10 @@ namespace StepWay
 		m_Instance = this;
 	}
 
+	//------------------------------------------------
+	static Layer* dbgGui;
+	//------------------------------------------------
+
 	bool Application::SetUp()
 	{
 		m_IsRunning = false;
@@ -55,8 +59,9 @@ namespace StepWay
 		}
 		m_MainWindow->SetEventCallback(SW_BIND_METH_1(Application::OnEvent));
 		m_MainWindow->SetPosition(0, 0);
+
 		m_MainWindow->GetMouse().SetEventCallback(SW_BIND_METH_1(Application::OnEvent));
-		
+		m_MainWindow->GetKeyboard().SetEventCallback(SW_BIND_METH_1(Application::OnEvent));
 
 		m_MainContext = GraphicsContext::Create(GAPI_TYPE::OPENGL, m_MainWindow);
 		m_MainContext->SetUp();
@@ -64,7 +69,8 @@ namespace StepWay
 
 
 		//---------------------------------------
-		PushLayer(new DebugGUILayer(m_MainWindow, m_MainContext));
+		dbgGui = SW_NEW DebugGUILayer(m_MainWindow, m_MainContext);
+		PushLayer(dbgGui);
 		//---------------------------------------
 
 
@@ -75,6 +81,12 @@ namespace StepWay
 
 	void Application::ShutDown()
 	{
+		//----------------------------
+		PopLayer(dbgGui);
+		SW_DELETE dbgGui;
+		//-----------------------------
+
+
 		ImplShutDown();
 
 
@@ -100,47 +112,49 @@ namespace StepWay
 		SW_CORE_TRACE("Entering Main Loop");
 		while (m_IsRunning)
 		{
-
+		
 			//some test rendering here
 			glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-
+			
 			glClear(GL_COLOR_BUFFER_BIT);
-
-
+			
+			
 			glBegin(GL_QUADS);
-
+			
 			glVertex2f(-0.8, -0.8);
-
+			
 			glVertex2f(0.8, -0.8);
-
+			
 			glVertex2f(0.8, 0.8);
-
+			
 			glVertex2f(-0.8, 0.8);
-
+			
 			glEnd();
-
-
+			
 			//update layers
 			for (auto it = m_layers.begin(); it != m_layers.end(); ++it)
 			{
-				(*it)->OnUpdate();
+				if((*it)->Enabled())
+					(*it)->OnUpdate();
 			}
-
+			
 			//update overlays
 			for (auto it = m_overlays.begin(); it != m_overlays.end(); ++it)
 			{
-				(*it)->OnUpdate();
+				if((*it)->Enabled())
+					(*it)->OnUpdate();
 			}
-
 			
-			m_MainContext->SwapBuffers();
 
+			m_MainContext->SwapBuffers();
+			
 			m_MainWindow->OnUpdate();
 		}
 	}
 
 	void Application::OnEvent(Event & e)
 	{
+
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowDestroyEvent>(SW_BIND_METH_1(Application::OnMainWindowClose));
 
@@ -150,14 +164,16 @@ namespace StepWay
 		for (auto it = m_overlays.end(); it != m_overlays.begin();)
 		{
 			--it;
-			(*it)->OnEvent(e);
+			if ((*it)->Enabled())
+				(*it)->OnEvent(e);
 		}
 
 		//Messaging layers
 		for (auto it = m_layers.end(); it != m_layers.begin();)
 		{
 			--it;
-			(*it)->OnEvent(e);
+			if ((*it)->Enabled())
+				(*it)->OnEvent(e);
 		}
 
 	}

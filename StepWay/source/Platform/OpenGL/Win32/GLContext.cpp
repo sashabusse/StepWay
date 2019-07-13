@@ -8,7 +8,7 @@ namespace StepWay
 
 	API::GraphicsContext* API::GraphicsContext::CreateGLContext(Window* window)
 	{
-		return new OpenGL::Win32::GLContext((Win32::Win32Window*)window);
+		return SW_NEW OpenGL::Win32::GLContext((Win32::Win32Window*)window);
 	}
 
 	namespace OpenGL
@@ -71,6 +71,11 @@ namespace StepWay
 		void GLContext::SwapBuffers()
 		{
 			bool success = ::SwapBuffers(m_pWindow->GetDC());
+			if (!success)
+			{
+				DWORD err = GetLastError();
+				DBG_BREAK();
+			}
 			SW_CORE_ASSERT(success, "failed swap buffer");
 		}
 

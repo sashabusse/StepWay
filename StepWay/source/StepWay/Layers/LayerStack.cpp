@@ -13,7 +13,15 @@ namespace StepWay
 	}
 
 
-	void LayerStack::PopLayer(Layer* layer)
+	Layer* LayerStack::PopLayer()
+	{
+		SW_CORE_ASSERT(size() != 0, "cant pop layer when stack is empty");
+		Layer* ret = m_Layers.back();
+		m_Layers.pop_back();
+		return ret;
+	}
+
+	void LayerStack::PopLayer(Layer * layer)
 	{
 		SW_CORE_ASSERT(layer != nullptr, "invalid pointer");
 		auto it = std::find(m_Layers.begin(), m_Layers.end(), layer);
@@ -51,5 +59,9 @@ namespace StepWay
 	LayerStack::ConstIterator LayerStack::end() const
 	{
 		return m_Layers.end();
+	}
+	int LayerStack::size() const
+	{
+		return m_Layers.size();
 	}
 }

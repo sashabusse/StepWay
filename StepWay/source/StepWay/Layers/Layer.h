@@ -9,7 +9,8 @@ namespace StepWay
 	class SW_API Layer
 	{
 	public:
-		virtual ~Layer() {};
+
+		Layer();
 
 		virtual void OnAttach() = 0;
 		virtual void OnDetach() = 0;
@@ -20,9 +21,15 @@ namespace StepWay
 		virtual std::wstring ToWString() const = 0;
 
 		//TODO:
-		//virtual void Disable() = 0;
-		//virtual void Enable() = 0;
+		void Disable() { IsEnabled = false; };
+		void Enable() { IsEnabled = true; };
+		bool Enabled() const { return IsEnabled; };
+		bool Disabled() const { return !Enabled(); };
+
+
+		virtual ~Layer() {};
 	protected:
+		bool IsEnabled;
 	};
 
 }

@@ -2,14 +2,18 @@
 #include "Win32Window.h"
 #include "Events/WindowEvent.h"
 #include "Events/MouseEvents.h"
+#include "Events/KeyEvent.h"
+#include "Win32InputSystem.h"
 
 namespace StepWay
 {	namespace Win32
 	{
 
+	using Input::Win32::Win32InputSystem;
 
 	LRESULT WindowProcedure(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	{
+
 		if (msg == WM_CREATE)
 		{
 			//may be store in some other form
@@ -41,6 +45,15 @@ namespace StepWay
 		case WM_MBUTTONDOWN: case WM_MBUTTONUP:
 		{
 			pWindow->MouseInputHandler(msg, wparam, lparam);
+			break;
+		}
+
+		//Keyboard input
+		case WM_KEYDOWN:
+		case WM_KEYUP:
+		case WM_CHAR:
+		{
+			pWindow->KeyboardInputHandler(msg, wparam, lparam);
 			break;
 		}
 
@@ -78,7 +91,9 @@ namespace StepWay
 
 					//Raw Move
 					if (rawMouse.lLastX != 0 || rawMouse.lLastY != 0)
+					{
 						m_Mouse.OnRawMouseMove(rawMouse.lLastX, rawMouse.lLastY);
+					}
 
 
 					//Now using legacy WM_xxx for handling mouse clicks to make default interface work
@@ -136,35 +151,58 @@ namespace StepWay
 			//Button press events
 			case WM_LBUTTONDOWN:
 			{
-				m_Mouse.OnMousePress(Input::L_BUTTON);
+				m_Mouse.OnMousePress(Input::MouseKey::L_BUTTON);
 				break;
 			}
 			case WM_RBUTTONDOWN:
 			{
-				m_Mouse.OnMousePress(Input::R_BUTTON);
+				m_Mouse.OnMousePress(Input::MouseKey::R_BUTTON);
 				break;
 			}
 			case WM_MBUTTONDOWN:
 			{
-				m_Mouse.OnMousePress(Input::MID_BUTTON);
+				m_Mouse.OnMousePress(Input::MouseKey::MID_BUTTON);
 				break;
 			}
 			//button Release events
 			case WM_LBUTTONUP:
 			{
-				m_Mouse.OnMouseRelease(Input::L_BUTTON);
+				m_Mouse.OnMouseRelease(Input::MouseKey::L_BUTTON);
 				break;
 			}
 			case WM_RBUTTONUP:
 			{
-				m_Mouse.OnMouseRelease(Input::R_BUTTON);
+				m_Mouse.OnMouseRelease(Input::MouseKey::R_BUTTON);
 				break;
 			}
 			case WM_MBUTTONUP:
 			{
-				m_Mouse.OnMouseRelease(Input::MID_BUTTON);
+				m_Mouse.OnMouseRelease(Input::MouseKey::MID_BUTTON);
 				break;
 			}
+		}
+	}
+
+	
+
+
+	void Win32Window::KeyboardInputHandler(UINT msg, WPARAM wparam, LPARAM lparam)
+	{
+		if (msg == WM_KEYDOWN)
+		{
+			KeyboardKey key = Win32InputSystem::MapKey(wparam);
+			if (key != KeyboardKey::NONE)
+				m_Keyboard.OnButtonPress(key);
+		}
+		if (msg == WM_KEYUP)
+		{
+			KeyboardKey key = Win32InputSystem::MapKey(wparam);
+			if (key != KeyboardKey::NONE)
+				m_Keyboard.OnButtonRelease(Input::Win32::Win32InputSystem::MapKey(wparam));
+		}
+		if (msg == WM_CHAR)
+		{
+			m_Keyboard.OnCharInput(wparam);
 		}
 	}
 

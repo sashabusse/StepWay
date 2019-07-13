@@ -1,6 +1,8 @@
 #pragma once
 //always include first cause definition below
 
+
+
 #ifdef SW_PLATFORM_WINDOWS
 	#ifdef SW_BUILD_DLL
 		#define SW_API __declspec(dllexport)

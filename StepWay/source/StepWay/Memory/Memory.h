@@ -3,7 +3,7 @@
 #include "Core.h"
 
 
-
+/*    Not realised yet
 //override-allocators-here----------------------------------------------|
 //should suply static members:
 //public:
@@ -32,6 +32,7 @@ namespace StepWay
 
 //allocators-overriden---------------------------------------------------|
 
+
 #if !SW_FORCE_STD_NEW
 inline void* operator new  (std::size_t count)
 {
@@ -53,11 +54,26 @@ inline void operator delete[](void* ptr)
 	::StepWay::GlobalAllocator::Free(ptr);
 }
 #endif
+*/
 
 
+#if defined(SW_USE_CRT_DBG) && defined(_DEBUG)
+	#define _CRTDBG_MAP_ALLOC
+	#include <crtdbg.h>
+#endif
+
+
+#if defined(SW_USE_CRT_DBG) && defined(_DEBUG)
+#define SW_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+// Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
+// allocations to be of _CLIENT_BLOCK type
+#else
 #define SW_NEW								new
+#endif
 #define SW_DELETE							delete
 
+
+/*
 #if !SW_FORCE_STD_MALLOC
 
 #define SW_MALLOC(size)						::StepWay::GlobalAllocator::Allocate(size)
@@ -87,7 +103,7 @@ inline void operator delete[](void* ptr)
 #define SW_CACHE_LINE_FREE(ptr)				free(ptr)
 
 #endif
-
+*/
 
 
 

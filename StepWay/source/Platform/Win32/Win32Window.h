@@ -52,6 +52,9 @@ namespace StepWay
 			void Hide() override;
 
 
+			//Capture
+			virtual void SetInputCapture() override;
+			virtual void ReleaseInputCapture() override;
 
 			//Events related
 			virtual void SetEventCallback(const EventCallback& callback) override;
@@ -66,12 +69,13 @@ namespace StepWay
 			
 			//WndProc Helper Handlers
 			void MouseInputHandler(UINT msg, WPARAM wparam, LPARAM lparam);
+			void KeyboardInputHandler(UINT msg, WPARAM wparam, LPARAM lparam);
 			void WindowSizeMoveHandler(UINT msg, WPARAM wparam, LPARAM lparam);
 
 		private:
 			void PollEvents();
 
-
+			//remove some of this to Window class
 			std::string m_title;
 			//Position (origin is assumed to be in upper left corner)
 			struct Position { int x, y; } m_position;
@@ -86,6 +90,7 @@ namespace StepWay
 
 			//windows specific
 			HWND m_wnd;
+			HDC m_DC;
 
 		};
 

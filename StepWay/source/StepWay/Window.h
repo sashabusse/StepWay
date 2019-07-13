@@ -2,6 +2,7 @@
 #include "Core.h"
 #include "Events/Event.h"
 #include "Input/Mouse.h"
+#include "Input/Keyboard.h"
 #include <string>
 #include <functional>
 
@@ -58,16 +59,21 @@ namespace StepWay
 		virtual void Show() = 0;
 		virtual void Hide() = 0;
 
+		//Capture may be bool
+		virtual void SetInputCapture() = 0;
+		virtual void ReleaseInputCapture() = 0;
 
 		//Events related
 		virtual void SetEventCallback(const EventCallback& callback) = 0;
 
-		Input::MouseClientInterface GetMouse() { return m_Mouse.GetClientInterface(); }
+		inline Input::MouseClientInterface GetMouse() { return m_Mouse.GetClientInterface(); }
+		inline Input::KeyboardClientInterface GetKeyboard() { return m_Keyboard.GetInterface(); }
 		
 	protected:
 		Window() {};
 
 		Input::Mouse m_Mouse;
+		Input::Keyboard m_Keyboard;
 	};
 
 }

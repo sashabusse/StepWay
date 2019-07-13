@@ -10,7 +10,7 @@ namespace StepWay
 	enum class EventType
 	{
 		EMPTY = 0,
-		KEY_PRESS, KEY_RELEASE,
+		KEY_PRESS, KEY_RELEASE,CHAR_INPUT,
 		MOUSE_MOVE,MOUSE_RAW_MOVE, MOUSE_SCROLL, MOUSE_BUTTON_PRESS, MOUSE_BUTTON_RELEASE,
 		WINDOW_DESTROY, WINDOW_MOVE, WINDOW_MOVE_END, WINDOW_RESIZE, WINDOW_RESIZE_END
 		//Add here window events later
@@ -39,30 +39,37 @@ namespace StepWay
 		virtual std::wstring GetTypeWString() const override { return L#type; }
 
 
-
+	//base class for events
 	class Event
 	{
 	public:
-		virtual int GetEventCategory() const = 0;
-
+		//define with SW_DECLARE_EVENT_TYPE
 		virtual EventType GetEventType() const = 0;
 		virtual std::string GetTypeString() const = 0;
 		virtual std::wstring GetTypeWString() const = 0;
+		
+		//define with SW_DECLARE_EVENT_CATEGORY
+		virtual int GetEventCategory() const = 0;
 
+		//category checks
+		inline bool IsOfCategoriesAny(EventCategory OredCategories) const { return GetEventCategory()&OredCategories; };
+		inline bool IsOfCategoriesAll(EventCategory OredCategories) const { return (GetEventCategory()&OredCategories) == OredCategories; }
+		inline bool IsOfCategoriesFullMatch(EventCategory OredCategories) const { return GetEventCategory() == OredCategories; }
+
+		//redefine if want to reporn something else
 		virtual std::string ToString() const { return GetTypeString(); };
 		virtual std::wstring ToWString() const { return GetTypeWString(); };
 
 		virtual ~Event() {};
-
-		inline bool IsOfCategories(EventCategory OredCategories) const { return GetEventCategory()&OredCategories; };
-
-		bool IsHandled() const { return m_isHandled; }
-		void MarkHandled() { m_isHandled = true; }
 	protected:
-		bool m_isHandled = false;
 	};
 
+	//use for event callbacks
 	typedef std::function<void(Event&)> EventCallback;
+
+
+
+
 
 	//Danger reference storage
 	class EventDispatcher
@@ -72,12 +79,14 @@ namespace StepWay
 			m_event(e)
 		{
 		}
-		template<typename EventArg>
-		void Dispatch(const std::function<void(EventArg&)>& fun)
+
+		template<typename EventTypeArg>
+		void Dispatch(const std::function<void(EventTypeArg&)>& fun)
 		{
-			if (m_event.GetEventType() == EventArg::GetStaticEventType())
-				fun(static_cast<EventArg&>(m_event));
+			if (m_event.GetEventType() == EventTypeArg::GetStaticEventType())
+				fun(static_cast<EventTypeArg&>(m_event));
 		}
+		
 	private:
 		Event& m_event;
 	};

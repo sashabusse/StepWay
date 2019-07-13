@@ -47,6 +47,6 @@ bool SandboxApp::ImplSetUp()
 
 void SandboxApp::ImplShutDown()
 {
-	//PopLayer(layer);
+	PopLayer(layer);
 	SW_DELETE layer;
 }

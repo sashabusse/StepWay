@@ -8,6 +8,8 @@
 //  [X] Platform: Gamepad support. Enabled with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
 
 #include "StepWayPCH.h"
+#include "Input/InputDefs.h"
+using StepWay::Input::KeyboardKey;
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -64,27 +66,27 @@ bool    ImGui_ImplWin32_Init(void* hwnd)
     io.ImeWindowHandle = hwnd;
 
     // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array that we will update during the application lifetime.
-    io.KeyMap[ImGuiKey_Tab] = VK_TAB;
-    io.KeyMap[ImGuiKey_LeftArrow] = VK_LEFT;
-    io.KeyMap[ImGuiKey_RightArrow] = VK_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow] = VK_UP;
-    io.KeyMap[ImGuiKey_DownArrow] = VK_DOWN;
-    io.KeyMap[ImGuiKey_PageUp] = VK_PRIOR;
-    io.KeyMap[ImGuiKey_PageDown] = VK_NEXT;
-    io.KeyMap[ImGuiKey_Home] = VK_HOME;
-    io.KeyMap[ImGuiKey_End] = VK_END;
-    io.KeyMap[ImGuiKey_Insert] = VK_INSERT;
-    io.KeyMap[ImGuiKey_Delete] = VK_DELETE;
-    io.KeyMap[ImGuiKey_Backspace] = VK_BACK;
-    io.KeyMap[ImGuiKey_Space] = VK_SPACE;
-    io.KeyMap[ImGuiKey_Enter] = VK_RETURN;
-    io.KeyMap[ImGuiKey_Escape] = VK_ESCAPE;
-    io.KeyMap[ImGuiKey_A] = 'A';
-    io.KeyMap[ImGuiKey_C] = 'C';
-    io.KeyMap[ImGuiKey_V] = 'V';
-    io.KeyMap[ImGuiKey_X] = 'X';
-    io.KeyMap[ImGuiKey_Y] = 'Y';
-    io.KeyMap[ImGuiKey_Z] = 'Z';
+    io.KeyMap[ImGuiKey_Tab] = (int)KeyboardKey::KEY_TAB;
+    io.KeyMap[ImGuiKey_LeftArrow] = (int)KeyboardKey::KEY_LEFT;
+    io.KeyMap[ImGuiKey_RightArrow] = (int)KeyboardKey::KEY_RIGHT;
+    io.KeyMap[ImGuiKey_UpArrow] = (int)KeyboardKey::KEY_UP;
+    io.KeyMap[ImGuiKey_DownArrow] = (int)KeyboardKey::KEY_DOWN;
+    io.KeyMap[ImGuiKey_PageUp] = (int)KeyboardKey::KEY_PAGE_UP;
+    io.KeyMap[ImGuiKey_PageDown] = (int)KeyboardKey::KEY_PAGE_DOWN;
+    io.KeyMap[ImGuiKey_Home] = (int)KeyboardKey::KEY_HOME;
+    io.KeyMap[ImGuiKey_End] = (int)KeyboardKey::KEY_END;
+    io.KeyMap[ImGuiKey_Insert] = (int)KeyboardKey::KEY_INSERT;
+    io.KeyMap[ImGuiKey_Delete] = (int)KeyboardKey::KEY_DELETE;
+    io.KeyMap[ImGuiKey_Backspace] =(int)KeyboardKey::KEY_BACKSPACE;
+    io.KeyMap[ImGuiKey_Space] = (int)KeyboardKey::KEY_SPACE;
+    io.KeyMap[ImGuiKey_Enter] = (int)KeyboardKey::KEY_ENTER;
+    io.KeyMap[ImGuiKey_Escape] = (int)KeyboardKey::KEY_ESCAPE;
+    //io.KeyMap[ImGuiKey_A] = 'A';
+    //io.KeyMap[ImGuiKey_C] = 'C';
+    //io.KeyMap[ImGuiKey_V] = 'V';
+    //io.KeyMap[ImGuiKey_X] = 'X';
+    //io.KeyMap[ImGuiKey_Y] = 'Y';
+    //io.KeyMap[ImGuiKey_Z] = 'Z';
 
     return true;
 }

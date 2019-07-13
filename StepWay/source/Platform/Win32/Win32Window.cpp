@@ -3,7 +3,7 @@
 #include "Utility.h"
 
 //overriding platform specific Creation function from Window.h
-StepWay::Window* StepWay::Window::Create() { return new StepWay::Win32::Win32Window; }
+StepWay::Window* StepWay::Window::Create() { return SW_NEW StepWay::Win32::Win32Window; }
 
 namespace StepWay
 {	namespace Win32
@@ -16,7 +16,8 @@ namespace StepWay
 			m_IsMoving(false),
 			m_size({ 0,0 }),
 			m_IsResizing(false),
-			m_wnd(NULL)
+			m_wnd(NULL),
+			m_DC(NULL)
 		{
 
 		}
@@ -86,6 +87,9 @@ namespace StepWay
 
 			SW_CORE_ASSERT(m_wnd != NULL, "failed to create window");
 
+			m_DC = ::GetDC(m_wnd);
+			SW_CORE_ASSERT(m_DC != NULL, "failed to retrieve DC");
+
 			ShowWindow(m_wnd, SW_NORMAL);
 			UpdateWindow(m_wnd);
 
@@ -96,6 +100,7 @@ namespace StepWay
 		//Delete binding and destroys window
 		void Win32Window::ShutDown()
 		{
+			ReleaseDC(m_wnd,m_DC);
 			Close();
 		}
 
@@ -195,6 +200,16 @@ namespace StepWay
 			ShowWindow(m_wnd, SW_HIDE);
 		}
 
+		void Win32Window::SetInputCapture()
+		{
+			SetCapture(m_wnd);
+		}
+
+		void Win32Window::ReleaseInputCapture()
+		{
+			ReleaseCapture();
+		}
+
 
 		void Win32Window::Close()
 		{
@@ -223,7 +238,7 @@ namespace StepWay
 
 		HDC Win32Window::GetDC() const
 		{
-			return ::GetDC(m_wnd);
+			return m_DC;
 		}
 
 

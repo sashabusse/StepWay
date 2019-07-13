@@ -4,7 +4,9 @@
 
 namespace StepWay
 {
-
-
+	Layer::Layer() :
+		IsEnabled(true)
+	{
+	}
 }
 

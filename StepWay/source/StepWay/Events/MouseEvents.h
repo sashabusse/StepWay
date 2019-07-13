@@ -14,13 +14,19 @@ namespace StepWay
 	public:
 		SW_DECLARE_EVENT_CATEGORY(INPUT_CATEGORY | MOUSE_CATEGORY)
 		
-		inline float GetX() const { return m_x; }
-		inline float GetY() const { return m_y; }
 
-		virtual std::string ToString() const 
+		virtual std::string ToString() const
 		{
 			return GetTypeString() + " x: " + std::to_string(GetX()) + "  y: " + std::to_string(GetY());
 		};
+		virtual std::wstring ToWString() const
+		{
+			return GetTypeWString() + L" x: " + std::to_wstring(GetX()) + L"  y: " + std::to_wstring(GetY());
+		};
+
+
+		inline float GetX() const { return m_x; }
+		inline float GetY() const { return m_y; }
 
 	protected:
 		MouseEvent(float x, float y) :
@@ -31,11 +37,23 @@ namespace StepWay
 		float m_x, m_y;
 	};
 
+
 	//Not Implemented yet
 	class MouseScrollEvent : public MouseEvent
 	{
 	public:
 		SW_DECLARE_EVENT_TYPE(EventType::MOUSE_SCROLL)
+
+
+		virtual std::string ToString() const
+		{
+			return GetTypeString() + "(offset=" + std::to_string(GetOffset()) + ")";
+		};
+		virtual std::wstring ToWString() const
+		{
+			return GetTypeWString() + L"(x=" + std::to_wstring(GetOffset()) + L")";
+		};
+
 
 		MouseScrollEvent(float x, float y, float offset) :
 			MouseEvent(x, y),
@@ -44,10 +62,7 @@ namespace StepWay
 
 		inline float GetOffset()const { return m_offset; };
 
-
-		virtual std::string ToString() const { return GetTypeString() + "(offset=" + std::to_string(GetOffset()) + ")"; };
-		virtual std::wstring ToWString() const { return GetTypeWString() + L"(x=" + std::to_wstring(GetOffset()) + L")"; };
-
+		~MouseScrollEvent() override {};
 	private:
 		float m_offset;
 	};
@@ -58,17 +73,39 @@ namespace StepWay
 	public:
 		SW_DECLARE_EVENT_TYPE(EventType::MOUSE_MOVE)
 
+
+		virtual std::string ToString() const
+		{
+			return GetTypeString() + "(x=" + std::to_string(GetX()) + " , y=" + std::to_string(GetY()) + ")";
+		};
+		virtual std::wstring ToWString() const
+		{
+			return GetTypeWString() + L"(x=" + std::to_wstring(GetX()) + L" , y=" + std::to_wstring(GetY()) + L")";
+		};
+
 		MouseMoveEvent(float x, float y) :
 			MouseEvent(x, y)
 		{};
 
-		virtual std::string ToString() const { return GetTypeString() + "(x=" + std::to_string(GetX()) + " , y=" + std::to_string(GetY()) + ")"; };
-		virtual std::wstring ToWString() const { return GetTypeWString() + L"(x=" + std::to_wstring(GetX()) + L" , y=" + std::to_wstring(GetY()) + L")"; };
+		~MouseMoveEvent() override {};
 	};
 
 	class MouseRawMoveEvent : public MouseEvent
 	{
 	public:
+		SW_DECLARE_EVENT_TYPE(EventType::MOUSE_RAW_MOVE)
+
+
+		virtual std::string ToString() const
+		{
+			return GetTypeString() + "(dx=" + std::to_string(GetDX()) + " , dy=" + std::to_string(GetDY()) + ")";
+		};
+		virtual std::wstring ToWString() const
+		{
+			return GetTypeWString() + L"(dx=" + std::to_wstring(GetDX()) + L" , dy=" + std::to_wstring(GetDY()) + L")";
+		};
+
+
 		MouseRawMoveEvent(float dx, float dy) :
 			m_dx(dx),
 			m_dy(dy),
@@ -76,15 +113,11 @@ namespace StepWay
 		{
 		}
 
-		SW_DECLARE_EVENT_TYPE(EventType::MOUSE_RAW_MOVE)
 
 		inline float GetDX()const { return m_dx; }
 		inline float GetDY()const { return m_dy; }
 
-		virtual std::string ToString() const { return GetTypeString() + "(dx=" + std::to_string(GetDX()) + " , dy=" + std::to_string(GetDY()) + ")"; };
-		virtual std::wstring ToWString() const { return GetTypeWString() + L"(dx=" + std::to_wstring(GetDX()) + L" , dy=" + std::to_wstring(GetDY()) + L")"; };
-
-
+		~MouseRawMoveEvent() override {};
 	private:
 		float m_dx, m_dy;
 	};
@@ -93,16 +126,16 @@ namespace StepWay
 	class MouseButtonEvent : public MouseEvent
 	{
 	public:
-		MouseButtonEvent(Input::MouseKeyCode keyCode, int flags, float x, float y) :
+		MouseButtonEvent(Input::MouseKey keyCode, int flags, float x, float y) :
 			MouseEvent(x, y),
 			m_keyCode(keyCode),
 			m_flags(flags)
 		{};
 
-		inline Input::MouseKeyCode GetKeyCode() const { return m_keyCode; }
+		inline Input::MouseKey GetKeyCode() const { return m_keyCode; }
 		inline int GetFlags() const { return m_flags; }
 	protected:
-		Input::MouseKeyCode m_keyCode;
+		Input::MouseKey m_keyCode;
 		int m_flags;
 	};
 	
@@ -112,9 +145,11 @@ namespace StepWay
 	public:
 		SW_DECLARE_EVENT_TYPE(EventType::MOUSE_BUTTON_PRESS)
 
-		MouseButtonPressEvent(Input::MouseKeyCode keyCode,int flags,float x, float y) :
+		MouseButtonPressEvent(Input::MouseKey keyCode,int flags,float x, float y) :
 			MouseButtonEvent(keyCode,flags,x, y)
 		{};
+
+		~MouseButtonPressEvent() override {};
 	};
 
 	class MouseButtonReleaseEvent : public MouseButtonEvent
@@ -122,9 +157,11 @@ namespace StepWay
 	public:
 		SW_DECLARE_EVENT_TYPE(EventType::MOUSE_BUTTON_RELEASE)
 
-		MouseButtonReleaseEvent(Input::MouseKeyCode keyCode, int flags, float x, float y) :
+		MouseButtonReleaseEvent(Input::MouseKey keyCode, int flags, float x, float y) :
 			MouseButtonEvent(keyCode, flags, x, y)
 		{};
+
+		~MouseButtonReleaseEvent() override {};
 	};
 
 }
