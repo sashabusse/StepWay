@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Layer.h"
+#include <memory.h>
 
 namespace StepWay
 {
@@ -9,12 +10,15 @@ namespace StepWay
 	class LayerStack
 	{
 	public:
-		void PushLayer(Layer* layer);
-		Layer* PopLayer();
-		void PopLayer(Layer* layer);
+		void SetUp() {};
+		void ShutDown();
 
-		typedef std::vector<Layer*>::iterator		Iterator;
-		typedef std::vector<Layer*>::const_iterator ConstIterator;
+		void PushLayer(std::shared_ptr<Layer> layer);
+		std::shared_ptr <Layer> PopLayer();
+		void PopLayer(std::shared_ptr<Layer> layer);
+
+		typedef std::vector< std::shared_ptr<Layer>>::iterator			Iterator;
+		typedef std::vector< std::shared_ptr<Layer>>::const_iterator	ConstIterator;
 
 		Iterator begin();
 		ConstIterator begin() const;
@@ -24,7 +28,7 @@ namespace StepWay
 		int size()const;
 
 	private:
-		std::vector<Layer*> m_Layers;
+		std::vector< std::shared_ptr<Layer>> m_Layers;
 	};
 
 

@@ -20,11 +20,13 @@
 
 #define SW_ASSERT(cond, ...)\
  {if(!(cond)){SW_ERROR("Assertion failed on condition: {}",#cond);\
-			SW_ERROR("assertion message(arg): {}",__VA_ARGS__);DBG_BREAK();}}
+			SW_ERROR("assertion message(arg): {}",__VA_ARGS__);\
+			SW_ERROR(__VA_ARGS__);DBG_BREAK();}}
 
 #define SW_CORE_ASSERT(cond, ...)\
- {if(!(cond)){SW_ERROR("Assertion failed on condition: {}",#cond);\
-			SW_ERROR("assertion message(arg): {}",__VA_ARGS__);DBG_BREAK();}}
+ {if(!(cond)){SW_CORE_ERROR("Assertion failed on condition: {}",#cond);\
+			SW_CORE_ERROR("assertion message(arg):");\
+			SW_CORE_ERROR(__VA_ARGS__);DBG_BREAK();}}
 
 #define SW_BIND_METH(meth, ...) std::bind(&meth,this,__VA_ARGS__)
 #define SW_BIND_METH_1(meth) std::bind(&meth,this,std::placeholders::_1)

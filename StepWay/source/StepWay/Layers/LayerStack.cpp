@@ -4,7 +4,16 @@
 
 namespace StepWay
 {
-	void LayerStack::PushLayer(Layer* layer)
+	void LayerStack::ShutDown()
+	{
+		for (auto& layer : m_Layers)
+		{
+			layer->OnDetach();
+		}
+		m_Layers.clear();
+	}
+
+	void LayerStack::PushLayer(std::shared_ptr <Layer> layer)
 	{
 		SW_CORE_ASSERT(layer != nullptr, "invalid pointer");
 		m_Layers.push_back(layer);
@@ -13,15 +22,15 @@ namespace StepWay
 	}
 
 
-	Layer* LayerStack::PopLayer()
+	std::shared_ptr<Layer> LayerStack::PopLayer()
 	{
 		SW_CORE_ASSERT(size() != 0, "cant pop layer when stack is empty");
-		Layer* ret = m_Layers.back();
+		std::shared_ptr<Layer> ret = m_Layers.back();
 		m_Layers.pop_back();
 		return ret;
 	}
 
-	void LayerStack::PopLayer(Layer * layer)
+	void LayerStack::PopLayer(std::shared_ptr<Layer> layer)
 	{
 		SW_CORE_ASSERT(layer != nullptr, "invalid pointer");
 		auto it = std::find(m_Layers.begin(), m_Layers.end(), layer);

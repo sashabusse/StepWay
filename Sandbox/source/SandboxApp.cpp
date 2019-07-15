@@ -40,13 +40,9 @@ protected:
 
 bool SandboxApp::ImplSetUp()
 {
-	layer = SW_NEW ExampleLayer;
-	//PushLayer(layer);
 	return true;
 }
 
 void SandboxApp::ImplShutDown()
 {
-	PopLayer(layer);
-	SW_DELETE layer;
 }

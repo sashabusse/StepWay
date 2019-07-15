@@ -7,6 +7,7 @@
 //Just WTF is it doing here?
 #include "Layers/DebugGUI/DebugGUILayer.h"
 #include "glad/glad.h"
+#include "Graphics/API/Buffer.h"
 
 
 using StepWay::Graphics::API::GraphicsContext;
@@ -27,6 +28,8 @@ namespace StepWay
 
 	//------------------------------------------------
 	static Layer* dbgGui;
+	static Graphics::API::VertexBuffer* buffer;
+	using Graphics::API::ShaderDataType;
 	//------------------------------------------------
 
 	bool Application::SetUp()
@@ -67,10 +70,22 @@ namespace StepWay
 		m_MainContext->SetUp();
 		m_MainContext->MakeCurrent();
 
+		m_layers.SetUp();
+		m_overlays.SetUp();
 
 		//---------------------------------------
-		dbgGui = SW_NEW DebugGUILayer(m_MainWindow, m_MainContext);
-		PushLayer(dbgGui);
+		PushLayer(std::make_shared<DebugGUILayer>(m_MainWindow, m_MainContext));
+
+		float data[9] =
+		{
+			-0.5f, -0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.0f,  0.5f, 0.0f
+		};
+		buffer = Graphics::API::VertexBuffer::Create(Graphics::API::GAPI_TYPE::OPENGL);
+		buffer->SetUp(data, 9 * sizeof(float));
+		buffer->Bind();
+		buffer->SetLayout({ ShaderDataType::FLOAT3 });
 		//---------------------------------------
 
 
@@ -81,11 +96,9 @@ namespace StepWay
 
 	void Application::ShutDown()
 	{
-		//----------------------------
-		PopLayer(dbgGui);
-		SW_DELETE dbgGui;
-		//-----------------------------
 
+		m_layers.ShutDown();
+		m_overlays.ShutDown();
 
 		ImplShutDown();
 
@@ -114,23 +127,29 @@ namespace StepWay
 		{
 		
 			//some test rendering here
-			glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-			
 			glClear(GL_COLOR_BUFFER_BIT);
 			
+			uint32 VAO;
+			glGenVertexArrays(1, &VAO);
+			glBindVertexArray(VAO);
+			{
+				int i = 0;
+				for (auto& element : buffer->GetLayout())
+				{
+					glEnableVertexAttribArray(i);
+					glVertexAttribPointer(i, element.GetComponentCount(), GL_FLOAT, GL_TRUE, buffer->GetLayout().GetStride(), (void*)element.GetOffset());
+					i++;
+				}
+			}
 			
-			glBegin(GL_QUADS);
+			glDrawArrays(GL_TRIANGLES, 0, 3);
 			
-			glVertex2f(-0.8, -0.8);
+			glDisableVertexAttribArray(0);
+			glDeleteVertexArrays(1, &VAO);
 			
-			glVertex2f(0.8, -0.8);
 			
-			glVertex2f(0.8, 0.8);
 			
-			glVertex2f(-0.8, 0.8);
-			
-			glEnd();
-			
+
 			//update layers
 			for (auto it = m_layers.begin(); it != m_layers.end(); ++it)
 			{
@@ -178,24 +197,24 @@ namespace StepWay
 
 	}
 
-	void Application::PushLayer(Layer * layer)
+	void Application::PushLayer(std::shared_ptr<Layer> layer)
 	{
 		SW_CORE_TRACE("(Layer)");
 		m_layers.PushLayer(layer);
 	}
 
-	void Application::PopLayer(Layer * layer)
+	void Application::PopLayer(std::shared_ptr<Layer> layer)
 	{
 		m_layers.PopLayer(layer);
 	}
 
-	void Application::PushOverLay(Layer * overlay)
+	void Application::PushOverLay(std::shared_ptr<Layer> overlay)
 	{
 		SW_CORE_TRACE("(Overlay)");
 		m_overlays.PushLayer(overlay);
 	}
 
-	void Application::PopOverlay(Layer * overlay)
+	void Application::PopOverlay(std::shared_ptr<Layer> overlay)
 	{
 		m_overlays.PopLayer(overlay);
 	}

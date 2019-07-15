@@ -31,10 +31,10 @@ namespace StepWay
 		void OnEvent(Event& e);
 
 		//find an better way to pop layers
-		void PushLayer(Layer* layer);
-		void PopLayer(Layer* layer);
-		void PushOverLay(Layer* overlay);
-		void PopOverlay(Layer* overlay);
+		void PushLayer(std::shared_ptr<Layer> layer);
+		void PopLayer(std::shared_ptr<Layer> layer);
+		void PushOverLay(std::shared_ptr<Layer> overlay);
+		void PopOverlay(std::shared_ptr<Layer> overlay);
 
 		virtual ~Application();
 	private:
