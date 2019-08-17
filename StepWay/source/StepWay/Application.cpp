@@ -5,18 +5,21 @@
 #include "Input/InputSystem.h"
 #include "Memory/Memory.h"
 //Just WTF is it doing here?
-#include "Layers/DebugGUI/DebugGUILayer.h"
+#include "Graphics/API/Shader.h"
 #include "glad/glad.h"
-#include "Graphics/API/Buffer.h"
+#include "OpenGL/ErrorHandling.h"
+#include "Graphics/API/RenderingCommands.h"
 
 
 using StepWay::Graphics::API::GraphicsContext;
 using StepWay::Graphics::API::GAPI_TYPE;
 
 
+using namespace StepWay::Graphics::API;
+
+
 namespace StepWay
 {
-
 	
 	Application* Application::m_Instance = nullptr;
 
@@ -26,11 +29,6 @@ namespace StepWay
 		m_Instance = this;
 	}
 
-	//------------------------------------------------
-	static Layer* dbgGui;
-	static Graphics::API::VertexBuffer* buffer;
-	using Graphics::API::ShaderDataType;
-	//------------------------------------------------
 
 	bool Application::SetUp()
 	{
@@ -73,34 +71,18 @@ namespace StepWay
 		m_layers.SetUp();
 		m_overlays.SetUp();
 
-		//---------------------------------------
-		PushLayer(std::make_shared<DebugGUILayer>(m_MainWindow, m_MainContext));
-
-		float data[9] =
-		{
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.0f,  0.5f, 0.0f
-		};
-		buffer = Graphics::API::VertexBuffer::Create(Graphics::API::GAPI_TYPE::OPENGL);
-		buffer->SetUp(data, 9 * sizeof(float));
-		buffer->Bind();
-		buffer->SetLayout({ ShaderDataType::FLOAT3 });
-		//---------------------------------------
-
-
 		m_IsRunning = ImplSetUp();
+		
 		return m_IsRunning;
 	}
 
 
 	void Application::ShutDown()
 	{
+		ImplShutDown();
 
 		m_layers.ShutDown();
 		m_overlays.ShutDown();
-
-		ImplShutDown();
 
 
 		m_MainContext->ShutDown();
@@ -125,30 +107,7 @@ namespace StepWay
 		SW_CORE_TRACE("Entering Main Loop");
 		while (m_IsRunning)
 		{
-		
-			//some test rendering here
-			glClear(GL_COLOR_BUFFER_BIT);
-			
-			uint32 VAO;
-			glGenVertexArrays(1, &VAO);
-			glBindVertexArray(VAO);
-			{
-				int i = 0;
-				for (auto& element : buffer->GetLayout())
-				{
-					glEnableVertexAttribArray(i);
-					glVertexAttribPointer(i, element.GetComponentCount(), GL_FLOAT, GL_TRUE, buffer->GetLayout().GetStride(), (void*)element.GetOffset());
-					i++;
-				}
-			}
-			
-			glDrawArrays(GL_TRIANGLES, 0, 3);
-			
-			glDisableVertexAttribArray(0);
-			glDeleteVertexArrays(1, &VAO);
-			
-			
-			
+			ImplOnNewFrameStart();
 
 			//update layers
 			for (auto it = m_layers.begin(); it != m_layers.end(); ++it)
@@ -168,6 +127,8 @@ namespace StepWay
 			m_MainContext->SwapBuffers();
 			
 			m_MainWindow->OnUpdate();
+
+			ImplOnNewFrameEnd();
 		}
 	}
 

@@ -69,6 +69,8 @@ namespace StepWay
 		m_sKeyMap[VK_DELETE] = KeyboardKey::KEY_DELETE;
 		m_sKeyMap[VK_RETURN] = KeyboardKey::KEY_ENTER;
 		m_sKeyMap[VK_ESCAPE] = KeyboardKey::KEY_ESCAPE;
+
+		RegisterMouses();
 	}
 
 

@@ -27,7 +27,25 @@ namespace StepWay
 				uint32 m_buffer;
 			};
 
+			class GLIndexBuffer :public API::IndexBuffer
+			{
+			public:
+				GLIndexBuffer();
 
+				virtual void SetUp(uint16* indices, int count) override;
+				virtual void ShutDown() override;
+				virtual int GetCount()const override { return m_count; };
+
+				virtual void Bind();
+				virtual void UnBind();
+
+				virtual ~GLIndexBuffer() {};
+			private:
+			public:
+			private:
+				uint m_indexBuffer;
+				int m_count;
+			};
 
 		}
 	}

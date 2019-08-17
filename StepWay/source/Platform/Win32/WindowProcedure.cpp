@@ -22,10 +22,8 @@ namespace StepWay
 			return 0;
 		}
 
-
 		//may be store in some other form
 		Win32Window* pWindow = reinterpret_cast<Win32Window*>(GetWindowLongPtrW(wnd, 0));
-
 
 		//unroll to if and some delegation later
 		switch (msg)

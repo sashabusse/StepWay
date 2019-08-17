@@ -11,11 +11,14 @@ namespace StepWay
 {
 	using Input::MouseKey;
 
-	DebugGUILayer::DebugGUILayer(Window * window, GraphicsContext* Context):
+	DebugGUILayer::DebugGUILayer(Window * window, GraphicsContext* Context) :
 		m_Context(Context),
-		m_show_demo_window(true),
-		m_pWindow(window)
+		m_ShowDebugWindow(true),
+		m_pWindow(window),
+		m_window_flags(0)
 	{
+		m_MainMenuState.ShowAppStatistics = false;
+		m_MainMenuState.ShowStyleEditor = false;
 	}
 
 	DebugGUILayer::~DebugGUILayer()
@@ -27,12 +30,11 @@ namespace StepWay
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
 
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
-		//ImGui::StyleColorsClassic();
-
+		
 		// Setup Platform/Renderer bindings
 		OS_SetUp();
 		if (m_Context->GetGAPI_TYPE() == Graphics::API::GAPI_TYPE::OPENGL)
@@ -43,6 +45,16 @@ namespace StepWay
 		{
 			SW_CORE_ASSERT(false, "no realization of debug gui for such GAPI type");
 		}
+		
+		m_window_flags |= ImGuiWindowFlags_MenuBar;
+		//if (no_titlebar)        m_window_flags |= ImGuiWindowFlags_NoTitleBar;
+		//if (no_scrollbar)       m_window_flags |= ImGuiWindowFlags_NoScrollbar;
+		//if (no_move)            m_window_flags |= ImGuiWindowFlags_NoMove;
+		//if (no_resize)          m_window_flags |= ImGuiWindowFlags_NoResize;
+		//if (no_collapse)        m_window_flags |= ImGuiWindowFlags_NoCollapse;
+		//if (no_nav)             m_window_flags |= ImGuiWindowFlags_NoNav;
+		//if (no_background)      m_window_flags |= ImGuiWindowFlags_NoBackground;
+		//if (no_bring_to_front)  m_window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 	}
 
 	void DebugGUILayer::OnDetach()
@@ -69,12 +81,11 @@ namespace StepWay
 		{
 			SW_CORE_ASSERT(false, "something wrong with NewFrame");
 		}
-
 		OS_NewFrame();
 		ImGui::NewFrame();
 
-		if (m_show_demo_window)
-			ImGui::ShowDemoWindow(&m_show_demo_window);
+		if (m_ShowDebugWindow)
+			ShowDebugWindow(&m_ShowDebugWindow);
 
 		ImGui::Render();
 		
@@ -180,6 +191,50 @@ namespace StepWay
 			io.AddInputCharacter(ChEvent->GetWChar());
 	}
 
+	void DebugGUILayer::ShowDebugWindow(bool* p_opened)
+	{
+		// We specify a default position/size in case there's no data in the .ini file. Typically this isn't required! We only do it to make the Demo applications a little more welcoming.
+		ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(350, 400), ImGuiCond_FirstUseEver);
+
+
+		if (m_MainMenuState.ShowAppStatistics) { ImGui::ShowMetricsWindow(&(m_MainMenuState.ShowAppStatistics)); }
+		if (m_MainMenuState.ShowStyleEditor) { ImGui::Begin("Style Editor", &(m_MainMenuState.ShowStyleEditor)); ImGui::ShowStyleEditor(); ImGui::End(); }
+
+
+		if (!ImGui::Begin("Debug Window", p_opened, m_window_flags))
+		{
+			// Early out if the window is collapsed, as an optimization.
+			ImGui::End();
+			return;
+		}
+
+		if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("Help"))
+			{
+				ImGui::MenuItem("Metrics", NULL, &(m_MainMenuState.ShowAppStatistics));
+				ImGui::MenuItem("Style Editor", NULL, &(m_MainMenuState.ShowStyleEditor));
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenuBar();
+		}
+
+
+		for (DbgTab& tab : m_Tabs)
+		{
+			if (ImGui::CollapsingHeader(tab.GetName().c_str()))
+			{
+				tab.Show();
+			}
+		}
+		
+		
+
+		ImGui::End();
+
+	}
+
 
 	// not replicated part
 	//
@@ -223,6 +278,11 @@ namespace StepWay
 	std::wstring DebugGUILayer::ToWString() const
 	{
 		return L"DebugGUILayer(by imgui)";
+	}
+
+	void DebugGUILayer::AddTab(const DbgTab & tab)
+	{
+		m_Tabs.push_back(tab);
 	}
 
 }

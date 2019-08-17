@@ -27,6 +27,8 @@ namespace StepWay
 		void ShutDown();
 		virtual void ImplShutDown() = 0;
 		void Run();
+		virtual void ImplOnNewFrameStart() {};
+		virtual void ImplOnNewFrameEnd() {};
 
 		void OnEvent(Event& e);
 
@@ -35,6 +37,12 @@ namespace StepWay
 		void PopLayer(std::shared_ptr<Layer> layer);
 		void PushOverLay(std::shared_ptr<Layer> overlay);
 		void PopOverlay(std::shared_ptr<Layer> overlay);
+
+		//Getters
+		inline Window* GetMainWindow()const { return m_MainWindow; }
+		inline Graphics::API::GraphicsContext* GetMainContex()const { return m_MainContext; }
+
+		//Setters
 
 		virtual ~Application();
 	private:

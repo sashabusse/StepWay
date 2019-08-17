@@ -3,6 +3,9 @@
 #include "Core.h"
 #include "Window.h"
 #include "Graphics/API/Context.h"
+#include "imgui.h"
+#include "DebugTab.h"
+#include <functional>
 
 namespace StepWay
 {
@@ -23,6 +26,8 @@ namespace StepWay
 		std::string ToString() const override;
 		std::wstring ToWString() const override;
 
+		void AddTab(const DbgTab& tab);
+		
 
 	private:
 		void OS_SetUp();
@@ -36,13 +41,21 @@ namespace StepWay
 		void OnKeyRelease(Event& e);
 		void OnCharInput(Event& e);
 
+		void ShowDebugWindow(bool* p_opened);
 	private:
 		Window* m_pWindow;
 		GraphicsContext* m_Context;
 
 
-		bool m_show_demo_window;
+		bool m_ShowDebugWindow;
+		ImGuiWindowFlags m_window_flags;
+		struct MainMenuState
+		{
+			bool ShowAppStatistics;
+			bool ShowStyleEditor;
+		} m_MainMenuState;
 
+		std::vector<DbgTab> m_Tabs;
 	};
 
 

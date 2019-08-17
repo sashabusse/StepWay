@@ -41,6 +41,7 @@ workspace "StepWay"
 	AddIncludeDirs["spdlog"] =  "StepWay/vendor/spdlog/include/"
 	AddIncludeDirs["imgui"] = "StepWay/vendor/imgui/"
 	AddIncludeDirs["glad"] = "StepWay/vendor/glad/include/"
+	AddIncludeDirs["glm"] = "StepWay/vendor/glm/"
 	
 	
 	include "Tests/Tests.lua"
@@ -95,7 +96,8 @@ workspace "StepWay"
 			"StepWay/source/Platform",
 			"%{AddIncludeDirs.spdlog}",
 			"%{AddIncludeDirs.imgui}",
-			"%{AddIncludeDirs.glad}"
+			"%{AddIncludeDirs.glad}",
+			"%{AddIncludeDirs.glm}"
 		}
 		-- Links---------------------------------------------------------------------------------------
 		links
@@ -183,8 +185,9 @@ workspace "StepWay"
 			"%{AddIncludeDirs.spdlog}",
 			"%{AddIncludeDirs.imgui}",
 			"%{AddIncludeDirs.glad}",
+			"%{AddIncludeDirs.glm}",
 			"StepWay/source/",
-			"StepWay/source/StepWay/"			
+			"StepWay/source/StepWay/"
 		}
 		
 		links

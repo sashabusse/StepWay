@@ -11,7 +11,7 @@ namespace StepWay
 		{
 
 			//rename and move somewhere else later-------------------------------
-			enum ShaderDataType : int
+			enum SW_API ShaderDataType : int
 			{
 				NONE = 0,
 				FLOAT, FLOAT2, FLOAT3, FLOAT4,
@@ -24,9 +24,9 @@ namespace StepWay
 			int ShaderDataTypeByteSize(ShaderDataType type);
 
 
-			class BufferLayout;
+			class SW_API BufferLayout;
 
-			class LayoutElement
+			class SW_API LayoutElement
 			{
 				friend BufferLayout;
 			public:
@@ -43,7 +43,7 @@ namespace StepWay
 			};
 
 
-			class BufferLayout
+			class SW_API BufferLayout
 			{
 			public:
 				BufferLayout(std::initializer_list<LayoutElement> elements);
@@ -68,7 +68,7 @@ namespace StepWay
 			};
 
 
-			class VertexBuffer
+			class SW_API VertexBuffer
 			{
 			public:
 				VertexBuffer() : m_layout({}) {};
@@ -89,6 +89,27 @@ namespace StepWay
 				static VertexBuffer* Create(GAPI_TYPE api);
 			protected:
 				BufferLayout m_layout;
+			};
+
+
+
+			class SW_API IndexBuffer
+			{
+			public:
+				virtual void SetUp(uint16* indices,int count) = 0;
+				virtual void ShutDown() = 0;
+
+				virtual void Bind() = 0;
+				virtual void UnBind() = 0;
+				
+				virtual int GetCount()const = 0;
+
+				static IndexBuffer* Create(GAPI_TYPE api);
+
+				virtual ~IndexBuffer() {};
+			private:
+			public:
+			private:
 			};
 
 

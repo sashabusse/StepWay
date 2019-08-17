@@ -14,6 +14,7 @@
 
 //std containers
 #include <vector>
+#include <string>
 #include <list>
 #include <map>
 #include <unordered_map>
@@ -21,6 +22,7 @@
 #include <unordered_set>
 #include <stack>
 #include <queue>
+
 #include <memory.h>
 
 #include <functional>
@@ -28,6 +30,9 @@
 
 #include <locale>
 #include <codecvt>
+
+#include <sstream>
+#include <fstream>
 
 
 #ifdef SW_PLATFORM_WINDOWS

@@ -89,6 +89,21 @@ namespace StepWay
 			{
 			}
 
+			IndexBuffer * IndexBuffer::Create(GAPI_TYPE api)
+			{
+				switch (api)
+				{
+				case GAPI_TYPE::OPENGL:
+					return SW_NEW OpenGL::GLIndexBuffer();
+					break;
+				default:
+					SW_CORE_ASSERT(false, "no IndexBuffer support for such api");
+					break;
+				}
+				SW_CORE_ASSERT(false, "no IndexBuffer support for such api");
+				return nullptr;
+			}
+
 		}
 	}
 }
