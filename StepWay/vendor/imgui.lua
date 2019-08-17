@@ -1,23 +1,24 @@
-project "glad"
+project "imgui"
 
+	location "imgui"
 	targetname  "%{prj.name}"
-	targetdir ("../../../bin/" .. outputdirname .. "/%{prj.name}/")
-	objdir ("../../../bin-int/" .. outputdirname .. "/%{prj.name}/")
+	targetdir ("../../bin/" .. outputdirname .. "/%{prj.name}/")
+	objdir ("../../bin-int/" .. outputdirname .. "/%{prj.name}/")
 
-	language "C"
+	language "C++"
 	
 	kind "StaticLib"
 	staticruntime "Off"
 
 	files
 	{
-		"src/**.c",
-		"include/**.h"
+		"imgui/*.cpp",
+		"imgui/*.h"
 	}
 
 	includedirs
-	{
-		"include/"		
+	{		
+		"imgui/"
 	}
 	
 	links

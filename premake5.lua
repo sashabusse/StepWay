@@ -45,8 +45,8 @@ workspace "StepWay"
 	
 	
 	include "Tests/Tests.lua"
-	include "StepWay/vendor/glad/glad.lua"
-	include "StepWay/vendor/imgui/imgui.lua"
+	include "StepWay/vendor/glad.lua"
+	include "StepWay/vendor/imgui.lua"
 	--TODO:
 	--add imgui later---------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-------------------------------------
 	
