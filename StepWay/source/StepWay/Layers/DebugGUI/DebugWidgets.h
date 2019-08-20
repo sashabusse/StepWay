@@ -27,7 +27,8 @@ namespace StepWay
 		INPUT_FLOAT2,
 		INPUT_FLOAT3,
 		INPUT_FLOAT4,
-		CHECK_BOX
+		CHECK_BOX,
+		COLOR_FLOAT4
 	};
 
 #define SW_DECLARE_DBG_WIDGET_TYPE(type)\
@@ -237,6 +238,33 @@ namespace StepWay
 		virtual ~DbgInput4f() {};
 
 		virtual void Show() override;
+	};
+
+
+	class SW_API DbgColor4f : public DbgWidget
+	{
+	public:
+		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::COLOR_FLOAT4);
+		DbgColor4f(const std::string& name, float* pval) :
+			m_name(name), m_pval(pval) {};
+
+		virtual void Show() override;
+
+		virtual ~DbgColor4f() {};
+	private:
+
+	public:
+	private:
+		std::string m_name;
+		float* m_pval;
+	};
+
+	class SW_API DbgColor : public DbgWidget
+	{
+	public:
+	private:
+	public:
+	private:
 	};
 
 }

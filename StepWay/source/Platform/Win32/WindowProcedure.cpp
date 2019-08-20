@@ -90,7 +90,8 @@ namespace StepWay
 					//Raw Move
 					if (rawMouse.lLastX != 0 || rawMouse.lLastY != 0)
 					{
-						m_Mouse.OnRawMouseMove(rawMouse.lLastX, rawMouse.lLastY);
+						m_Mouse.OnRawMouseMove(
+							(float)rawMouse.lLastX, (float)rawMouse.lLastY);
 					}
 
 
@@ -141,7 +142,8 @@ namespace StepWay
 			case WM_MOUSEMOVE:
 			{
 				//here is relative to client area
-				m_Mouse.OnMouseMove(GET_X_LPARAM(lparam), GET_Y_LPARAM(lparam));
+				m_Mouse.OnMouseMove(
+					(float)GET_X_LPARAM(lparam), (float)GET_Y_LPARAM(lparam));
 				break;
 			}
 
@@ -188,19 +190,19 @@ namespace StepWay
 	{
 		if (msg == WM_KEYDOWN)
 		{
-			KeyboardKey key = Win32InputSystem::MapKey(wparam);
+			KeyboardKey key = Win32InputSystem::MapKey((int)wparam);
 			if (key != KeyboardKey::NONE)
 				m_Keyboard.OnButtonPress(key);
 		}
 		if (msg == WM_KEYUP)
 		{
-			KeyboardKey key = Win32InputSystem::MapKey(wparam);
+			KeyboardKey key = Win32InputSystem::MapKey((int)wparam);
 			if (key != KeyboardKey::NONE)
-				m_Keyboard.OnButtonRelease(Input::Win32::Win32InputSystem::MapKey(wparam));
+				m_Keyboard.OnButtonRelease(Input::Win32::Win32InputSystem::MapKey((int)wparam));
 		}
 		if (msg == WM_CHAR)
 		{
-			m_Keyboard.OnCharInput(wparam);
+			m_Keyboard.OnCharInput((wchar_t)wparam);
 		}
 	}
 

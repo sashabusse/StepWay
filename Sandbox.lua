@@ -1,18 +1,19 @@
-project "glad"
-	location "glad"
-	
-	targetname  "%{prj.name}"
-	targetdir ("../../bin/" .. outputdirname .. "/%{prj.name}/")
-	objdir ("../../bin-int/" .. outputdirname .. "/%{prj.name}/")
+project "Sandbox"
+	location "Sandbox"
 
-	language "C"
-	
-	kind "StaticLib"
+	targetname  "%{prj.name}"
+	targetdir ("bin/" .. outputdirname .. "/%{prj.name}/")
+	objdir ("bin-int/" .. outputdirname .. "/%{prj.name}/")
+
+	language "C++"
+	cppdialect "C++11"
+
+	kind "ConsoleApp"
 	staticruntime "Off"
-	
 	-------------------------------------------------------------------------
 	defines
 	{
+		"SW_USE_DLL"
 	}
 	
 	filter("configurations:Debug")
@@ -28,17 +29,23 @@ project "glad"
 	-------------------------------------------------------------------------
 	files
 	{
-		"glad/src/**.c",
-		"glad/include/**.h"
+		"%{prj.name}/source/**.cpp",
+		"%{prj.name}/source/**.h"
 	}
 	-------------------------------------------------------------------------
 	includedirs
 	{
-		"glad/include/"		
+		"%{AddIncludeDirs.spdlog}",
+		"%{AddIncludeDirs.imgui}",
+		"%{AddIncludeDirs.glad}",
+		"%{AddIncludeDirs.glm}",
+		"StepWay/source/",
+		"StepWay/source/StepWay/"
 	}
 	-------------------------------------------------------------------------
 	links
 	{
+		"StepWay"
 	}
 	-------------------------------------------------------------------------
 	filter("configurations:Debug")
@@ -61,3 +68,4 @@ project "glad"
 
 	filter {}
 	-------------------------------------------------------------------------
+	

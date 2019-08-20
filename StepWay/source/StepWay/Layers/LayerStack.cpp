@@ -71,6 +71,6 @@ namespace StepWay
 	}
 	int LayerStack::size() const
 	{
-		return m_Layers.size();
+		return (int)m_Layers.size();
 	}
 }

@@ -1,13 +1,15 @@
 project "imgui"
-
 	location "imgui"
+	
 	targetname  "%{prj.name}"
 	targetdir ("../../bin/" .. outputdirname .. "/%{prj.name}/")
 	objdir ("../../bin-int/" .. outputdirname .. "/%{prj.name}/")
 
 	language "C++"
+	cppdialect "C++11"
 	
-	kind "StaticLib"
+	
+	kind "StaticLibS"
 	staticruntime "Off"
 
 	files

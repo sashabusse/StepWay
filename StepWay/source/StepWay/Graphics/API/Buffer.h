@@ -55,8 +55,8 @@ namespace StepWay
 				Iterator end() { return m_elements.end(); }
 				ConstIterator begin() const { return m_elements.begin(); }
 				ConstIterator end() const { return m_elements.end(); }
-
-				inline int GetElementCount()const { return m_elements.size(); }
+				
+				inline int GetElementCount()const { return (int)m_elements.size(); }
 				inline int GetStride() const { return m_Stride; }
 
 			private:

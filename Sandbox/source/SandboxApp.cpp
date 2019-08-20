@@ -28,6 +28,7 @@ using StepWay::DbgInput2f;
 using StepWay::DbgInput3f;
 using StepWay::DbgInput4f;
 using StepWay::DbgCheckBox;
+using StepWay::DbgColor4f;
 
 
 using StepWay::Layer;
@@ -116,7 +117,7 @@ bool SandboxApp::ImplSetUp()
 	m_dbgGUILayer->AddTab(tab4);
 
 	DbgTab tabUniform("Uniform");
-	tabUniform.AddWidget(std::make_shared<DbgSlider4f>("color", &m_color.x, 0.0, 1.0));
+	tabUniform.AddWidget(std::make_shared<DbgColor4f>("color", &m_color.x));
 	m_dbgGUILayer->AddTab(tabUniform);
 
 	PushLayer(m_dbgGUILayer);

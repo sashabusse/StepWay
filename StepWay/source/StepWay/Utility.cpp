@@ -15,6 +15,11 @@ namespace StepWay
 	{
 		return converter.from_bytes(str);
 	}
+	char WChToCh(wchar_t wch)
+	{
+		if (IsASCII(wch))return (char)wch;
+		return 0;
+	}
 	bool IsASCII(wchar_t wch)
 	{
 		return ((wchar_t)0xFF00)&wch;

@@ -75,6 +75,11 @@ namespace StepWay
 		ImGui::InputFloat4(m_name.c_str(), m_pval, 3);
 	}
 
+	void DbgColor4f::Show()
+	{
+		ImGui::ColorEdit4(m_name.c_str(), m_pval);
+	}
+
 }
 
 

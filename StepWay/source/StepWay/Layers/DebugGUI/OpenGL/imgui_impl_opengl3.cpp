@@ -359,8 +359,8 @@ bool    ImGui_ImplOpenGL3_CreateDeviceObjects()
 
     // Parse GLSL version string
     int glsl_version = 130;
-    sscanf(g_GlslVersionString, "#version %d", &glsl_version);
-
+    sscanf_s(g_GlslVersionString, "#version %d", &glsl_version);
+	
     const GLchar* vertex_shader_glsl_120 =
         "uniform mat4 ProjMtx;\n"
         "attribute vec2 Position;\n"

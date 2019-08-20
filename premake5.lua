@@ -1,6 +1,5 @@
 
-
-
+--workspace/solution discription file
 workspace "StepWay"
 	
 	startproject "Sandbox"
@@ -35,6 +34,7 @@ workspace "StepWay"
 	filter {}
 	
 	
+	--variables for common use--
 	outputdirname = "%{cfg.system}-%{cfg.platform}-%{cfg.buildcfg}"
 	
 	AddIncludeDirs = {}
@@ -44,187 +44,41 @@ workspace "StepWay"
 	AddIncludeDirs["glm"] = "StepWay/vendor/glm/"
 	
 	
+	include "StepWay.lua"
+	include "Sandbox.lua"
 	include "Tests/Tests.lua"
 	include "StepWay/vendor/glad.lua"
 	include "StepWay/vendor/imgui.lua"
-	--TODO:
-	--add imgui later---------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-------------------------------------
 	
-	project "StepWay"
-		
-		location "StepWay"
-
-		targetname  "%{prj.name}"
-		targetdir ("bin/" .. outputdirname .. "/%{prj.name}/")
-		objdir ("bin-int/" .. outputdirname .. "/%{prj.name}/")
-
-		language "C++"
-		cppdialect "C++11"
-
-		kind "SharedLib"
-		staticruntime "Off"
-		
-		pchheader "StepWayPCH.h"
-		pchsource "StepWay/source/StepWay/StepWayPCH.cpp"
-
-		postbuildcommands("{MKDIR} ../bin/" .. outputdirname .. "/Sandbox")
-		postbuildcommands("{COPY} \"%{cfg.buildtarget.relpath}\" \"../bin/" .. outputdirname .. "/Sandbox/\"")
-		
-		------------------------------------------------------------------------
-		files
-		{
-			"%{prj.name}/source/StepWay/**.cpp",	--main engine files
-			"%{prj.name}/source/StepWay/**.h",		--main engine files
-			"%{prj.name}/source/Platform/OpenGL/**.cpp",
-			"%{prj.name}/source/Platform/OpenGL/**.h"
-		}
-		filter("system:windows")
-			files
-			{
-				"%{prj.name}/source/Platform/Win32/**.cpp",
-				"%{prj.name}/source/Platform/Win32/**.h",
-				"%{prj.name}/source/Platform/Direct3D11/**.cpp",
-				"%{prj.name}/source/Platform/Direct3D11/**.h"
-			}
-		
-		filter{}
-		------------------------------------------------------------------------
-
-		includedirs
-		{
-			"StepWay/source/StepWay/",
-			"StepWay/source/Platform",
-			"%{AddIncludeDirs.spdlog}",
-			"%{AddIncludeDirs.imgui}",
-			"%{AddIncludeDirs.glad}",
-			"%{AddIncludeDirs.glm}"
-		}
-		-- Links---------------------------------------------------------------------------------------
-		links
-		{
-			"glad",
-			"imgui"
-		}
-		filter("system:windows")
-			links
-			{
-				"Opengl32.lib" --wglCreateContext e.t.c.
-			}
-			
-		filter{}
-		------------------------------------------------------------------------------------------------
-
-		defines 
-		{
-			"SW_BUILD_DLL"
-		}
-
-
-		filter("configurations:Debug")
-			runtime "Debug"
-			symbols "On"
-			optimize "Off"
-			targetsuffix "_d"
-			defines
-			{
-				"SW_DEBUG"
-			}
-
-		filter("configurations:Release")
-			runtime "Release"
-			symbols "Off"
-			optimize "On"
-			targetsuffix "_r"
-			defines
-			{
-				"SW_RELEASE"
-			}
-
-		filter("configurations:Dist")
-			runtime "Release"
-			symbols "Off"
-			optimize "On"
-			defines 
-			{
-				"SW_DIST"
-			}
-
-		filter {} --end of configuration filters
-
-
-		filter("action:vs*")
-			defines {"SW_MSVC"}
-			
-		filter {} --end of compiler filters
-
-
-
-
-
-	project "Sandbox"
-		location "Sandbox"
-
-		targetname  "%{prj.name}"
-		targetdir ("bin/" .. outputdirname .. "/%{prj.name}/")
-		objdir ("bin-int/" .. outputdirname .. "/%{prj.name}/")
-
-		language "C++"
-		cppdialect "C++11"
-
-		kind "ConsoleApp"
-		staticruntime "Off"
-
-		files
-		{
-			"%{prj.name}/source/**.cpp",
-			"%{prj.name}/source/**.h"
-		}
-
-		includedirs
-		{
-			"%{AddIncludeDirs.spdlog}",
-			"%{AddIncludeDirs.imgui}",
-			"%{AddIncludeDirs.glad}",
-			"%{AddIncludeDirs.glm}",
-			"StepWay/source/",
-			"StepWay/source/StepWay/"
-		}
-		
-		links
-		{
-			"StepWay"
-		}
-		
-		defines
-		{
-			"SW_USE_DLL"
-		}
-
-		filter("configurations:Debug")
-			runtime "Debug"
-			symbols "On"
-			optimize "Off"
-			defines
-			{
-				"SW_DEBUG"
-			}
-
-		filter("configurations:Release")
-			runtime "Release"
-			symbols "Off"
-			optimize "On"
-			defines
-			{
-				"SW_RELEASE"
-			}
-
-		filter("configurations:Dist")
-			runtime "Release"
-			symbols "Off"
-			optimize "On"
-			defines 
-			{
-				"SW_DIST"
-			}
-
-		filter {}
+	--Projects are defined in such order
+	--[[
+	
+	1. location
+	
+	2. targetname
+	3. targetdir
+	4. objdir
+	
+	5. language and dialect
+	
+	6. kind (static/shared lib e.t.c.)
+	7. staticruntime("off") cause all should use common dll runtime
+	
+	--0.1. precompiled header
+	--0.2. postbuild commands
+	
+	8. defines with their filters if needed
+	
+	9. files with their filters if needed
+	10. include directories with their filters if needed
+	
+	11. links with their filters if needed
+	
+	12. configuration filters runtime,symbols,optimizations
+	
+	--0.3. configuration some other filters e.g. compiler or smth other not specified before
+	
+	]]--
+	
+	
+	

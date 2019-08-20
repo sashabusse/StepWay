@@ -10,7 +10,6 @@
 namespace StepWay
 {
 
-
 	//Initialization properties of the window
 	struct SW_API WindowProp
 	{

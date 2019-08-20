@@ -89,8 +89,7 @@ namespace StepWay
 
 		ImGui::Render();
 		
-		int display_w, display_h;
-
+		
 		m_Context->MakeCurrent();
 		
 		if (m_Context->GetGAPI_TYPE() == Graphics::API::GAPI_TYPE::OPENGL)

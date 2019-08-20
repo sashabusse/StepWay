@@ -55,7 +55,7 @@ void StepWay::ResourceGroupManager::ClearResBundles()
 
 int StepWay::ResourceGroupManager::GetResBundleCount() const
 {
-	return m_Bundles.size();
+	return (int)m_Bundles.size();
 }
 
 StepWay::IResourceBundle * StepWay::ResourceGroupManager::GetResBundle(const std::string & path) const

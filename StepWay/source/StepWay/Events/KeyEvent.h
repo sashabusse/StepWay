@@ -4,6 +4,7 @@
 #include "Input/InputDefs.h"
 #include "Utility.h"
 
+
 namespace StepWay
 {
 	using Input::KeyboardKey;
@@ -99,7 +100,7 @@ namespace StepWay
 
 		inline wchar_t GetWChar()const { return m_wch; }
 		//may be incorrect in case of not ASCII symbols
-		inline char GetChar()const { return m_wch; }
+		inline char GetChar()const { return Utility::WChToCh(m_wch); }
 
 		~CharInputEvent() override {};
 	private:
