@@ -13,7 +13,7 @@ namespace StepWay
 {
 
 
-	class SW_API Application
+	class Application
 	{
 	private:
 		static Application* m_Instance;

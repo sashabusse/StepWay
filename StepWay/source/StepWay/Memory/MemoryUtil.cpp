@@ -3,7 +3,7 @@
 
 
 
-SW_API void * AlignedMalloc(size_t size, size_t alignment)
+void * AlignedMalloc(size_t size, size_t alignment)
 {
 #ifdef SW_MSVC
 	return _aligned_malloc(size, alignment);
@@ -16,7 +16,7 @@ SW_API void * AlignedMalloc(size_t size, size_t alignment)
 #endif
 }
 
-SW_API void AlignedFree(void * ptr)
+void AlignedFree(void * ptr)
 {
 #ifdef SW_MSVC
 	_aligned_free(ptr);

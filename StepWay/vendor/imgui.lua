@@ -9,8 +9,8 @@ project "imgui"
 	cppdialect "C++11"
 	
 	
-	kind "StaticLibS"
-	staticruntime "Off"
+	kind "StaticLib"
+	staticruntime "on"
 
 	files
 	{

@@ -6,7 +6,7 @@
 namespace StepWay
 {
 
-	struct SW_API SystemMemoryInfo
+	struct SystemMemoryInfo
 	{
 		uint64 VirtualMemoryTotal;
 		uint64 VirtualMemoryAvail;
@@ -17,7 +17,7 @@ namespace StepWay
 	};
 
 
-	class SW_API MemoryManager
+	class MemoryManager
 	{
 	public:
 	private:

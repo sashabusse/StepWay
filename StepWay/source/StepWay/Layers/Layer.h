@@ -6,7 +6,7 @@ namespace StepWay
 {
 
 
-	class SW_API Layer
+	class Layer
 	{
 	public:
 

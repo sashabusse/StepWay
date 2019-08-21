@@ -10,7 +10,7 @@ namespace StepWay
 	{	namespace API
 		{	
 
-	class SW_API RenderCommand
+	class RenderCommand
 	{
 	public:
 		//need math library to make it
@@ -18,7 +18,7 @@ namespace StepWay
 		virtual void Clear() = 0;
 
 		virtual void Draw(API::VertexArray* const VAO) = 0;
-		void Draw(const std::shared_ptr<API::VertexArray> const VAO) { Draw(&*VAO); };
+		void Draw(const std::shared_ptr<API::VertexArray> VAO) { Draw(&*VAO); };
 
 		virtual void DrawIndexed(API::VertexArray* const VAO,
 								API::IndexBuffer* const IBO) = 0;

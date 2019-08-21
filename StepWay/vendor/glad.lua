@@ -8,7 +8,7 @@ project "glad"
 	language "C"
 	
 	kind "StaticLib"
-	staticruntime "Off"
+	staticruntime "on"
 	
 	-------------------------------------------------------------------------
 	defines

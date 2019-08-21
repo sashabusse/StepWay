@@ -91,22 +91,22 @@ bool SandboxApp::ImplSetUp()
 		std::make_shared<DbgSlider4i>("int4 slider",&(ivec4.x),0,100)
 		});
 	m_dbgGUILayer->AddTab(tab1);
-
+	
 	DbgTab tab2("float sliders");
 	tab2.AddWidgets({
-		std::make_shared<DbgSliderf>("float slider",&f1,100,1000),
-		std::make_shared<DbgSlider2f>("float2 slider",&(fvec2.x),0,100),
-		std::make_shared<DbgSlider3f>("float3 slider",&(fvec3.x),0,100),
-		std::make_shared<DbgSlider4f>("float4 slider",&(fvec4.x),0,100)
+		std::make_shared<DbgSliderf>("float slider",&f1,100.0f,1000.0f),
+		std::make_shared<DbgSlider2f>("float2 slider",&(fvec2.x),0.0f,100.0f),
+		std::make_shared<DbgSlider3f>("float3 slider",&(fvec3.x),0.0f,100.0f),
+		std::make_shared<DbgSlider4f>("float4 slider",&(fvec4.x),0.0f,100.0f)
 		});
 	m_dbgGUILayer->AddTab(tab2);
-
+	
 	DbgTab tab3("checkboxes");
 	tab3.AddWidgets({
 		std::make_shared<DbgCheckBox>("check box",&m_b)
 		});
 	m_dbgGUILayer->AddTab(tab3);
-
+	
 	DbgTab tab4("Float Inputs");
 	tab4.AddWidgets({
 		std::make_shared<DbgInputf>("float input",&f1),
@@ -115,7 +115,7 @@ bool SandboxApp::ImplSetUp()
 		std::make_shared<DbgInput4f>("float4 input",&fvec4.x)
 		});
 	m_dbgGUILayer->AddTab(tab4);
-
+	
 	DbgTab tabUniform("Uniform");
 	tabUniform.AddWidget(std::make_shared<DbgColor4f>("color", &m_color.x));
 	m_dbgGUILayer->AddTab(tabUniform);

@@ -36,7 +36,7 @@ namespace StepWay
 		virtual DbgWidgetType GetWidgetType() const override { return GetStaticWidgetType(); }\
 
 
-	class SW_API DbgWidget
+	class DbgWidget
 	{
 	public:
 		virtual DbgWidgetType GetWidgetType()const = 0;
@@ -66,7 +66,7 @@ namespace StepWay
 
 
 	//FLOATS-----------------------------------------------
-	class SW_API DbgSliderf : public DbgSliderBase<float>
+	class DbgSliderf : public DbgSliderBase<float>
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::SLIDER_FLOAT);
@@ -78,7 +78,7 @@ namespace StepWay
 	};
 	
 
-	class SW_API DbgSlider2f : public DbgSliderBase<float>
+	class DbgSlider2f : public DbgSliderBase<float>
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::SLIDER_FLOAT2);
@@ -90,7 +90,7 @@ namespace StepWay
 	};
 	
 
-	class SW_API DbgSlider3f : public DbgSliderBase<float>
+	class DbgSlider3f : public DbgSliderBase<float>
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::SLIDER_FLOAT3);
@@ -102,7 +102,7 @@ namespace StepWay
 	};
 
 
-	class SW_API DbgSlider4f : public DbgSliderBase<float>
+	class DbgSlider4f : public DbgSliderBase<float>
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::SLIDER_FLOAT4);
@@ -116,7 +116,7 @@ namespace StepWay
 
 
 	//INTEGER------------------------------------------
-	class SW_API DbgSlideri : public DbgSliderBase<int>
+	class DbgSlideri : public DbgSliderBase<int>
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::SLIDER_INT);
@@ -128,7 +128,7 @@ namespace StepWay
 	};
 	
 	
-	class SW_API DbgSlider2i : public DbgSliderBase<int>
+	class DbgSlider2i : public DbgSliderBase<int>
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::SLIDER_INT2);
@@ -140,7 +140,7 @@ namespace StepWay
 	};
 	
 
-	class SW_API DbgSlider3i : public DbgSliderBase<int>
+	class DbgSlider3i : public DbgSliderBase<int>
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::SLIDER_INT3);
@@ -152,7 +152,7 @@ namespace StepWay
 	};
 	
 
-	class SW_API DbgSlider4i : public DbgSliderBase<int>
+	class DbgSlider4i : public DbgSliderBase<int>
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::SLIDER_INT4);
@@ -166,7 +166,7 @@ namespace StepWay
 
 
 	//Checkbox
-	class SW_API DbgCheckBox : public DbgWidget
+	class DbgCheckBox : public DbgWidget
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::CHECK_BOX);
@@ -196,7 +196,7 @@ namespace StepWay
 	};
 
 
-	class SW_API DbgInputf : public DbgInputBase<float>
+	class DbgInputf : public DbgInputBase<float>
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::INPUT_FLOAT);
@@ -207,7 +207,7 @@ namespace StepWay
 		virtual void Show() override;
 	};
 
-	class SW_API DbgInput2f : public DbgInputBase<float>
+	class DbgInput2f : public DbgInputBase<float>
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::INPUT_FLOAT);
@@ -218,7 +218,7 @@ namespace StepWay
 		virtual void Show() override;
 	};
 
-	class SW_API DbgInput3f : public DbgInputBase<float>
+	class DbgInput3f : public DbgInputBase<float>
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::INPUT_FLOAT);
@@ -229,7 +229,7 @@ namespace StepWay
 		virtual void Show() override;
 	};
 
-	class SW_API DbgInput4f : public DbgInputBase<float>
+	class DbgInput4f : public DbgInputBase<float>
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::INPUT_FLOAT);
@@ -241,7 +241,7 @@ namespace StepWay
 	};
 
 
-	class SW_API DbgColor4f : public DbgWidget
+	class DbgColor4f : public DbgWidget
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::COLOR_FLOAT4);
@@ -257,14 +257,6 @@ namespace StepWay
 	private:
 		std::string m_name;
 		float* m_pval;
-	};
-
-	class SW_API DbgColor : public DbgWidget
-	{
-	public:
-	private:
-	public:
-	private:
 	};
 
 }

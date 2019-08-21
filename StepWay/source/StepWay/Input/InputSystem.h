@@ -10,7 +10,7 @@ namespace StepWay
 	
 
 	//Add support of configuration files later
-	class SW_API InputSystem
+	class InputSystem
 	{
 	public:
 		static InputSystem* Create();

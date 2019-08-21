@@ -27,7 +27,7 @@ namespace StepWay
 
 	//extensive use of std::string remove later
 	//Interface for resource sets like fileSystemFolders and Zip archieves
-	class SW_API IResourceBundle
+	class IResourceBundle
 	{
 	public:
 		//factory method
@@ -48,7 +48,7 @@ namespace StepWay
 
 
 
-	class SW_API DebugResourceBundle : public IResourceBundle
+	class DebugResourceBundle : public IResourceBundle
 	{
 	public:
 		SW_DECLARE_BUNDLE_TYPE(BundleType::DEBUG);

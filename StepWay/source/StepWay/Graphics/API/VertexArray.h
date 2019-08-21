@@ -11,7 +11,7 @@ namespace StepWay
 		{
 
 			//rework later when will add DirectX
-			class SW_API VertexArray
+			class VertexArray
 			{
 			public:
 				VertexArray() {};

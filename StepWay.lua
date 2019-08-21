@@ -8,8 +8,8 @@ project "StepWay"
 	language "C++"
 	cppdialect "C++11"
 
-	kind "SharedLib"
-	staticruntime "Off"
+	kind "StaticLib"
+	staticruntime "on"
 	
 	pchheader "StepWayPCH.h"
 	pchsource "StepWay/source/StepWay/StepWayPCH.cpp"
@@ -20,7 +20,6 @@ project "StepWay"
 	-----------------------------------------------------------------------
 	defines 
 	{
-		"SW_BUILD_DLL"
 	}
 	filter("configurations:Debug")
 	defines{"SW_DEBUG"}

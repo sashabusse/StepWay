@@ -27,3 +27,4 @@ typedef uint_fast8_t	ubytef;
 typedef uint_fast16_t	uint16f;
 typedef uint_fast32_t	uint32f;
 typedef uint_fast64_t	uint64f;
+

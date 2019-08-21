@@ -9,13 +9,13 @@ namespace StepWay
 {
 
 	//represents Resource Locatrion inside ResourceGroupManager
-	struct SW_API ResourceLocator
+	struct ResourceLocator
 	{
 		std::string path;
 		IResourceBundle* pBundle;
 	};
 
-	class SW_API ResourceGroupManager
+	class ResourceGroupManager
 	{
 		//SINGLETON functions
 	public:

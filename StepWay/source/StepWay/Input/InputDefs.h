@@ -5,7 +5,7 @@ namespace StepWay
 {	namespace Input
 	{
 
-	enum class SW_API MouseKey : int
+	enum class MouseKey : int
 	{
 		NONE = 0,
 		L_BUTTON,
@@ -16,7 +16,7 @@ namespace StepWay
 	};
 
 
-	enum class SW_API KeyboardKey : int
+	enum class KeyboardKey : int
 	{
 		NONE = 0,
 		KEY_A,

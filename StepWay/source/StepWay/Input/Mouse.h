@@ -6,9 +6,6 @@
 #include <memory>
 
 
-//may be not the best practice
-#pragma warning(push)
-#pragma warning(disable:4251)
 
 
 
@@ -16,18 +13,18 @@ namespace StepWay
 {	namespace Input
 	{
 	
-	enum SW_API MouseInputMode : int
+	enum MouseInputMode : int
 	{
 		NORMAL=0,
 		CAMERA=1 //Disable cursor
 	};
 
-	class SW_API MouseClientInterface;
+	class MouseClientInterface;
 
 
 
 
-	class SW_API Mouse
+	class Mouse
 	{
 	public:
 		Mouse();
@@ -59,7 +56,7 @@ namespace StepWay
 	};
 
 
-	class SW_API MouseClientInterface
+	class MouseClientInterface
 	{
 	public:
 		MouseClientInterface() = delete;
@@ -75,5 +72,3 @@ namespace StepWay
 
 }}
 
-
-#pragma warning(pop)

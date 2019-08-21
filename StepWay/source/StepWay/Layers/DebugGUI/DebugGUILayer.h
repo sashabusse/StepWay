@@ -11,7 +11,7 @@ namespace StepWay
 {
 	using Graphics::API::GraphicsContext;
 
-	class SW_API  DebugGUILayer : public Layer
+	class  DebugGUILayer : public Layer
 	{
 	public:
 		DebugGUILayer(Window* window,GraphicsContext* Context);

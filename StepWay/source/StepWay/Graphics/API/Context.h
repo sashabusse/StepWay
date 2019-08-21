@@ -10,7 +10,7 @@ namespace StepWay
 	{	namespace API
 		{
 
-	enum class SW_API GAPI_TYPE : int
+	enum class GAPI_TYPE : int
 	{
 		NONE = 0,
 		OPENGL,
@@ -24,7 +24,7 @@ namespace StepWay
 	virtual std::wstring GetGAPIWString()const override {return L#type;}
 
 
-	class SW_API GraphicsContext
+	class GraphicsContext
 	{
 	public:
 		static GraphicsContext* Create(GAPI_TYPE type, Window* window);

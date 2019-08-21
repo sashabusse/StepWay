@@ -12,7 +12,6 @@ namespace StepWay
 		{
 
 
-
 			void GLVertexArray::SetUp()
 			{
 				glGenVertexArrays(1, &m_VAO);
@@ -45,9 +44,10 @@ namespace StepWay
 				for (auto& element : m_VertexBuffer->GetLayout())
 				{
 					glEnableVertexAttribArray(i);
-					glVertexAttribPointer(i, element.GetComponentCount(), GL_FLOAT, GL_TRUE, m_VertexBuffer->GetLayout().GetStride(), (void*)element.GetOffset());
+					glVertexAttribPointer(i, element.GetComponentCount(), GL_FLOAT, GL_TRUE, m_VertexBuffer->GetLayout().GetStride(), (void*)((int64)element.GetOffset()));//uin64 isn't good
 					i++;
 				}
+				GL_CHECK_ERRORS();
 			}
 
 			void GLVertexArray::SetIndexBuffer(std::shared_ptr<API::IndexBuffer> pBuffer)
@@ -55,7 +55,6 @@ namespace StepWay
 				m_IndexBuffer = pBuffer;
 			}
 
-			
 
 
 

@@ -12,7 +12,7 @@ namespace StepWay
 		namespace API
 		{
 			
-			class SW_API Shader
+			class Shader
 			{
 			public:
 				virtual void SetUpFromSource(const std::string& vertexSource, const std::string& fragmentSource) = 0;

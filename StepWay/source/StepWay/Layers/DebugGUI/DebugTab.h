@@ -8,7 +8,7 @@ namespace StepWay
 {
 
 	
-	class SW_API DbgTab
+	class DbgTab
 	{
 	public:
 		DbgTab(const std::string& name):m_name(name) {};

@@ -9,11 +9,10 @@ project "Sandbox"
 	cppdialect "C++11"
 
 	kind "ConsoleApp"
-	staticruntime "Off"
+	staticruntime "on"
 	-------------------------------------------------------------------------
 	defines
 	{
-		"SW_USE_DLL"
 	}
 	
 	filter("configurations:Debug")

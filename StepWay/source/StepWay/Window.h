@@ -11,7 +11,7 @@ namespace StepWay
 {
 
 	//Initialization properties of the window
-	struct SW_API WindowProp
+	struct WindowProp
 	{
 		std::string title;
 		int luX;
@@ -23,7 +23,7 @@ namespace StepWay
 
 	//Window Interface
 	//For example realization check Platform/Win32/Win32Window
-	class SW_API Window
+	class Window
 	{
 	public:
 		static Window* Create();

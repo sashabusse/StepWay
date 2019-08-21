@@ -11,7 +11,7 @@ namespace StepWay
 		{
 
 			//rename and move somewhere else later-------------------------------
-			enum SW_API ShaderDataType : int
+			enum ShaderDataType : int
 			{
 				NONE = 0,
 				FLOAT, FLOAT2, FLOAT3, FLOAT4,
@@ -24,9 +24,9 @@ namespace StepWay
 			int ShaderDataTypeByteSize(ShaderDataType type);
 
 
-			class SW_API BufferLayout;
+			class BufferLayout;
 
-			class SW_API LayoutElement
+			class LayoutElement
 			{
 				friend BufferLayout;
 			public:
@@ -43,7 +43,7 @@ namespace StepWay
 			};
 
 
-			class SW_API BufferLayout
+			class BufferLayout
 			{
 			public:
 				BufferLayout(std::initializer_list<LayoutElement> elements);
@@ -68,7 +68,7 @@ namespace StepWay
 			};
 
 
-			class SW_API VertexBuffer
+			class VertexBuffer
 			{
 			public:
 				VertexBuffer() : m_layout({}) {};
@@ -93,7 +93,7 @@ namespace StepWay
 
 
 
-			class SW_API IndexBuffer
+			class IndexBuffer
 			{
 			public:
 				virtual void SetUp(uint16* indices,int count) = 0;

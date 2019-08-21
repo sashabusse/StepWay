@@ -62,6 +62,7 @@ namespace StepWay
 				case MAT4:		return 4 * 4;
 				}
 				SW_CORE_ASSERT(false, "failed count components");
+				return 0;
 			}
 
 			int ShaderDataTypeByteSize(ShaderDataType type)

@@ -6,9 +6,6 @@
 
 
 
-//may be not the best practice
-#pragma warning(push)
-#pragma warning(disable:4251)
 
 
 
@@ -17,9 +14,9 @@ namespace StepWay
 	{
 
 
-	class SW_API KeyboardClientInterface;
+	class KeyboardClientInterface;
 
-	class SW_API Keyboard
+	class Keyboard
 	{
 	public:
 		Keyboard();
@@ -39,7 +36,7 @@ namespace StepWay
 	};
 
 
-	class SW_API KeyboardClientInterface
+	class KeyboardClientInterface
 	{
 
 	public:
@@ -55,5 +52,3 @@ namespace StepWay
 
 }}
 
-
-#pragma warning(pop)

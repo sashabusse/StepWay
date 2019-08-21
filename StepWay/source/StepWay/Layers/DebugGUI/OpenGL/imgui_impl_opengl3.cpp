@@ -105,8 +105,8 @@ bool    ImGui_ImplOpenGL3_Init(const char* glsl_version)
         glsl_version = "#version 130";
 #endif
     IM_ASSERT((int)strlen(glsl_version) + 2 < IM_ARRAYSIZE(g_GlslVersionString));
-    strcpy(g_GlslVersionString, glsl_version);
-    strcat(g_GlslVersionString, "\n");
+    strcpy_s(g_GlslVersionString, glsl_version);
+    strcat_s(g_GlslVersionString, "\n");
 
     return true;
 }
