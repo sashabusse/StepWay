@@ -21,21 +21,9 @@ namespace StepWay
 			void GLShader::SetUpFromSource(const std::string& vertexSource, const std::string& fragmentSource)
 			{
 				m_Program = glCreateProgram();
-				uint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-				uint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-				GL_CHECK_ERRORS();
 
-				const char* tmpVS = vertexSource.c_str();
-				glShaderSource(vertexShader, 1, &(tmpVS), NULL);
-				GL_CHECK_ERRORS();
-				SW_CORE_TRACE("Compiling vertex shader. Source:\n" + vertexSource);
-				Compile(vertexShader);
-
-				const char* tmpFS = fragmentSource.c_str();
-				glShaderSource(fragmentShader, 1, &tmpFS, NULL);
-				GL_CHECK_ERRORS();
-				SW_CORE_TRACE("Compiling fragment shader. Source:\n" + fragmentSource);
-				Compile(fragmentShader);
+				uint vertexShader = ProcessShaderSource(GL_VERTEX_SHADER, vertexSource);
+				uint fragmentShader = ProcessShaderSource(GL_FRAGMENT_SHADER, fragmentSource);
 
 				glAttachShader(m_Program, vertexShader);
 				glAttachShader(m_Program, fragmentShader);
@@ -101,6 +89,18 @@ namespace StepWay
 					SW_CORE_ASSERT(false, error);
 				}
 				GL_CHECK_ERRORS();
+			}
+
+			uint GLShader::ProcessShaderSource(GLenum shader_type, const std::string& source)
+			{
+				uint shader = glCreateShader(shader_type);
+				GL_CHECK_ERRORS();
+
+				const char* tmpS = source.c_str();
+				glShaderSource(shader, 1, &(tmpS), NULL);
+				GL_CHECK_ERRORS();
+				SW_CORE_TRACE("Compiling vertex shader. Source:\n" + source);
+				Compile(shader);
 			}
 
 			void GLShader::ShutDown()

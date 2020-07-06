@@ -11,7 +11,7 @@ namespace StepWay
 
 	using Input::Win32::Win32InputSystem;
 
-	LRESULT WindowProcedure(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam)
+	LRESULT __stdcall WindowProcedure(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	{
 
 		if (msg == WM_CREATE)

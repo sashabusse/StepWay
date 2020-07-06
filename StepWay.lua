@@ -37,7 +37,9 @@ project "StepWay"
 		"%{prj.name}/source/StepWay/**.cpp",	--main engine files
 		"%{prj.name}/source/StepWay/**.h",		--main engine files
 		"%{prj.name}/source/Platform/OpenGL/**.cpp",
-		"%{prj.name}/source/Platform/OpenGL/**.h"
+		"%{prj.name}/source/Platform/OpenGL/**.h",
+		
+		"%{prj.name}/vendor/stb_image/**.cpp" --mb change layter stb_image files
 	}
 	filter("system:windows")
 		files
@@ -57,7 +59,8 @@ project "StepWay"
 		"%{AddIncludeDirs.spdlog}",
 		"%{AddIncludeDirs.imgui}",
 		"%{AddIncludeDirs.glad}",
-		"%{AddIncludeDirs.glm}"
+		"%{AddIncludeDirs.glm}",
+		"%{AddIncludeDirs.stb_image}"
 	}
 	-- Links---------------------------------------------------------------------------------------
 	links

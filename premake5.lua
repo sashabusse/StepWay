@@ -42,6 +42,7 @@ workspace "StepWay"
 	AddIncludeDirs["imgui"] = "StepWay/vendor/imgui/"
 	AddIncludeDirs["glad"] = "StepWay/vendor/glad/include/"
 	AddIncludeDirs["glm"] = "StepWay/vendor/glm/"
+	AddIncludeDirs["stb_image"] = "StepWay/vendor/stb_image/"
 	
 	
 	include "StepWay.lua"

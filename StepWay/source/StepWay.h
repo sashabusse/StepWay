@@ -17,6 +17,7 @@
 #include "Graphics/API/VertexArray.h"
 #include "Graphics/API/Shader.h"
 #include "Graphics/API/RenderingCommands.h"
+#include "Graphics/API/Texture.h"
 
 
 //Layers

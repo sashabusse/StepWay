@@ -38,6 +38,7 @@ project "Sandbox"
 		"%{AddIncludeDirs.imgui}",
 		"%{AddIncludeDirs.glad}",
 		"%{AddIncludeDirs.glm}",
+		"%{AddIncludeDirs.stb_image}",
 		"StepWay/source/",
 		"StepWay/source/StepWay/"
 	}
