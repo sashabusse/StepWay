@@ -21,6 +21,10 @@ namespace StepWay
 				void SetUpFromFile(const std::string& vertexPath, const std::string& fragment)override;
 				void ShutDown() override;
 
+				//for compute shaders
+				void SetUpAsComputeShader(const std::string& filePath) override;
+				void SetUpAsComputeShaderFromSource(const std::string& source) override;
+
 				void SetUniform(const std::string& name, const int val) override;
 				void SetUniform(const std::string& name, const float val) override;
 				void SetUniform(const std::string& name, const glm::fvec2& val) override;
@@ -38,10 +42,23 @@ namespace StepWay
 			private:
 				GLint GetUniformLocation(const std::string& name);
 				void Compile(uint shader);
+				uint ProcessShaderSource(GLenum shader_type, const std::string& source);
+				//should be a part of resource system
+				std::string ReadFile(const std::string& filePath);
 			public:
 			private:
 				std::unordered_map<std::string, GLint> m_UniformLocations;
 				uint m_Program;
+			};
+
+
+			class GLComputeShader : GLShader
+			{
+			public:
+
+			private:
+			public:
+			private:
 			};
 
 

@@ -44,21 +44,8 @@ namespace StepWay
 
 			void GLShader::SetUpFromFile(const std::string & vertexPath, const std::string & fragmentPath)
 			{
-				std::ifstream SourceFile(vertexPath);
-
-				std::string nextLine;
-				std::string vertexSource;
-				while (std::getline(SourceFile, nextLine))
-				{ 
-					vertexSource += nextLine + "\n";
-				}
-				
-				SourceFile = std::ifstream(fragmentPath);
-				std::string fragmentSource;
-				while (std::getline(SourceFile, nextLine))
-				{
-					fragmentSource += nextLine + "\n";
-				}
+				std::string vertexSource = ReadFile(vertexPath);
+				std::string fragmentSource = ReadFile(fragmentPath);
 				SetUpFromSource(vertexSource, fragmentSource);
 			}
 			
@@ -101,6 +88,20 @@ namespace StepWay
 				GL_CHECK_ERRORS();
 				SW_CORE_TRACE("Compiling vertex shader. Source:\n" + source);
 				Compile(shader);
+				return shader;
+			}
+
+			std::string GLShader::ReadFile(const std::string& filePath)
+			{
+				std::ifstream file_stream(filePath);
+
+				std::string nextLine;
+				std::string text;
+				while (std::getline(file_stream, nextLine))
+				{
+					text += nextLine + "\n";
+				}
+				return text;
 			}
 
 			void GLShader::ShutDown()
@@ -108,43 +109,79 @@ namespace StepWay
 				glDeleteProgram(m_Program);
 				GL_CHECK_ERRORS();
 			}
+			void GLShader::SetUpAsComputeShader(const std::string& filePath)
+			{
+				std::string source = ReadFile(filePath);
+				SetUpAsComputeShaderFromSource(source);
+			}
+
+			void GLShader::SetUpAsComputeShaderFromSource(const std::string& source)
+			{
+				m_Program = glCreateProgram();
+
+				uint shader_id = ProcessShaderSource(GL_COMPUTE_SHADER, source);
+
+				glAttachShader(m_Program, shader_id);
+				GL_CHECK_ERRORS();
+
+				glLinkProgram(m_Program);
+				glValidateProgram(m_Program);
+				GL_CHECK_ERRORS();
+
+				glDetachShader(m_Program, shader_id);
+				GL_CHECK_ERRORS();
+
+				glDeleteShader(shader_id);
+				GL_CHECK_ERRORS();
+			}
+
+			//now it's needed to bind before set uniform may be later do it some other way
 			void GLShader::SetUniform(const std::string & name, const int val)
 			{
+				Bind();
 				glUniform1i(GetUniformLocation(name), val);
 				GL_CHECK_ERRORS()
 			}
+
 			void GLShader::SetUniform(const std::string & name, const float val)
 			{
+				Bind();
 				glUniform1f(GetUniformLocation(name), val);
 				GL_CHECK_ERRORS();
 			}
 			void GLShader::SetUniform(const std::string & name, const glm::fvec2 & val)
 			{
+				Bind();
 				glUniform2f(GetUniformLocation(name), val.x, val.y);
 				GL_CHECK_ERRORS();
 			}
 			void GLShader::SetUniform(const std::string & name, const glm::fvec3 & val)
 			{
+				Bind();
 				glUniform3f(GetUniformLocation(name), val.x, val.y, val.z);
 				GL_CHECK_ERRORS();
 			}
 			void GLShader::SetUniform(const std::string & name, const glm::fvec4 & val)
 			{
+				Bind();
 				glUniform4f(GetUniformLocation(name), val.x, val.y, val.z, val.w);
 				GL_CHECK_ERRORS();
 			}
 			void GLShader::SetUniform(const std::string & name, const glm::fmat2 & val)
 			{
+				Bind();
 				glUniformMatrix2fv(GetUniformLocation(name), 1, false, glm::value_ptr(val));
 				GL_CHECK_ERRORS();
 			}
 			void GLShader::SetUniform(const std::string & name, const glm::fmat3 & val)
 			{
+				Bind();
 				glUniformMatrix3fv(GetUniformLocation(name), 1, false, glm::value_ptr(val));
 				GL_CHECK_ERRORS();
 			}
 			void GLShader::SetUniform(const std::string & name, const glm::fmat4 & val)
 			{
+				Bind();
 				glUniformMatrix4fv(GetUniformLocation(name), 1, false, glm::value_ptr(val));
 				GL_CHECK_ERRORS();
 			}

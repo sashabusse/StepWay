@@ -49,6 +49,7 @@ public:
 	StepWay::Layer* layer;
 
 private:
+	//drawing stuff
 	std::shared_ptr<VertexBuffer> m_buffer;
 	std::shared_ptr<IndexBuffer> m_IBO;
 	std::shared_ptr<VertexArray> m_VAO;
@@ -59,7 +60,7 @@ private:
 
 	//was used for test of interface
 	float f1 = 0.0;
-	int i1 = 100;
+	int i1 = 0;
 	glm::ivec2 ivec2{0,0};
 	glm::ivec3 ivec3{ 0,0,0 };
 	glm::ivec4 ivec4{ 0,0,0,0 };
@@ -72,6 +73,10 @@ private:
 
 	glm::vec4 m_color{ 1,1,1,1 };
 
+	//compute shader stuff
+	std::shared_ptr<Texture> texture_buffer;
+	std::shared_ptr<Shader> compute_shader;
+	float compute_shader_mul = 0.0f;
 };
 
 
@@ -85,7 +90,7 @@ StepWay::Application* StepWay::CreateApplication()
 
 //-----------------------compute shader---------------
 #include "Platform/OpenGL/ErrorHandling.h"
-void go_compute_shader()
+void go_trace_compute_shader_limits()
 {
 	int work_grp_cnt[3];
 
@@ -105,54 +110,7 @@ void go_compute_shader()
 
 	SW_TRACE("max work group size[0] = {}", work_grp_size[0]);
 	SW_TRACE("max work group size[1] = {}", work_grp_size[1]);
-	SW_TRACE("max work group size[2] = {}", work_grp_size[2]);
-	
-	std::shared_ptr<Texture> tex = std::shared_ptr<Texture>(Texture::Create(GAPI_TYPE::OPENGL));
-	tex->SetUp(512, 512);
-
-	std::string compute_shader_string = std::string(
-"#version 430\n\
-layout(local_size_x = 1, local_size_y = 1) in;\n\
-layout(rgba32f, binding = 0) uniform image2D img_output;\n\
-\n\
-void main() {\n\
-vec4 pixel = vec4(0.0, 1.0, 1.0, 1.0);\n\
-ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);\n\
-pixel.r = pixel_coords.x*1.0/512.0;\n\
-imageStore(img_output, pixel_coords, pixel);\n\
-}"
-);
-	const char* string_p = compute_shader_string.c_str();
-	GLuint compute_shader = glCreateShader(GL_COMPUTE_SHADER);
-	
-	glShaderSource(compute_shader, 1, &string_p, NULL);
-	glCompileShader(compute_shader);
-
-	GLint result;
-	glGetShaderiv(compute_shader, GL_COMPILE_STATUS, &result);
-	if (result == GL_FALSE)
-	{
-		GLint length;
-		glGetShaderiv(compute_shader, GL_INFO_LOG_LENGTH, &length);
-		char* error = new char[length + 1];
-		glGetShaderInfoLog(compute_shader, length, &length, &error[0]);
-		glDeleteShader(compute_shader);
-		SW_CORE_ASSERT(false, error);
-	}
-	GL_CHECK_ERRORS();
-	// check for compilation errors as per normal here
-
-	GLuint compute_program = glCreateProgram();
-	glAttachShader(compute_program, compute_shader);
-	glLinkProgram(compute_program);
-	GL_CHECK_ERRORS();
-
-	glUseProgram(compute_program);
-	glDispatchCompute((GLuint)512, (GLuint)512, 1);
-	GL_CHECK_ERRORS();
-
-	glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
-	GL_CHECK_ERRORS();
+	SW_TRACE("max work group size[2] = {}", work_grp_size[2]);	
 }
 //-----------------------compute shader---------------
 
@@ -160,20 +118,21 @@ imageStore(img_output, pixel_coords, pixel);\n\
 
 bool SandboxApp::ImplSetUp()
 {
+	//Setting Up Dbg Gui------------
 	m_dbgGUILayer = std::make_shared<DebugGUILayer>(GetMainWindow(), GetMainContex());
 
 	DbgTab tabUniform("Uniform");
+	//color uniform in drawing shader
 	tabUniform.AddWidget(std::make_shared<DbgColor4f>("color", &m_color.x));
+	//multiplier in compute shader
+	tabUniform.AddWidget(std::make_shared<DbgSliderf>("mul", &compute_shader_mul, 0.0, 5.0));
+
 	m_dbgGUILayer->AddTab(tabUniform);
 
 	PushLayer(m_dbgGUILayer);
+	//------------------------------
 
-	//------compute shader tests-----
-
-	go_compute_shader();
-
-	//------compute shader tests-----
-
+	//preparing vertex data---------
 	float data[12] =
 	{
 		-0.5f, -0.5f, 0.0f,
@@ -187,6 +146,7 @@ bool SandboxApp::ImplSetUp()
 	m_buffer->Bind();
 	m_buffer->SetLayout({ ShaderDataType::FLOAT3 });
 
+	//indexes
 	m_IBO = std::shared_ptr<IndexBuffer>(IndexBuffer::Create(GAPI_TYPE::OPENGL));
 	uint16 indices[6] = { 0,1,2, 2,3,0 };
 	m_IBO->SetUp(indices, 6);
@@ -196,21 +156,35 @@ bool SandboxApp::ImplSetUp()
 	m_VAO->SetUp();
 	m_VAO->Bind();
 	m_VAO->SetVertexBuffer(m_buffer);
+	//----------------------------------
 
+	//Setting Up Main Drawing Shader----
 	m_shader = std::shared_ptr<Shader>(Shader::Create(GAPI_TYPE::OPENGL));
 	m_shader->SetUpFromFile("Resource\\GLShaders\\SimpleVertexShader.hlsl",
 		"Resource\\GLShaders\\SimpleFragmentShader.hlsl");
-	m_shader->Bind();
 	m_shader->SetUniform("u_color", m_color);
+	//----------------------------------
 
+	//Simple texture example------------
 	m_Texture = std::shared_ptr<Texture>(Texture::Create(GAPI_TYPE::OPENGL));
 	m_Texture->SetUp("Resource\\Images\\container.jpg");
 	m_Texture->SetToUnit(1);
 	m_shader->SetUniform("ourTexture", 1);
+	//----------------------------------
 
 	m_renderCommands = std::shared_ptr<RenderCommand>(RenderCommand::Create(GAPI_TYPE::OPENGL));
 
-	
+	//Simple Compute Shader---------
+	go_trace_compute_shader_limits();
+
+	//buffer for computed data
+	texture_buffer = std::shared_ptr<Texture>(Texture::Create(GAPI_TYPE::OPENGL));
+	texture_buffer->SetUp(512, 512);
+	texture_buffer->SetToUnit(2);
+
+	compute_shader = std::shared_ptr<Shader>(Shader::Create(GAPI_TYPE::OPENGL));
+	compute_shader->SetUpAsComputeShader("Resource\\GLShaders\\compute_shaders\\compute.hlsl");
+	//----------------------------------
 
 	return true;
 }
@@ -226,8 +200,23 @@ void SandboxApp::ImplShutDown()
 
 void SandboxApp::ImplOnNewFrameStart()
 {
-	m_renderCommands->Clear();
+	//------compute shader tests-----
+	
+	compute_shader->SetUniform("multiplier", compute_shader_mul);
+	compute_shader->Bind();
+	glDispatchCompute((GLuint)512, (GLuint)512, 1);
+	GL_CHECK_ERRORS();
+	
+	glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+	GL_CHECK_ERRORS();
+	
+	//------compute shader tests-----
+
+	//rendering stuff
+	m_shader->SetUniform("ourTexture", 2);
 	m_shader->SetUniform("u_color", m_color);
+	m_shader->Bind();
+	m_renderCommands->Clear();
 	m_renderCommands->DrawIndexed(m_VAO, m_IBO);
 }
 

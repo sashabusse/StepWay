@@ -21,6 +21,10 @@ namespace StepWay
 				//virtual void SetUpFromStream(...)
 				virtual void ShutDown() = 0;
 
+				//compute shaders
+				virtual void SetUpAsComputeShader(const std::string& filePath) = 0;
+				virtual void SetUpAsComputeShaderFromSource(const std::string& source) = 0;
+
 				virtual void Bind() = 0;
 				virtual void Unbind() = 0;
 
@@ -39,6 +43,7 @@ namespace StepWay
 			public:
 			private:
 			};
+
 
 		}
 	}
