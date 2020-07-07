@@ -168,7 +168,7 @@ bool SandboxApp::ImplSetUp()
 	//Simple texture example------------
 	m_Texture = std::shared_ptr<Texture>(Texture::Create(GAPI_TYPE::OPENGL));
 	m_Texture->SetUp("Resource\\Images\\container.jpg");
-	m_Texture->SetToUnit(1);
+	m_Texture->SetToTexUnit(1);
 	m_shader->SetUniform("ourTexture", 1);
 	//----------------------------------
 
@@ -179,8 +179,9 @@ bool SandboxApp::ImplSetUp()
 
 	//buffer for computed data
 	texture_buffer = std::shared_ptr<Texture>(Texture::Create(GAPI_TYPE::OPENGL));
-	texture_buffer->SetUp(512, 512);
-	texture_buffer->SetToUnit(2);
+	texture_buffer->SetUp(512, 512, Texture::PixelFormat::RGBA32_F);
+	texture_buffer->SetToImgUnit(0);
+	texture_buffer->SetToTexUnit(2);
 
 	compute_shader = std::shared_ptr<Shader>(Shader::Create(GAPI_TYPE::OPENGL));
 	compute_shader->SetUpAsComputeShader("Resource\\GLShaders\\compute_shaders\\compute.hlsl");

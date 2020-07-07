@@ -16,18 +16,26 @@ namespace StepWay
 				GLTexture();
 
 				void SetUp(std::string filename) override;
-				void SetUp(int width, int height) override;
+				void SetUp(int width, int height, PixelFormat format) override;
 				void ShutDown() override;
 				
 				void Bind() override;
 				void Unbind() override;
 
-				void SetToUnit(int num) override;
+				void SetToTexUnit(int num) override;
+				void SetToImgUnit(int num) override;
+
+				void SetMagFilter(Filter filter) override;
+				void SetMinFilter(Filter filter) override;
+
+				void SetWrapModeS(WrapMode mode) override;
+				void SetWrapModeT(WrapMode mode) override;
 
 				virtual ~GLTexture() {};
 			private:
 				void loadImageByName(std::string filename);
 				GLenum UnitNumToGLenum(int num);
+				void PixFormatToGLFormats(PixelFormat format, GLenum& gl_internal_format, GLenum& gl_pixel_format, GLenum& gl_data_type);
 			private:
 				uint m_id;
 			};

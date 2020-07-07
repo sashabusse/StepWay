@@ -11,9 +11,9 @@ namespace StepWay
 	{
 		namespace OpenGL
 		{
-			GLTexture::GLTexture()
+			GLTexture::GLTexture():
+				m_id(0)
 			{
-				
 			}
 
 			void GLTexture::SetUp(std::string filename)
@@ -23,31 +23,36 @@ namespace StepWay
 				glGenTextures(1, &m_id);
 				Bind();
 
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				SetWrapModeS(WrapMode::REPEAT);
+				SetWrapModeT(WrapMode::REPEAT);
+				SetMinFilter(Filter::LINEAR);
+				SetMagFilter(Filter::LINEAR);
 
 				loadImageByName(filename);
-				glGenerateMipmap(GL_TEXTURE_2D);
+				//glGenerateMipmap(GL_TEXTURE_2D);
 
 			}
 
-			void GLTexture::SetUp(int width, int height)
+			void GLTexture::SetUp(int width, int height, PixelFormat format)
 			{
 				glActiveTexture(GL_TEXTURE0);
 
 				glGenTextures(1, &m_id);
 				Bind();
 
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				SetWrapModeS(WrapMode::REPEAT);
+				SetWrapModeT(WrapMode::REPEAT);
+				SetMinFilter(Filter::LINEAR);
+				SetMagFilter(Filter::LINEAR);
 
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
-				// here it is for compute shaders need move somewhere later
-				glBindImageTexture(0, m_id, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
+				GLenum gl_int_format = 0;
+				GLenum gl_pix_format = 0;
+				GLenum gl_data_type = 0;
+
+				PixFormatToGLFormats(format, gl_int_format, gl_pix_format, gl_data_type);
+
+				glTexImage2D(GL_TEXTURE_2D, 0, gl_int_format, width, height, 0, gl_pix_format, gl_data_type, NULL);
+				GL_CHECK_ERRORS();
 			}
 
 			void GLTexture::ShutDown()
@@ -70,10 +75,95 @@ namespace StepWay
 
 			//0 is reserved for common temporal purposes
 			//all the temporal textures are set to the 0 as default
-			void GLTexture::SetToUnit(int num)
+			void GLTexture::SetToTexUnit(int num)
 			{
 				glActiveTexture(UnitNumToGLenum(num));
 				Bind();
+			}
+
+			void GLTexture::SetToImgUnit(int num)
+			{
+				//custom formats should be involved for the last 2 arguments
+				glBindImageTexture(num, m_id, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
+				GL_CHECK_ERRORS();
+			}
+
+			void GLTexture::SetMagFilter(Filter filter)
+			{
+				switch (filter)
+				{
+				case Filter::NEAREST:
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+					break;
+				case Filter::LINEAR:
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+					break;
+				default:
+					SW_ASSERT(false, "INVALID MAG FILTER");
+					break;
+				}
+				GL_CHECK_ERRORS();
+				return;
+			}
+
+			void GLTexture::SetMinFilter(Filter filter)
+			{
+				switch (filter)
+				{
+				case Filter::NEAREST:
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+					break;
+				case Filter::LINEAR:
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+					break;
+				default:
+					SW_ASSERT(false, "INVALID MIN FILTER");
+					break;
+				}
+				GL_CHECK_ERRORS();
+				return;
+			}
+
+			void GLTexture::SetWrapModeS(WrapMode mode)
+			{
+				switch (mode)
+				{
+				case WrapMode::CLAMP_TO_EDGE:
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+					break;
+				case WrapMode::REPEAT:
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+					break;
+				case WrapMode::MIRRORED_REPEAT:
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+					break;
+				default:
+					SW_ASSERT(false, "INVALID WRAP MODE");
+					break;
+				}
+				GL_CHECK_ERRORS();
+				return;
+			}
+
+			void GLTexture::SetWrapModeT(WrapMode mode)
+			{
+				switch (mode)
+				{
+				case WrapMode::CLAMP_TO_EDGE:
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+					break;
+				case WrapMode::REPEAT:
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+					break;
+				case WrapMode::MIRRORED_REPEAT:
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+					break;
+				default:
+					SW_ASSERT(false, "INVALID WRAP MODE");
+					break;
+				}
+				GL_CHECK_ERRORS();
+				return;
 			}
 
 			void GLTexture::loadImageByName(std::string filename)
@@ -112,6 +202,91 @@ namespace StepWay
 				GL_CHECK_ERRORS();
 				DBG_BREAK();
 				return GL_TEXTURE0;
+			}
+
+			void GLTexture::PixFormatToGLFormats(PixelFormat format, GLenum& gl_internal_format, GLenum& gl_pixel_format, GLenum& gl_data_type)
+			{
+				switch (format)
+				{
+				case StepWay::Graphics::API::Texture::PixelFormat::R8_I:
+					gl_internal_format = GL_R8;
+					gl_pixel_format = GL_RED_INTEGER;
+					gl_data_type = GL_INT;
+					break;
+				case StepWay::Graphics::API::Texture::PixelFormat::RG8_I:
+					gl_internal_format = GL_RG8;
+					gl_pixel_format = GL_RG_INTEGER;
+					gl_data_type = GL_INT;
+					break;
+				case StepWay::Graphics::API::Texture::PixelFormat::RGB8_I:
+					gl_internal_format = GL_RGB8;
+					gl_pixel_format = GL_RGB_INTEGER;
+					gl_data_type = GL_INT;
+					break;
+				case StepWay::Graphics::API::Texture::PixelFormat::RGBA8_I:
+					gl_internal_format = GL_RGBA8;
+					gl_pixel_format = GL_RGBA_INTEGER;
+					gl_data_type = GL_INT;
+					break;
+				case StepWay::Graphics::API::Texture::PixelFormat::R16_I:
+					gl_internal_format = GL_R16;
+					gl_pixel_format = GL_RED_INTEGER;
+					gl_data_type = GL_INT;
+					break;
+				case StepWay::Graphics::API::Texture::PixelFormat::RG16_I:
+					gl_internal_format = GL_RG16;
+					gl_pixel_format = GL_RG_INTEGER;
+					gl_data_type = GL_INT;
+					break;
+				case StepWay::Graphics::API::Texture::PixelFormat::RGBA16_I:
+					gl_internal_format = GL_RGB16;
+					gl_pixel_format = GL_RGB_INTEGER;
+					gl_data_type = GL_INT;
+					break;
+				case StepWay::Graphics::API::Texture::PixelFormat::R16_F:
+					gl_internal_format = GL_R16F;
+					gl_pixel_format = GL_RED;
+					gl_data_type = GL_FLOAT;
+					break;
+				case StepWay::Graphics::API::Texture::PixelFormat::RG16_F:
+					gl_internal_format = GL_RG16F;
+					gl_pixel_format = GL_RG;
+					gl_data_type = GL_FLOAT;
+					break;
+				case StepWay::Graphics::API::Texture::PixelFormat::RGB16_F:
+					gl_internal_format = GL_RGB16F;
+					gl_pixel_format = GL_RGB;
+					gl_data_type = GL_FLOAT;
+					break;
+				case StepWay::Graphics::API::Texture::PixelFormat::RGBA16_F:
+					gl_internal_format = GL_RGBA16F;
+					gl_pixel_format = GL_RGBA;
+					gl_data_type = GL_FLOAT;
+					break;
+				case StepWay::Graphics::API::Texture::PixelFormat::R32_F:
+					gl_internal_format = GL_R32F;
+					gl_pixel_format = GL_RED;
+					gl_data_type = GL_FLOAT;
+					break;
+				case StepWay::Graphics::API::Texture::PixelFormat::RG32_F:
+					gl_internal_format = GL_RG32F;
+					gl_pixel_format = GL_RG;
+					gl_data_type = GL_FLOAT;
+					break;
+				case StepWay::Graphics::API::Texture::PixelFormat::RGB32_F:
+					gl_internal_format = GL_RGB32F;
+					gl_pixel_format = GL_RGB;
+					gl_data_type = GL_FLOAT;
+					break;
+				case StepWay::Graphics::API::Texture::PixelFormat::RGBA32_F:
+					gl_internal_format = GL_RGBA32F;
+					gl_pixel_format = GL_RGBA;
+					gl_data_type = GL_FLOAT;
+					break;
+				default:
+					SW_ASSERT(false, "WRONG PIXEL FORMAT")
+					break;
+				}
 			}
 		}
 	}
