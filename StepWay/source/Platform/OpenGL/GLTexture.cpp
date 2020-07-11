@@ -33,7 +33,8 @@ namespace StepWay
 
 			}
 
-			void GLTexture::SetUp(int width, int height, PixelFormat format)
+			//use data = NULL for empty array
+			void GLTexture::SetUp(int width, int height, PixelFormat format, void* data)
 			{
 				glActiveTexture(GL_TEXTURE0);
 
@@ -45,14 +46,12 @@ namespace StepWay
 				SetMinFilter(Filter::LINEAR);
 				SetMagFilter(Filter::LINEAR);
 
-				GLenum gl_int_format = 0;
-				GLenum gl_pix_format = 0;
-				GLenum gl_data_type = 0;
+				LoadData(width, height, format, data);
+			}
 
-				PixFormatToGLFormats(format, gl_int_format, gl_pix_format, gl_data_type);
-
-				glTexImage2D(GL_TEXTURE_2D, 0, gl_int_format, width, height, 0, gl_pix_format, gl_data_type, NULL);
-				GL_CHECK_ERRORS();
+			void GLTexture::SetUp(int width, int height, PixelFormat format)
+			{
+				SetUp(width, height, format, NULL);
 			}
 
 			void GLTexture::ShutDown()
@@ -73,6 +72,21 @@ namespace StepWay
 				GL_CHECK_ERRORS();
 			}
 
+			void GLTexture::LoadData(int width, int height, PixelFormat format, void* data)
+			{
+				m_format = format;
+
+				GLenum gl_int_format = 0;
+				GLenum gl_pix_format = 0;
+				GLenum gl_data_type = 0;
+
+				PixFormatToGLFormats(format, gl_int_format, gl_pix_format, gl_data_type);
+
+				Bind();
+				glTexImage2D(GL_TEXTURE_2D, 0, gl_int_format, width, height, 0, gl_pix_format, gl_data_type, data);
+				GL_CHECK_ERRORS();
+			}
+
 			//0 is reserved for common temporal purposes
 			//all the temporal textures are set to the 0 as default
 			void GLTexture::SetToTexUnit(int num)
@@ -83,8 +97,15 @@ namespace StepWay
 
 			void GLTexture::SetToImgUnit(int num)
 			{
+
+				GLenum gl_int_format = 0;
+				GLenum gl_pix_format = 0;
+				GLenum gl_data_type = 0;
+
+				PixFormatToGLFormats(m_format, gl_int_format, gl_pix_format, gl_data_type);
+
 				//custom formats should be involved for the last 2 arguments
-				glBindImageTexture(num, m_id, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
+				glBindImageTexture(num, m_id, 0, GL_FALSE, 0, GL_READ_WRITE, gl_int_format);
 				GL_CHECK_ERRORS();
 			}
 
@@ -173,9 +194,12 @@ namespace StepWay
 
 				SW_ASSERT(data != 0, "can't load image");
 
-				Bind();
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-				GL_CHECK_ERRORS();
+				PixelFormat format = PixelFormat::RGB8_I;
+
+				LoadData(width, height, format, data);
+				//Bind();
+				//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+				//GL_CHECK_ERRORS();
 
 				stbi_image_free(data);
 			}
@@ -210,37 +234,37 @@ namespace StepWay
 				{
 				case StepWay::Graphics::API::Texture::PixelFormat::R8_I:
 					gl_internal_format = GL_R8;
-					gl_pixel_format = GL_RED_INTEGER;
-					gl_data_type = GL_INT;
+					gl_pixel_format = GL_RED;
+					gl_data_type = GL_UNSIGNED_BYTE;
 					break;
 				case StepWay::Graphics::API::Texture::PixelFormat::RG8_I:
 					gl_internal_format = GL_RG8;
-					gl_pixel_format = GL_RG_INTEGER;
-					gl_data_type = GL_INT;
+					gl_pixel_format = GL_RG;
+					gl_data_type = GL_UNSIGNED_BYTE;
 					break;
 				case StepWay::Graphics::API::Texture::PixelFormat::RGB8_I:
 					gl_internal_format = GL_RGB8;
-					gl_pixel_format = GL_RGB_INTEGER;
-					gl_data_type = GL_INT;
+					gl_pixel_format = GL_RGB;
+					gl_data_type = GL_UNSIGNED_BYTE;
 					break;
 				case StepWay::Graphics::API::Texture::PixelFormat::RGBA8_I:
 					gl_internal_format = GL_RGBA8;
-					gl_pixel_format = GL_RGBA_INTEGER;
-					gl_data_type = GL_INT;
+					gl_pixel_format = GL_RGBA;
+					gl_data_type = GL_UNSIGNED_BYTE;
 					break;
 				case StepWay::Graphics::API::Texture::PixelFormat::R16_I:
 					gl_internal_format = GL_R16;
-					gl_pixel_format = GL_RED_INTEGER;
+					gl_pixel_format = GL_RED;
 					gl_data_type = GL_INT;
 					break;
 				case StepWay::Graphics::API::Texture::PixelFormat::RG16_I:
 					gl_internal_format = GL_RG16;
-					gl_pixel_format = GL_RG_INTEGER;
+					gl_pixel_format = GL_RG;
 					gl_data_type = GL_INT;
 					break;
 				case StepWay::Graphics::API::Texture::PixelFormat::RGBA16_I:
 					gl_internal_format = GL_RGB16;
-					gl_pixel_format = GL_RGB_INTEGER;
+					gl_pixel_format = GL_RGB;
 					gl_data_type = GL_INT;
 					break;
 				case StepWay::Graphics::API::Texture::PixelFormat::R16_F:

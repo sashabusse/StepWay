@@ -37,6 +37,7 @@ namespace StepWay
 					//add more if needed later
 				};
 				virtual void SetUp(std::string filename) = 0;//PixelFormat??
+				virtual void SetUp(int width, int height, PixelFormat format, void* data) = 0;
 				virtual void SetUp(int width, int height, PixelFormat format) = 0;
 				//should be done later
 				//virtual void SetUp(int width, int height, glm::vec4 col) = 0;
@@ -44,6 +45,8 @@ namespace StepWay
 
 				virtual void Bind() = 0;
 				virtual void Unbind() = 0;
+
+				virtual void LoadData(int width, int height, PixelFormat format, void* data) = 0;
 				
 				virtual void SetToTexUnit(int num) = 0;
 				virtual void SetToImgUnit(int num) = 0;

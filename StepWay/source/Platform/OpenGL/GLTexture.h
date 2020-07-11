@@ -16,11 +16,14 @@ namespace StepWay
 				GLTexture();
 
 				void SetUp(std::string filename) override;
+				void SetUp(int width, int height, PixelFormat format, void* data) override;
 				void SetUp(int width, int height, PixelFormat format) override;
 				void ShutDown() override;
 				
 				void Bind() override;
 				void Unbind() override;
+
+				void LoadData(int width, int height, PixelFormat format, void* data) override;
 
 				void SetToTexUnit(int num) override;
 				void SetToImgUnit(int num) override;
@@ -38,6 +41,7 @@ namespace StepWay
 				void PixFormatToGLFormats(PixelFormat format, GLenum& gl_internal_format, GLenum& gl_pixel_format, GLenum& gl_data_type);
 			private:
 				uint m_id;
+				PixelFormat m_format;
 			};
 
 

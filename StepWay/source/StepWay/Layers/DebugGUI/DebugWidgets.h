@@ -55,12 +55,13 @@ namespace StepWay
 	public:
 		virtual ~DbgSliderBase() {};
 	protected:
-		DbgSliderBase(const std::string& name, ItemType* pvalue, ItemType min, ItemType max) :
-			m_name(name), m_pvalue(pvalue), m_min(min), m_max(max) {};
+		DbgSliderBase(const std::string& name, ItemType* pvalue, ItemType min, ItemType max, const std::string& format) :
+			m_name(name), m_pvalue(pvalue), m_min(min), m_max(max), m_format(format) {};
 
 		std::string m_name;
 		ItemType* m_pvalue;
 		ItemType m_min, m_max;
+		std::string m_format;
 	};
 
 
@@ -70,8 +71,8 @@ namespace StepWay
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::SLIDER_FLOAT);
-		DbgSliderf(const std::string& name, float* pvalue, float min, float max) :
-			DbgSliderBase<float>(name, pvalue, min, max) {};
+		DbgSliderf(const std::string& name, float* pvalue, float min, float max, const std::string& format = "%.3f") :
+			DbgSliderBase<float>(name, pvalue, min, max, format) {};
 		virtual ~DbgSliderf() {};
 
 		void Show() override;
@@ -82,8 +83,8 @@ namespace StepWay
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::SLIDER_FLOAT2);
-		DbgSlider2f(const std::string& name, float* pvalue, float min, float max) :
-			DbgSliderBase<float>(name, pvalue, min, max) {};
+		DbgSlider2f(const std::string& name, float* pvalue, float min, float max, const std::string& format = "%.3f") :
+			DbgSliderBase<float>(name, pvalue, min, max, format) {};
 		virtual ~DbgSlider2f() {};
 	
 		void Show() override;
@@ -94,8 +95,8 @@ namespace StepWay
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::SLIDER_FLOAT3);
-		DbgSlider3f(const std::string& name, float* pvalue, float min, float max) :
-			DbgSliderBase<float>(name, pvalue, min, max) {};
+		DbgSlider3f(const std::string& name, float* pvalue, float min, float max, const std::string& format = "%.3f") :
+			DbgSliderBase<float>(name, pvalue, min, max, format) {};
 		virtual ~DbgSlider3f() {};
 
 		void Show() override;
@@ -106,8 +107,8 @@ namespace StepWay
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::SLIDER_FLOAT4);
-		DbgSlider4f(const std::string& name, float* pvalue, float min, float max) :
-			DbgSliderBase<float>(name, pvalue, min, max) {};
+		DbgSlider4f(const std::string& name, float* pvalue, float min, float max, const std::string& format = "%.3f") :
+			DbgSliderBase<float>(name, pvalue, min, max, format) {};
 		virtual ~DbgSlider4f() {};
 
 		void Show() override;
@@ -120,8 +121,8 @@ namespace StepWay
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::SLIDER_INT);
-		DbgSlideri(const std::string& name, int* pvalue, int min, int max) :
-			DbgSliderBase<int>(name, pvalue, min, max) {};
+		DbgSlideri(const std::string& name, int* pvalue, int min, int max, const std::string& format = "%d") :
+			DbgSliderBase<int>(name, pvalue, min, max, format) {};
 		virtual ~DbgSlideri() {};
 	
 		void Show() override;
@@ -132,8 +133,8 @@ namespace StepWay
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::SLIDER_INT2);
-		DbgSlider2i(const std::string& name, int* pvalue, int min, int max) :
-			DbgSliderBase<int>(name, pvalue, min, max) {};
+		DbgSlider2i(const std::string& name, int* pvalue, int min, int max, const std::string& format = "%d") :
+			DbgSliderBase<int>(name, pvalue, min, max, format) {};
 		virtual ~DbgSlider2i() {};
 	
 		void Show() override;
@@ -144,8 +145,8 @@ namespace StepWay
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::SLIDER_INT3);
-		DbgSlider3i(const std::string& name, int* pvalue, int min, int max) :
-			DbgSliderBase<int>(name, pvalue, min, max) {};
+		DbgSlider3i(const std::string& name, int* pvalue, int min, int max, const std::string& format = "%d") :
+			DbgSliderBase<int>(name, pvalue, min, max, format) {};
 		virtual ~DbgSlider3i() {};
 	
 		void Show() override;
@@ -156,8 +157,8 @@ namespace StepWay
 	{
 	public:
 		SW_DECLARE_DBG_WIDGET_TYPE(DbgWidgetType::SLIDER_INT4);
-		DbgSlider4i(const std::string& name, int* pvalue, int min, int max) :
-			DbgSliderBase<int>(name, pvalue, min, max) {};
+		DbgSlider4i(const std::string& name, int* pvalue, int min, int max, const std::string& format = "%d") :
+			DbgSliderBase<int>(name, pvalue, min, max, format) {};
 		virtual ~DbgSlider4i() {};
 	
 		void Show() override;
