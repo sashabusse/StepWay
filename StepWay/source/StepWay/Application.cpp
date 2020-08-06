@@ -43,11 +43,10 @@ namespace StepWay
 		//decide where to SetUp call!!!
 		m_MainWindow = Window::Create();//think about protected constructors
 
-
 		//main window initialization
 		WindowProp prop;
-		prop.height = 500;
-		prop.width = 500;
+		prop.height = 800;
+		prop.width = 800;
 		prop.luX = 100;
 		prop.luY = 100;
 		prop.title = "Main App Window";
