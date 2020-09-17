@@ -47,7 +47,7 @@ workspace "StepWay"
 	
 	include "StepWay.lua"
 	include "Sandbox.lua"
-	include "Tests/Tests.lua"
+	--include "Tests/Tests.lua"
 	include "StepWay/vendor/glad.lua"
 	include "StepWay/vendor/imgui.lua"
 	

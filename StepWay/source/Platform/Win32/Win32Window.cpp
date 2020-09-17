@@ -17,7 +17,8 @@ namespace StepWay
 			m_size({ 0,0 }),
 			m_IsResizing(false),
 			m_wnd(NULL),
-			m_DC(NULL)
+			m_DC(NULL),
+			m_BorderSize({0, 0})
 		{
 
 		}

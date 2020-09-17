@@ -2,9 +2,9 @@
 #include "Layers/LayerStack.h"
 #include "Log.h"
 
-using StepWay::graphics::LayerStack;
+using StepWay::LayerStack;
 
-using StepWay::graphics::Layer;
+using StepWay::Layer;
 
 class LayerStackTests : public ::testing::Test
 {
@@ -56,9 +56,9 @@ TEST_F(LayerStackTests, push_pop)
 	//check empty
 	EXPECT_EQ(stack.begin(), stack.end());
 
-	TestLayer tstLayer;
+	std::shared_ptr<TestLayer> tstLayer(new TestLayer);
 
-	stack.PushLayer(&tstLayer);
+	stack.PushLayer(tstLayer);
 	EXPECT_TRUE(tstLayer.IsAttached);
 	EXPECT_NE(stack.begin(), stack.end());
 	EXPECT_EQ((++stack.begin()), stack.end());

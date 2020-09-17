@@ -44,8 +44,8 @@ TEST_F(Win32WindowFixture, InitializationTest)
 
 TEST_F(Win32WindowFixture, MultipleInitializationTest)
 {
-	StepWay::Window* window = new StepWay::Win32Window;
-	StepWay::Window* window2 = new StepWay::Win32Window;
+	StepWay::Window* window = new StepWay::Win32::Win32Window;
+	StepWay::Window* window2 = new StepWay::Win32::Win32Window;
 
 	StepWay::WindowProp prop;
 	prop.height = 800;
@@ -66,7 +66,7 @@ TEST_F(Win32WindowFixture, MultipleInitializationTest)
 
 TEST_F(Win32WindowFixture, InitialState)
 {
-	StepWay::Window* window = new StepWay::Win32Window;
+	StepWay::Window* window = new StepWay::Win32::Win32Window;
 	
 	StepWay::WindowProp prop;
 	prop.height = 800;
@@ -89,7 +89,7 @@ TEST_F(Win32WindowFixture, InitialState)
 
 TEST_F(Win32WindowFixture, Move)
 {
-	StepWay::Window* window = new StepWay::Win32Window;
+	StepWay::Window* window = new StepWay::Win32::Win32Window;
 
 	StepWay::WindowProp prop;
 	prop.height = 800;
@@ -117,7 +117,7 @@ TEST_F(Win32WindowFixture, Move)
 
 TEST_F(Win32WindowFixture, WindowDestroyCallback)
 {
-	StepWay::Window* window = new StepWay::Win32Window;
+	StepWay::Window* window = new StepWay::Win32::Win32Window;
 
 	StepWay::WindowProp prop;
 	prop.height = 800;
