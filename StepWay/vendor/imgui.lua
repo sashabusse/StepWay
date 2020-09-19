@@ -6,7 +6,7 @@ project "imgui"
 	objdir ("../../bin-int/" .. outputdirname .. "/%{prj.name}/")
 
 	language "C++"
-	cppdialect "C++11"
+	cppdialect "C++17"
 	
 	
 	kind "StaticLib"

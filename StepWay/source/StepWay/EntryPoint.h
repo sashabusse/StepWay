@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "Memory/Memory.h"
 #include "Log.h"
+#include "Graphics/API/RenderingCommands.h"
 
 
 
@@ -20,6 +21,7 @@ int main()
 #endif
 	
 	StepWay::Log::Init();
+	StepWay::Graphics::API::RenderingCommands::Init();
 
 	StepWay::Application* app = StepWay::CreateApplication();
 	if (!app->SetUp())

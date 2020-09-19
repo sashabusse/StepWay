@@ -18,6 +18,12 @@
 #include "Graphics/API/Shader.h"
 #include "Graphics/API/RenderingCommands.h"
 #include "Graphics/API/Texture.h"
+#include "Graphics/API/Mesh.h"
+
+//ECS
+#include "EntitySystem/Scene.h"
+#include "EntitySystem/Entity.h"
+#include "EntitySystem/BasicComponents.h"
 
 
 //Layers

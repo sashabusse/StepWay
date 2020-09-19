@@ -1,5 +1,6 @@
 //#include "TexturedQuadExample.h"
 //#include "ColoredQuadExample.h"
+#include "RenderingExample.h"
 //#include "SimpleComputeShaderExample.h"
-#include "HeatEquationSolvationSingleAxis.h"
+//#include "HeatEquationSolvationSingleAxis.h"
 //#include "HeatEquationSolvationDoubleAxis.h"

@@ -1,35 +1,81 @@
 #pragma once
 #include "Core.h"
+#include "RenderingAPI.h"
 #include "Context.h"
 #include "VertexArray.h"
+#include "Mesh.h"
 #include "glm/glm.hpp"
+#include "Graphics/API/Shader.h"
 
 
 namespace StepWay
-{	namespace Graphics
-	{	namespace API
+{	
+	namespace Graphics
+	{	
+		namespace API
 		{	
 
-	class RenderCommand
-	{
-	public:
-		//need math library to make it
-		virtual void SetClearColor(const glm::fvec4& col) = 0;
-		virtual void Clear() = 0;
+			class RenderingCommands
+			{
+			public:
+				static void Init()
+				{
+					m_API = std::unique_ptr<RenderingAPI>(RenderingAPI::Create(GAPI_TYPE::OPENGL));
+				};
 
-		virtual void Draw(API::VertexArray* const VAO) = 0;
-		void Draw(const std::shared_ptr<API::VertexArray> VAO) { Draw(&*VAO); };
+				static void Clear() { m_API->Clear(); };
+				static void Clear(const glm::fvec4& col) { m_API->Clear(col); };
+				static void SetClearColor(const glm::fvec4& col) { m_API->SetClearColor(col); };
 
-		virtual void DrawIndexed(API::VertexArray* const VAO,
-								API::IndexBuffer* const IBO) = 0;
-		void DrawIndexed(const std::shared_ptr<API::VertexArray> VAO,
-			const std::shared_ptr<API::IndexBuffer> IBO)
-		{DrawIndexed(&*VAO, &*IBO);}
+				static void DrawIndexed(
+					const std::shared_ptr<API::VertexArray> VAO,
+					const std::shared_ptr<API::IndexBuffer> IBO)
+				{
+					m_API->DrawIndexed(VAO, IBO);
+				};
+			private:
+				static std::unique_ptr<RenderingAPI> m_API;
+			};
 
-		static RenderCommand* Create(GAPI_TYPE api);
+			class Renderer
+			{
+			public:
+				inline void BeginScene() { m_shader->Bind(); };
 
-		virtual ~RenderCommand() {};
-	private:
-	};
+				inline void Clear() { RenderingCommands::Clear(); };
 
-}}}
+				inline void DrawIndexed(
+					const std::shared_ptr<API::VertexArray> VAO,
+					const std::shared_ptr<API::IndexBuffer> IBO,
+					const glm::mat4& MVP)
+				{
+					m_shader->SetUniform("u_MVP", MVP);
+					RenderingCommands::DrawIndexed(VAO, IBO);
+				}
+				inline void DrawIndexed(
+					const Mesh& mesh,
+					const glm::mat4& MVP)
+				{
+					m_shader->SetUniform("u_MVP", MVP);
+					RenderingCommands::DrawIndexed(mesh.GetVAO(), mesh.GetIBO());
+				}
+				inline void DrawIndexed(
+					const std::shared_ptr<API::VertexArray> VAO,
+					const std::shared_ptr<API::IndexBuffer> IBO)
+				{
+					RenderingCommands::DrawIndexed(VAO, IBO);
+				};
+				void DrawIndexed(const Mesh& mesh) { RenderingCommands::DrawIndexed(mesh.GetVAO(), mesh.GetIBO()); };
+
+				void SetShader(std::shared_ptr<Graphics::API::Shader> shader)
+				{
+					m_shader = shader;
+				};
+			private:
+
+				std::shared_ptr<Graphics::API::Shader> m_shader;
+			};
+
+		}
+	}
+}

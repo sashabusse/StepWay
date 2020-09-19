@@ -6,7 +6,7 @@ project "Sandbox"
 	objdir ("bin-int/" .. outputdirname .. "/%{prj.name}/")
 
 	language "C++"
-	cppdialect "C++11"
+	cppdialect "C++17"
 
 	kind "ConsoleApp"
 	staticruntime "on"
@@ -39,6 +39,7 @@ project "Sandbox"
 		"%{AddIncludeDirs.glad}",
 		"%{AddIncludeDirs.glm}",
 		"%{AddIncludeDirs.stb_image}",
+		"%{AddIncludeDirs.entt}",
 		"StepWay/source/",
 		"StepWay/source/StepWay/"
 	}

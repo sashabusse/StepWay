@@ -6,7 +6,7 @@ project "StepWay"
 	objdir ("bin-int/" .. outputdirname .. "/%{prj.name}/")
 
 	language "C++"
-	cppdialect "C++11"
+	cppdialect "C++17"
 
 	kind "StaticLib"
 	staticruntime "on"
@@ -60,7 +60,9 @@ project "StepWay"
 		"%{AddIncludeDirs.imgui}",
 		"%{AddIncludeDirs.glad}",
 		"%{AddIncludeDirs.glm}",
-		"%{AddIncludeDirs.stb_image}"
+		"%{AddIncludeDirs.stb_image}",
+		"%{AddIncludeDirs.entt}"
+		
 	}
 	-- Links---------------------------------------------------------------------------------------
 	links

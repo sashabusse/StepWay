@@ -182,7 +182,9 @@ namespace StepWay
 			void GLShader::SetUniform(const std::string & name, const glm::fmat4 & val)
 			{
 				Bind();
-				glUniformMatrix4fv(GetUniformLocation(name), 1, false, glm::value_ptr(val));
+				GLint res = GetUniformLocation(name);
+				GL_CHECK_ERRORS();
+				glUniformMatrix4fv(res, 1, false, glm::value_ptr(val));
 				GL_CHECK_ERRORS();
 			}
 
