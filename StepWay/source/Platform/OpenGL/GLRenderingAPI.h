@@ -13,6 +13,9 @@ namespace StepWay
 			public:
 				virtual ~GLRenderingAPI() {};
 
+
+				virtual void Init() override;
+
 				virtual void Clear() override;
 				virtual void Clear(const glm::fvec4& col) override;
 				virtual void SetClearColor(const glm::fvec4& col) override;

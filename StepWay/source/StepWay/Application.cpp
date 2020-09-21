@@ -44,7 +44,7 @@ namespace StepWay
 		m_MainWindow = Window::Create();//think about protected constructors
 
 		//main window initialization
-		WindowProp prop;
+		WindowProperties prop;
 		prop.height = 800;
 		prop.width = 800;
 		prop.luX = 100;

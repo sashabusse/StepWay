@@ -61,7 +61,8 @@ project "StepWay"
 		"%{AddIncludeDirs.glad}",
 		"%{AddIncludeDirs.glm}",
 		"%{AddIncludeDirs.stb_image}",
-		"%{AddIncludeDirs.entt}"
+		"%{AddIncludeDirs.entt}",
+		"%{AddIncludeDirs.assimp}"
 		
 	}
 	-- Links---------------------------------------------------------------------------------------
@@ -73,7 +74,7 @@ project "StepWay"
 	filter("system:windows")
 		links
 		{
-			"Opengl32.lib" --wglCreateContext e.t.c.
+			"Opengl32.lib", --wglCreateContext e.t.c.
 		}	
 	filter{}
 	------------------------------------------------------------------------------------------------

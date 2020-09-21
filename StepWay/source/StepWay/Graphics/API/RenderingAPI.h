@@ -18,6 +18,7 @@ namespace StepWay
 
 				virtual ~RenderingAPI() {};
 
+				virtual void Init() = 0;
 				virtual void Clear() = 0;
 				virtual void Clear(const glm::fvec4& col) = 0;
 				virtual void SetClearColor(const glm::fvec4& col) = 0;

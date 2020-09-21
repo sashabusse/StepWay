@@ -74,6 +74,13 @@ namespace StepWay
 				VertexBuffer() : m_layout({}) {};
 
 				virtual void SetUp(void* data,int size) = 0;
+				template<typename T>
+				void SetUp(std::vector<T>& data)
+				{
+					SW_CORE_ASSERT(!data.empty(), "empty data not allowed");
+					SetUp(&data[0], data.size() * sizeof(data[0]));
+				};
+
 				virtual void ShutDown() = 0;
 
 				virtual void Bind() = 0;

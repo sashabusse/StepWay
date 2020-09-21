@@ -11,7 +11,7 @@ namespace StepWay
 {
 
 	//Initialization properties of the window
-	struct WindowProp
+	struct WindowProperties
 	{
 		std::string title;
 		int luX;
@@ -31,7 +31,7 @@ namespace StepWay
 
 		virtual ~Window() {};
 
-		virtual bool SetUp(const WindowProp& prop) = 0;
+		virtual bool SetUp(const WindowProperties& prop) = 0;
 		virtual void ShutDown() = 0;
 		virtual bool IsInitialized() = 0;
 
@@ -66,6 +66,7 @@ namespace StepWay
 		//Events related
 		virtual void SetEventCallback(const EventCallback& callback) = 0;
 
+		//should be removed to other singletone class
 		inline Input::MouseClientInterface GetMouse() { return m_Mouse.GetClientInterface(); }
 		inline Input::KeyboardClientInterface GetKeyboard() { return m_Keyboard.GetInterface(); }
 		

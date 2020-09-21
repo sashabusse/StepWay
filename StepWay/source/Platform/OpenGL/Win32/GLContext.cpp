@@ -57,6 +57,9 @@ namespace StepWay
 			MakeCurrent();
 			int glad_load_res = gladLoadGL();
 			SW_CORE_ASSERT(glad_load_res != 0, "failed to load glad");
+
+
+			glEnable(GL_DEPTH_TEST);
 		}
 
 		void GLContext::ShutDown()

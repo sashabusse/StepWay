@@ -62,6 +62,13 @@ namespace StepWay
 		MouseClientInterface() = delete;
 		MouseClientInterface(Mouse& mouse) :
 			m_Mouse(mouse) {};
+
+		MouseClientInterface(const MouseClientInterface&) = default;
+		MouseClientInterface(MouseClientInterface&&) = default;
+
+		MouseClientInterface& operator= (const MouseClientInterface&) = default;
+		MouseClientInterface& operator= (MouseClientInterface&&) = default;
+
 		inline void SetEventCallback(const EventCallback& callback) { m_Mouse.SetEventCallback(callback); };
 		inline bool IsButtonDown(MouseKey code) const { return m_Mouse.IsButtonDown(code); };
 		inline float GetX() const { return m_Mouse.GetX(); };

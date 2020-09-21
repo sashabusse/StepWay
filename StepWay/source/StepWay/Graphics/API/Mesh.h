@@ -3,6 +3,8 @@
 #include "VertexArray.h"
 #include <string>
 #include <vector>
+#include "glm/glm.hpp"
+
 
 
 namespace StepWay
@@ -11,17 +13,26 @@ namespace StepWay
 	{
 		namespace API
 		{
-			
+			struct Vertex {
+				glm::vec3 position;
+				glm::vec3 normal;
+			};
+
 			class Mesh
 			{
 			public:
 				Mesh();
+				Mesh(const Mesh& other) = default;
+				Mesh(Mesh&& other) = default;
+				Mesh& operator= (Mesh&& other) = default;
+				Mesh& operator= (const Mesh& other) = default;
+
 				~Mesh();
 
 				void SetUpBuffers();
 				void ShutDownBuffers();
 
-				void LoadFromFile(std::string filename);
+				void make_flat_normals();
 
 				inline std::shared_ptr<VertexArray> GetVAO() { return m_VAO; };
 				inline std::shared_ptr<IndexBuffer> GetIBO() { return m_IBO; };
@@ -29,9 +40,10 @@ namespace StepWay
 				inline const std::shared_ptr<VertexArray> GetVAO() const { return m_VAO; };
 				inline const std::shared_ptr<IndexBuffer> GetIBO() const { return m_IBO; };
 
+
 			private:
 			public:
-				std::vector<float> m_vertices;
+				std::vector<Vertex> m_vertices;
 				std::vector<uint16> m_indices;
 
 			private:

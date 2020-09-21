@@ -16,7 +16,7 @@ namespace StepWay
 
 		if (msg == WM_CREATE)
 		{
-			//may be store in some other form
+			//mb store in some other form
 			CREATESTRUCT* pStruct = (CREATESTRUCT*)lparam;
 			SetWindowLongPtrW(wnd, 0, reinterpret_cast<LONG_PTR>(pStruct->lpCreateParams));
 			return 0;

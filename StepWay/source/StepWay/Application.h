@@ -38,7 +38,7 @@ namespace StepWay
 		void PushOverLay(std::shared_ptr<Layer> overlay);
 		void PopOverlay(std::shared_ptr<Layer> overlay);
 
-		//Getters
+		//Gettersd (mb static?)
 		inline Window* GetMainWindow()const { return m_MainWindow; }
 		inline Graphics::API::GraphicsContext* GetMainContex()const { return m_MainContext; }
 

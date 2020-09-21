@@ -2,6 +2,8 @@
 #include "Graphics/API/RenderingCommands.h"
 #include "entt.hpp"
 
+
+
 namespace StepWay
 {
 	class Entity;
@@ -11,8 +13,20 @@ namespace StepWay
 	public:
 		Scene();
 		Entity CreateEntity();
+		
+		template<typename... Args>
+		inline void ForEach(std::function<void(Entity&, Args&...)> func)
+		{
+			m_reg.view<Args>().each(
+				[&](entt::entity entity, Args&... args)
+				{
+					func(Entity(this, entity), args);
+				}
+			);
+		}
 
-		void RenderScene(Graphics::API::Renderer& renderer);
+		void UpdateScene();
+		void RenderScene(Graphics::API::Renderer& renderer, Entity& cam_entt);
 
 	private:
 	public:

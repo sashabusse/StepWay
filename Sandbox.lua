@@ -48,23 +48,46 @@ project "Sandbox"
 	{
 		"StepWay"
 	}
+	
+	libdirs 
+	{ 
+		"StepWay/vendor/Assimp/" 
+	}
 	-------------------------------------------------------------------------
 	filter("configurations:Debug")
 		runtime "Debug"
 		symbols "On"
 		optimize "Off"
+		links
+		{
+			"assimp-vc142-mtd.lib"
+		}
+		prebuildcommands("{MKDIR} ../bin/" .. outputdirname .. "/Sandbox")
+		prebuildcommands("{COPY} \"../StepWay/vendor/Assimp/assimp-vc142-mtd.dll\" \"../bin/" .. outputdirname .. "/Sandbox/\"")
 		
 
 	filter("configurations:Release")
 		runtime "Release"
 		symbols "Off"
 		optimize "On"
+		links
+		{
+			"assimp-vc142-mt.lib"
+		}
+		prebuildcommands("{MKDIR} ../bin/" .. outputdirname .. "/Sandbox")
+		prebuildcommands("{COPY} \"../StepWay/vendor/Assimp/assimp-vc142-mt.dll\" \"../bin/" .. outputdirname .. "/Sandbox/\"")
 		
 
 	filter("configurations:Dist")
 		runtime "Release"
 		symbols "Off"
 		optimize "On"
+		links
+		{
+			"assimp-vc142-mt.lib"
+		}
+		prebuildcommands("{MKDIR} ../bin/" .. outputdirname .. "/Sandbox")
+		prebuildcommands("{COPY} \"../StepWay/vendor/Assimp/assimp-vc142-mt.dll\" \"../bin/" .. outputdirname .. "/Sandbox/\"")
 		
 
 	filter {}

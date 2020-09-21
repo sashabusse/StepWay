@@ -43,6 +43,13 @@ namespace StepWay
 		KeyboardClientInterface() = delete;
 		KeyboardClientInterface(Keyboard& keyboard) :
 			m_Keyboard(keyboard) {};
+
+		KeyboardClientInterface(const KeyboardClientInterface&) = default;
+		KeyboardClientInterface(KeyboardClientInterface&&) = default;
+
+		KeyboardClientInterface& operator= (const KeyboardClientInterface&) = default;
+		KeyboardClientInterface& operator= (KeyboardClientInterface&&) = default;
+
 		inline void SetEventCallback(const EventCallback& callback) { m_Keyboard.SetEventCallback(callback); };
 		inline bool IsKeyPressed(KeyboardKey key) const { return m_Keyboard.IsKeyPressed(key); };
 	private:

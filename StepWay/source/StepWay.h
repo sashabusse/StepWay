@@ -30,6 +30,8 @@
 #include "Layers/DebugGUI/DebugGUILayer.h"
 #include "Layers/DebugGUI/DebugTab.h"
 
+#include "Resource/LoadModel.h"
+
 //---------EntryPoint--------------|
 #include "StepWay/EntryPoint.h"//--|
 //---------------------------------|

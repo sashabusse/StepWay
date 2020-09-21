@@ -23,7 +23,7 @@ namespace StepWay
 			~Win32Window();
 
 
-			bool SetUp(const WindowProp& prop) override;
+			bool SetUp(const WindowProperties& prop) override;
 			void ShutDown() override;
 			bool IsInitialized() override;
 

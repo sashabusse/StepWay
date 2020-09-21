@@ -21,10 +21,26 @@ namespace StepWay
 	}
 
 
-	void Scene::RenderScene(Graphics::API::Renderer& renderer)
+	void Scene::UpdateScene()
 	{
+		m_reg.view<NativeScriptComponent>().each(
+			[&](entt::entity entity, NativeScriptComponent& script_c)
+			{
+				script_c.OnUpdate();
+			});
+	}
+
+	void Scene::RenderScene(Graphics::API::Renderer& renderer, Entity& cam_entt)
+	{
+		//replace with default cam
+		SW_CORE_ASSERT(cam_entt.IsValid() && cam_entt.HasComponent<CameraComponent>(), "not valid entity as cam");
+
 		renderer.Clear();
-		renderer.BeginScene();
+
+		CameraComponent& cam_c = cam_entt.GetComponent<CameraComponent>();
+		TransformComponent& transform_c = cam_entt.GetComponent<TransformComponent>();
+
+		renderer.BeginScene(cam_c.projection, transform_c.transform);
 		m_reg.view<MeshComponent, TransformComponent>().each(
 			[&](entt::entity entity, MeshComponent& mesh_c, TransformComponent& transform_c)
 			{

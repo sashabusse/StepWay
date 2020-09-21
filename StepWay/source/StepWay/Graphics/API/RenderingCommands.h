@@ -21,6 +21,7 @@ namespace StepWay
 				static void Init()
 				{
 					m_API = std::unique_ptr<RenderingAPI>(RenderingAPI::Create(GAPI_TYPE::OPENGL));
+					m_API->Init();
 				};
 
 				static void Clear() { m_API->Clear(); };
@@ -40,24 +41,24 @@ namespace StepWay
 			class Renderer
 			{
 			public:
-				inline void BeginScene() { m_shader->Bind(); };
+				void BeginScene(glm::mat4& projection, glm::mat4& cam_transform);
 
 				inline void Clear() { RenderingCommands::Clear(); };
 
 				inline void DrawIndexed(
 					const std::shared_ptr<API::VertexArray> VAO,
 					const std::shared_ptr<API::IndexBuffer> IBO,
-					const glm::mat4& MVP)
+					const glm::mat4& model)
 				{
-					m_shader->SetUniform("u_MVP", MVP);
+					m_shader->SetUniform("u_VP", m_view_projection);
+					m_shader->SetUniform("u_model", model);
 					RenderingCommands::DrawIndexed(VAO, IBO);
 				}
 				inline void DrawIndexed(
 					const Mesh& mesh,
-					const glm::mat4& MVP)
+					const glm::mat4& model)
 				{
-					m_shader->SetUniform("u_MVP", MVP);
-					RenderingCommands::DrawIndexed(mesh.GetVAO(), mesh.GetIBO());
+					DrawIndexed(mesh.GetVAO(), mesh.GetIBO(), model);
 				}
 				inline void DrawIndexed(
 					const std::shared_ptr<API::VertexArray> VAO,
@@ -72,7 +73,7 @@ namespace StepWay
 					m_shader = shader;
 				};
 			private:
-
+				glm::mat4 m_view_projection = glm::mat4(1.0f);
 				std::shared_ptr<Graphics::API::Shader> m_shader;
 			};
 

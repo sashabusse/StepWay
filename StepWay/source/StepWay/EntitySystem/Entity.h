@@ -16,6 +16,11 @@ namespace StepWay
 			m_scene(sc),
 			m_id(id) {};
 
+		Entity(const Entity&) = default;
+		Entity(Entity&&) = default;
+		
+		Entity& operator= (const Entity&) = default;
+		Entity& operator= (Entity&&) = default;
 
 		bool IsValid()
 		{

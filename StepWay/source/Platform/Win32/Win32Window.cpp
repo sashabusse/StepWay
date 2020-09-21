@@ -29,7 +29,7 @@ namespace StepWay
 		}
 
 
-		bool Win32Window::SetUp(const WindowProp & prop)
+		bool Win32Window::SetUp(const WindowProperties & prop)
 		{
 
 			m_title = prop.title;
@@ -170,8 +170,6 @@ namespace StepWay
 			Rect.bottom = y + m_size.height;
 			Rect.left = x;
 			Rect.right = x + m_size.width;
-
-			//AdjustWindowRectEx(&Rect, WS_OVERLAPPEDWINDOW, NULL, NULL);
 
 			SetWindowPos(m_wnd, NULL, Rect.left, Rect.top, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
 		}
