@@ -31,6 +31,9 @@
 			SW_CORE_ERROR(__VA_ARGS__);DBG_BREAK();}}
 
 #define SW_BIND_METH(meth, ...) std::bind(&meth,this,__VA_ARGS__)
+#define SW_BIND_METH_TO(meth, inst, ...) std::bind(&meth, inst, __VA_ARGS__)
 #define SW_BIND_METH_1(meth) std::bind(&meth,this,std::placeholders::_1)
+#define SW_BIND_METH_1_TO(meth, inst) std::bind(&meth,inst,std::placeholders::_1)
+
 
 #define BIT(x) (1<<x)

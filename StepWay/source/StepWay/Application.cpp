@@ -134,6 +134,7 @@ namespace StepWay
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowDestroyEvent>(SW_BIND_METH_1(Application::OnMainWindowClose));
+		dispatcher.Dispatch<WindowResizeEndEvent>(SW_BIND_METH_1_TO(Graphics::API::GraphicsContext::OnWindowResize, &Application::GetContext()));
 
 		SW_CORE_WARNING(e.ToString());
 

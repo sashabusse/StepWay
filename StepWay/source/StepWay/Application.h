@@ -19,7 +19,9 @@ namespace StepWay
 		static Application* m_Instance;
 	public:
 		static Application& GetInstance() { return *m_Instance; }
-
+		static Window& GetWindow() { return m_Instance->GetMainWindow(); }
+		static Graphics::API::GraphicsContext& GetContext() { return m_Instance->GetMainContex(); }
+		static Input::InputSystem& GetInputSystem() { return m_Instance->GetMainInputSystem(); }
 	public:
 		Application();
 		bool SetUp();
@@ -41,7 +43,7 @@ namespace StepWay
 		//Gettersd (mb static?)
 		inline Window& GetMainWindow()const { return *m_MainWindow; }
 		inline Graphics::API::GraphicsContext& GetMainContex()const { return *m_MainContext; }
-		inline Input::InputSystem& GetInputSystem()const { return *m_InputSystem; }
+		inline Input::InputSystem& GetMainInputSystem()const { return *m_InputSystem; }
 		//Setters
 
 		virtual ~Application();

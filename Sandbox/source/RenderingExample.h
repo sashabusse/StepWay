@@ -41,7 +41,7 @@ public:
 	{};
 	virtual void OnCreate() override
 	{
-		Mouse::SetCursorMode(StepWay::Input::CursorMode::CAMERA);
+		//Mouse::SetCursorMode(StepWay::Input::CursorMode::CAMERA);
 	}
 	virtual void OnUpdate() override
 	{

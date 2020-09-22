@@ -18,6 +18,8 @@ namespace StepWay
 
 		GLContext(Win32Window* winow);
 
+		virtual void ResizeViewport(int x, int y, int width, int height) override;
+
 		virtual void SetUp() override;
 		virtual void ShutDown() override;
 		virtual void SwapBuffers() override;

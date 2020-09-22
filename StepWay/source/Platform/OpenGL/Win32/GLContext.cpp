@@ -1,6 +1,7 @@
 #include "StepWayPCH.h"
 #include "GLContext.h"
 #include "glad/glad.h"
+#include "OpenGL/ErrorHandling.h"
 
 namespace StepWay
 {	namespace Graphics
@@ -21,6 +22,12 @@ namespace StepWay
 			m_pWindow(window),
 			m_GLNativeContext(NULL)
 		{
+		}
+
+		void GLContext::ResizeViewport(int x, int y, int width, int height)
+		{
+			glViewport(x, y, width, height);
+			GL_CHECK_ERRORS();
 		}
 
 		void GLContext::SetUp()
@@ -58,8 +65,9 @@ namespace StepWay
 			int glad_load_res = gladLoadGL();
 			SW_CORE_ASSERT(glad_load_res != 0, "failed to load glad");
 
-
+			//some settings here
 			glEnable(GL_DEPTH_TEST);
+
 		}
 
 		void GLContext::ShutDown()

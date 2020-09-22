@@ -42,9 +42,9 @@ namespace StepWay
 
 		void Mouse::SetToWndCenter()
 		{
-			Window& wnd = Application::GetInstance().GetMainWindow();
+			Window& wnd = Application::GetWindow();
 			glm::ivec2 center({ wnd.GetX() + wnd.GetWidth() / 2,wnd.GetY() + wnd.GetHeight() / 2 });
-			Application::GetInstance().GetInputSystem().SetCursorPosition(center);
+			Application::GetInputSystem().SetCursorPosition(center);
 			m_x = center.x;
 			m_y = center.y;
 		}
@@ -71,7 +71,7 @@ namespace StepWay
 		{
 			m_x = x;
 			m_y = y;
-			Application::GetInstance().GetInputSystem().SetCursorPosition(glm::ivec2({ x, y }));
+			Application::GetInputSystem().SetCursorPosition(glm::ivec2({ x, y }));
 		}
 
 		void Mouse::SetCursorMode(CursorMode mode)
@@ -79,12 +79,12 @@ namespace StepWay
 			m_cursor_mode = mode;
 			if (m_cursor_mode == CursorMode::CAMERA)
 			{
-				Application::GetInstance().GetInputSystem().HideCursor(true);
+				Application::GetInputSystem().HideCursor(true);
 				SetToWndCenter();
 			}
 			else
 			{
-				Application::GetInstance().GetInputSystem().HideCursor(false);
+				Application::GetInputSystem().HideCursor(false);
 			}
 		}
 
