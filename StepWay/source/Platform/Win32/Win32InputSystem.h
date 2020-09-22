@@ -18,6 +18,11 @@ namespace StepWay
 		
 		static KeyboardKey MapKey(int vk_code);
 
+		virtual glm::ivec2 GetCursorPosition() override;
+		virtual void SetCursorPosition(glm::ivec2& pos) override;
+
+		virtual void HideCursor(bool b) override;
+
 	private:
 		virtual void ImplSetUp() override;
 		virtual void ImplShutDown() override;

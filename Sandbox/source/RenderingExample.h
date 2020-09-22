@@ -36,37 +36,36 @@ class CameraControlScript : public NativeScript
 public:
 	CameraControlScript(Entity& ent) :
 		NativeScript(ent),
-		keyboard(SandboxApp::GetInstance()->GetMainWindow()->GetKeyboard()),
-		mouse(SandboxApp::GetInstance()->GetMainWindow()->GetMouse()),
 		pos({0,0,0}),
 		angle({0,0})
 	{};
 	virtual void OnCreate() override
 	{
+		Mouse::SetCursorMode(StepWay::Input::CursorMode::CAMERA);
 	}
 	virtual void OnUpdate() override
 	{
 		glm::vec2 offset({ 0,0 });
-		if (keyboard.IsKeyPressed(StepWay::Input::KeyboardKey::KEY_W))
+		if (Keyboard::IsKeyPressed(KeyboardKey::KEY_W))
 		{
 			offset.x += 1.0 / 1000.0;
 		}
-		if (keyboard.IsKeyPressed(StepWay::Input::KeyboardKey::KEY_S))
+		if (Keyboard::IsKeyPressed(KeyboardKey::KEY_S))
 		{
 			offset.x -= 1.0 / 1000.0;
 		}
-		if (keyboard.IsKeyPressed(StepWay::Input::KeyboardKey::KEY_A))
+		if (Keyboard::IsKeyPressed(KeyboardKey::KEY_A))
 		{
 			offset.y -= 1.0 / 1000.0;
 		}
-		if (keyboard.IsKeyPressed(StepWay::Input::KeyboardKey::KEY_D))
+		if (Keyboard::IsKeyPressed(KeyboardKey::KEY_D))
 		{
 			offset.y += 1.0 / 1000.0;
 		}
 
 
 		
-		glm::vec2 mouse_cur({ mouse.GetX(), mouse.GetY() });
+		glm::vec2 mouse_cur({ Mouse::GetX(), Mouse::GetY() });
 		glm::vec2 rot({ 0,0 });
 		if (mp)
 		{
@@ -92,7 +91,7 @@ public:
 
 		glm::mat4& tr = GetComponent<TransformComponent>().transform;
 		
-		if(mouse.IsButtonDown(StepWay::Input::MouseKey::L_BUTTON))
+		if(Mouse::IsButtonDown(MouseKey::L_BUTTON))
 			tr = glm::translate(pos) * glm::eulerAngleYXZ(-angle.x, -angle.y, 0.0f);
 	}
 private:
@@ -100,14 +99,12 @@ private:
 	glm::vec2 angle;
 	glm::vec2 mouse_prev;
 	bool mp = false;
-	KeyboardClientInterface keyboard;
-	MouseClientInterface mouse;
 };
 
 bool SandboxApp::ImplSetUp()
 {
 	//Setting Up Dbg Gui------------
-	m_dbgGUILayer = std::make_shared<DebugGUILayer>(GetMainWindow(), GetMainContex());
+	m_dbgGUILayer = std::make_shared<DebugGUILayer>(&GetMainWindow(), &GetMainContex());
 
 	DbgTab color_tab("Color Uniform");
 	//color uniform in drawing shader

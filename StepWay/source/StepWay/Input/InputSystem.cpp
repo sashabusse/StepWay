@@ -17,6 +17,8 @@ namespace StepWay
 
 	void InputSystem::SetUp()
 	{
+		Mouse::SetUp();
+		Keyboard::SetUp();
 		ImplSetUp();
 	}
 

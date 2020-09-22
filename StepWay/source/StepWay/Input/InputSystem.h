@@ -2,6 +2,8 @@
 #include "Core.h"
 #include "Events/Event.h"
 #include "Mouse.h"
+#include "Keyboard.h"
+#include "glm/glm.hpp"
 #include <memory>
 
 namespace StepWay
@@ -20,6 +22,11 @@ namespace StepWay
 	
 		void SetUp();
 		void ShutDown();
+
+		virtual glm::ivec2 GetCursorPosition() = 0;
+		virtual void SetCursorPosition(glm::ivec2& pos) = 0;
+
+		virtual void HideCursor(bool b) = 0;
 
 	protected:
 		virtual void ImplSetUp() = 0;//should register all devices and fill in devices

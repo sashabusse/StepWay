@@ -65,16 +65,9 @@ namespace StepWay
 
 		//Events related
 		virtual void SetEventCallback(const EventCallback& callback) = 0;
-
-		//should be removed to other singletone class
-		inline Input::MouseClientInterface GetMouse() { return m_Mouse.GetClientInterface(); }
-		inline Input::KeyboardClientInterface GetKeyboard() { return m_Keyboard.GetInterface(); }
 		
 	protected:
 		Window() {};
-
-		Input::Mouse m_Mouse;
-		Input::Keyboard m_Keyboard;
 	};
 
 }

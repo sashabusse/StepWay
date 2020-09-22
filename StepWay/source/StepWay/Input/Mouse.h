@@ -10,72 +10,50 @@
 
 
 namespace StepWay
-{	namespace Input
+{	
+	namespace Input
 	{
 	
-	enum MouseInputMode : int
-	{
-		NORMAL=0,
-		CAMERA=1 //Disable cursor
-	};
-
-	class MouseClientInterface;
+		enum class CursorMode : int
+		{
+			NORMAL=0,
+			CAMERA=1 //Disable cursor
+		};
 
 
+		class Mouse
+		{
+		public:
+			static void SetUp();
+			
+			//ClientInterface
+			static void SetEventCallback(const EventCallback& callback);
+			static inline bool IsButtonDown(MouseKey code) { return m_ButtonPressed[(int)code]; };
+			static inline float GetX() { return m_x; };
+			static inline float GetY() { return m_y; };
+			
+			static void SetPosition(float x, float y);
+			static void SetCursorMode(CursorMode mode);
+
+			static void OnMouseMove(float x, float y);
+			static void OnRawMouseMove(float dx, float dy);
+
+			static void OnMousePress(MouseKey KeyCode);
+			static void OnMouseRelease(MouseKey KeyCode);
+			static void OnMouseScroll(float offset);
+			
+
+			static EventCallback GetEventCallback() { return m_callback; };
+		private:
+			static void SetToWndCenter();
+		protected:
+			static EventCallback m_callback;
+			static CursorMode m_cursor_mode;
+			static float m_x, m_y;
+			static bool m_ButtonPressed[(int)MouseKey::MOUSE_MAX_BUTTON_VAL];
+		};
 
 
-	class Mouse
-	{
-	public:
-		Mouse();
-		Mouse(float x, float y);
-		
-		MouseClientInterface GetClientInterface();
-		//ClientInterface
-		void SetEventCallback(const EventCallback& callback);
-		inline bool IsButtonDown(MouseKey code) const { return m_ButtonPressed[(int)code]; };
-		inline float GetX() const { return m_x; };
-		inline float GetY() const { return m_y; };
-		
-		void OnMouseMove(float x, float y);
-		void OnRawMouseMove(float dx, float dy);
-
-		void OnMousePress(MouseKey KeyCode);
-		void OnMouseRelease(MouseKey KeyCode);
-
-		void SetPosition(float x, float y);
-
-		void OnMouseScroll(float offset);
-		
-
-		EventCallback GetEventCallback() const { return m_callback; };
-	protected:
-		EventCallback m_callback;
-		float m_x, m_y;
-		bool m_ButtonPressed[(int)MouseKey::MOUSE_MAX_BUTTON_VAL];
-	};
-
-
-	class MouseClientInterface
-	{
-	public:
-		MouseClientInterface() = delete;
-		MouseClientInterface(Mouse& mouse) :
-			m_Mouse(mouse) {};
-
-		MouseClientInterface(const MouseClientInterface&) = default;
-		MouseClientInterface(MouseClientInterface&&) = default;
-
-		MouseClientInterface& operator= (const MouseClientInterface&) = default;
-		MouseClientInterface& operator= (MouseClientInterface&&) = default;
-
-		inline void SetEventCallback(const EventCallback& callback) { m_Mouse.SetEventCallback(callback); };
-		inline bool IsButtonDown(MouseKey code) const { return m_Mouse.IsButtonDown(code); };
-		inline float GetX() const { return m_Mouse.GetX(); };
-		inline float GetY() const { return m_Mouse.GetY(); };
-	private:
-		Mouse& m_Mouse;
-	};
-
-}}
+	}
+}
 

@@ -90,7 +90,7 @@ namespace StepWay
 					//Raw Move
 					if (rawMouse.lLastX != 0 || rawMouse.lLastY != 0)
 					{
-						m_Mouse.OnRawMouseMove(
+						Input::Mouse::OnRawMouseMove(
 							(float)rawMouse.lLastX, (float)rawMouse.lLastY);
 					}
 
@@ -131,7 +131,7 @@ namespace StepWay
 					{
 						float OneNotch = (float)WHEEL_DELTA;
 						float Delta = (float)((short)rawMouse.usButtonData);
-						m_Mouse.OnMouseScroll(Delta / OneNotch);
+						Input::Mouse::OnMouseScroll(Delta / OneNotch);
 					}
 				}
 				break;
@@ -142,7 +142,7 @@ namespace StepWay
 			case WM_MOUSEMOVE:
 			{
 				//here is relative to client area
-				m_Mouse.OnMouseMove(
+				Input::Mouse::OnMouseMove(
 					(float)GET_X_LPARAM(lparam), (float)GET_Y_LPARAM(lparam));
 				break;
 			}
@@ -151,33 +151,33 @@ namespace StepWay
 			//Button press events
 			case WM_LBUTTONDOWN:
 			{
-				m_Mouse.OnMousePress(Input::MouseKey::L_BUTTON);
+				Input::Mouse::OnMousePress(Input::MouseKey::L_BUTTON);
 				break;
 			}
 			case WM_RBUTTONDOWN:
 			{
-				m_Mouse.OnMousePress(Input::MouseKey::R_BUTTON);
+				Input::Mouse::OnMousePress(Input::MouseKey::R_BUTTON);
 				break;
 			}
 			case WM_MBUTTONDOWN:
 			{
-				m_Mouse.OnMousePress(Input::MouseKey::MID_BUTTON);
+				Input::Mouse::OnMousePress(Input::MouseKey::MID_BUTTON);
 				break;
 			}
 			//button Release events
 			case WM_LBUTTONUP:
 			{
-				m_Mouse.OnMouseRelease(Input::MouseKey::L_BUTTON);
+				Input::Mouse::OnMouseRelease(Input::MouseKey::L_BUTTON);
 				break;
 			}
 			case WM_RBUTTONUP:
 			{
-				m_Mouse.OnMouseRelease(Input::MouseKey::R_BUTTON);
+				Input::Mouse::OnMouseRelease(Input::MouseKey::R_BUTTON);
 				break;
 			}
 			case WM_MBUTTONUP:
 			{
-				m_Mouse.OnMouseRelease(Input::MouseKey::MID_BUTTON);
+				Input::Mouse::OnMouseRelease(Input::MouseKey::MID_BUTTON);
 				break;
 			}
 		}
@@ -192,17 +192,17 @@ namespace StepWay
 		{
 			KeyboardKey key = Win32InputSystem::MapKey((int)wparam);
 			if (key != KeyboardKey::NONE)
-				m_Keyboard.OnButtonPress(key);
+				Input::Keyboard::OnButtonPress(key);
 		}
 		if (msg == WM_KEYUP)
 		{
 			KeyboardKey key = Win32InputSystem::MapKey((int)wparam);
 			if (key != KeyboardKey::NONE)
-				m_Keyboard.OnButtonRelease(Input::Win32::Win32InputSystem::MapKey((int)wparam));
+				Input::Keyboard::OnButtonRelease(Input::Win32::Win32InputSystem::MapKey((int)wparam));
 		}
 		if (msg == WM_CHAR)
 		{
-			m_Keyboard.OnCharInput((wchar_t)wparam);
+			Input::Keyboard::OnCharInput((wchar_t)wparam);
 		}
 	}
 

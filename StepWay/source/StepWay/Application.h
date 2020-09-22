@@ -18,7 +18,7 @@ namespace StepWay
 	private:
 		static Application* m_Instance;
 	public:
-		static Application* GetInstance() { return m_Instance; }
+		static Application& GetInstance() { return *m_Instance; }
 
 	public:
 		Application();
@@ -39,9 +39,9 @@ namespace StepWay
 		void PopOverlay(std::shared_ptr<Layer> overlay);
 
 		//Gettersd (mb static?)
-		inline Window* GetMainWindow()const { return m_MainWindow; }
-		inline Graphics::API::GraphicsContext* GetMainContex()const { return m_MainContext; }
-
+		inline Window& GetMainWindow()const { return *m_MainWindow; }
+		inline Graphics::API::GraphicsContext& GetMainContex()const { return *m_MainContext; }
+		inline Input::InputSystem& GetInputSystem()const { return *m_InputSystem; }
 		//Setters
 
 		virtual ~Application();

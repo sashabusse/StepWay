@@ -39,9 +39,7 @@ namespace StepWay
 		m_InputSystem = Input::InputSystem::Create();
 		m_InputSystem->SetUp();
 
-		//TODO:
-		//decide where to SetUp call!!!
-		m_MainWindow = Window::Create();//think about protected constructors
+		m_MainWindow = Window::Create();
 
 		//main window initialization
 		WindowProperties prop;
@@ -60,8 +58,8 @@ namespace StepWay
 		m_MainWindow->SetEventCallback(SW_BIND_METH_1(Application::OnEvent));
 		m_MainWindow->SetPosition(0, 0);
 
-		m_MainWindow->GetMouse().SetEventCallback(SW_BIND_METH_1(Application::OnEvent));
-		m_MainWindow->GetKeyboard().SetEventCallback(SW_BIND_METH_1(Application::OnEvent));
+		Input::Mouse::SetEventCallback(SW_BIND_METH_1(Application::OnEvent));
+		Input::Keyboard::SetEventCallback(SW_BIND_METH_1(Application::OnEvent));
 
 		m_MainContext = GraphicsContext::Create(GAPI_TYPE::OPENGL, m_MainWindow);
 		m_MainContext->SetUp();

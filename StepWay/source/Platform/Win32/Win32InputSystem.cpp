@@ -79,6 +79,23 @@ namespace StepWay
 
 			}
 
+			glm::ivec2 Win32InputSystem::GetCursorPosition()
+			{
+				POINT pt;
+				SW_CORE_ASSERT(GetCursorPos(&pt), "Can't get cursor pos");
+				return glm::ivec2(pt.x, pt.y);
+			}
+
+			void Win32InputSystem::SetCursorPosition(glm::ivec2& pos)
+			{
+				SW_CORE_ASSERT(SetCursorPos(pos.x, pos.y), "Cant't set cursor position");
+			}
+
+			void Win32InputSystem::HideCursor(bool b)
+			{
+				ShowCursor(!b);
+			}
+
 			void Win32InputSystem::RegisterMouses()
 			{
 				RAWINPUTDEVICE mouse;
