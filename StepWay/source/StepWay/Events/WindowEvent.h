@@ -51,6 +51,7 @@ namespace StepWay
 		{};
 		inline int GetWidth()const { return m_width; }
 		inline int GetHeight()const { return m_height; }
+		inline float GetAspectRatio()const { return m_width * 1.0 / m_height; }
 
 		~WindowResizeEvent() override {};
 	private:

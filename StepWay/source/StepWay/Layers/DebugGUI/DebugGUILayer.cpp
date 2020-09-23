@@ -71,7 +71,7 @@ namespace StepWay
 
 	}
 
-	void DebugGUILayer::OnUpdate()
+	void DebugGUILayer::BeginFrame()
 	{
 		if (m_Context->GetGAPI_TYPE() == Graphics::API::GAPI_TYPE::OPENGL)
 		{
@@ -83,15 +83,13 @@ namespace StepWay
 		}
 		OS_NewFrame();
 		ImGui::NewFrame();
+	}
 
-		if (m_ShowDebugWindow)
-			ShowDebugWindow(&m_ShowDebugWindow);
-
+	void DebugGUILayer::EndFrame()
+	{
 		ImGui::Render();
-		
-		
 		m_Context->MakeCurrent();
-		
+
 		if (m_Context->GetGAPI_TYPE() == Graphics::API::GAPI_TYPE::OPENGL)
 		{
 			//glViewport(0, 0, display_w, display_h);
@@ -102,6 +100,7 @@ namespace StepWay
 			SW_CORE_ASSERT(false, "something wrong with gui render");
 		}
 	}
+
 
 	void DebugGUILayer::OnEvent(Event & e)
 	{
@@ -190,49 +189,7 @@ namespace StepWay
 			io.AddInputCharacter(ChEvent->GetWChar());
 	}
 
-	void DebugGUILayer::ShowDebugWindow(bool* p_opened)
-	{
-		// We specify a default position/size in case there's no data in the .ini file. Typically this isn't required! We only do it to make the Demo applications a little more welcoming.
-		ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiCond_FirstUseEver);
-		ImGui::SetNextWindowSize(ImVec2(350, 400), ImGuiCond_FirstUseEver);
-
-
-		if (m_MainMenuState.ShowAppStatistics) { ImGui::ShowMetricsWindow(&(m_MainMenuState.ShowAppStatistics)); }
-		if (m_MainMenuState.ShowStyleEditor) { ImGui::Begin("Style Editor", &(m_MainMenuState.ShowStyleEditor)); ImGui::ShowStyleEditor(); ImGui::End(); }
-
-
-		if (!ImGui::Begin("Debug Window", p_opened, m_window_flags))
-		{
-			// Early out if the window is collapsed, as an optimization.
-			ImGui::End();
-			return;
-		}
-
-		if (ImGui::BeginMenuBar())
-		{
-			if (ImGui::BeginMenu("Help"))
-			{
-				ImGui::MenuItem("Metrics", NULL, &(m_MainMenuState.ShowAppStatistics));
-				ImGui::MenuItem("Style Editor", NULL, &(m_MainMenuState.ShowStyleEditor));
-				ImGui::EndMenu();
-			}
-			ImGui::EndMenuBar();
-		}
-
-
-		for (DbgTab& tab : m_Tabs)
-		{
-			if (ImGui::CollapsingHeader(tab.GetName().c_str()))
-			{
-				tab.Show();
-			}
-		}
-		
-		
-
-		ImGui::End();
-
-	}
+	
 
 
 	// not replicated part

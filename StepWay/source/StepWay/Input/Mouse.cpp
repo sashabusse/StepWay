@@ -15,6 +15,7 @@ namespace StepWay
 		CursorMode Mouse::m_cursor_mode;
 		EventCallback Mouse::m_callback;
 		float Mouse::m_x, Mouse::m_y;
+		float Mouse::m_dx, Mouse::m_dy;
 		bool Mouse::m_ButtonPressed[(int)MouseKey::MOUSE_MAX_BUTTON_VAL];
 
 		void Mouse::SetUp()
@@ -52,6 +53,8 @@ namespace StepWay
 
 		void Mouse::OnRawMouseMove(float dx, float dy)
 		{
+			m_dx += dx;
+			m_dy += dy;
 			m_callback(MouseRawMoveEvent(dx, dy));
 		}
 

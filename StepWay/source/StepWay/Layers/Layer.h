@@ -14,8 +14,10 @@ namespace StepWay
 
 		virtual void OnAttach() = 0;
 		virtual void OnDetach() = 0;
-		virtual void OnUpdate() = 0;
+		virtual void OnUpdate() {};
 		virtual void OnEvent(Event& e) = 0;
+
+		virtual void OnGuiUpdate() {};
 
 		virtual std::string ToString() const = 0;
 		virtual std::wstring ToWString() const = 0;

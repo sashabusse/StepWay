@@ -5,6 +5,7 @@
 #include "Events/WindowEvent.h"
 #include "Events/WindowEvent.h"
 #include "Layers/LayerStack.h"
+#include "Layers/DebugGUI/DebugGUILayer.h"
 #include "Graphics/API/Context.h"
 #include "Input/InputSystem.h"
 
@@ -20,7 +21,7 @@ namespace StepWay
 	public:
 		static Application& GetInstance() { return *m_Instance; }
 		static Window& GetWindow() { return m_Instance->GetMainWindow(); }
-		static Graphics::API::GraphicsContext& GetContext() { return m_Instance->GetMainContex(); }
+		static Graphics::API::GraphicsContext& GetContext() { return m_Instance->GetMainContext(); }
 		static Input::InputSystem& GetInputSystem() { return m_Instance->GetMainInputSystem(); }
 	public:
 		Application();
@@ -42,7 +43,7 @@ namespace StepWay
 
 		//Gettersd (mb static?)
 		inline Window& GetMainWindow()const { return *m_MainWindow; }
-		inline Graphics::API::GraphicsContext& GetMainContex()const { return *m_MainContext; }
+		inline Graphics::API::GraphicsContext& GetMainContext()const { return *m_MainContext; }
 		inline Input::InputSystem& GetMainInputSystem()const { return *m_InputSystem; }
 		//Setters
 
@@ -59,6 +60,7 @@ namespace StepWay
 
 		LayerStack m_layers;
 		LayerStack m_overlays;
+		std::shared_ptr<DebugGUILayer> m_dbgGUILayer;
 	};
 
 	Application* CreateApplication();

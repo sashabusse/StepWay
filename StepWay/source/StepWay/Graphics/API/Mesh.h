@@ -14,6 +14,12 @@ namespace StepWay
 		namespace API
 		{
 			struct Vertex {
+				Vertex() :
+					position({ 0,0,0 }),
+					normal({ 0,0,0 }) {};
+				Vertex(glm::vec3 pos, glm::vec3 norm) :
+					position(pos),
+					normal(norm) {};
 				glm::vec3 position;
 				glm::vec3 normal;
 			};

@@ -58,15 +58,19 @@ namespace StepWay
 		m_MainWindow->SetEventCallback(SW_BIND_METH_1(Application::OnEvent));
 		m_MainWindow->SetPosition(0, 0);
 
-		Input::Mouse::SetEventCallback(SW_BIND_METH_1(Application::OnEvent));
-		Input::Keyboard::SetEventCallback(SW_BIND_METH_1(Application::OnEvent));
-
 		m_MainContext = GraphicsContext::Create(GAPI_TYPE::OPENGL, m_MainWindow);
 		m_MainContext->SetUp();
 		m_MainContext->MakeCurrent();
 
+		Input::Mouse::SetEventCallback(SW_BIND_METH_1(Application::OnEvent));
+		Input::Keyboard::SetEventCallback(SW_BIND_METH_1(Application::OnEvent));
+
+
 		m_layers.SetUp();
 		m_overlays.SetUp();
+
+		m_dbgGUILayer = std::make_shared<DebugGUILayer>(&Application::GetWindow(), &Application::GetContext());
+		PushLayer(m_dbgGUILayer);
 
 		m_IsRunning = ImplSetUp();
 		
@@ -119,10 +123,29 @@ namespace StepWay
 				if((*it)->Enabled())
 					(*it)->OnUpdate();
 			}
+
+
+			//update GUI
+			m_dbgGUILayer->BeginFrame();
+			//update layers
+			for (auto it = m_layers.begin(); it != m_layers.end(); ++it)
+			{
+				if ((*it)->Enabled())
+					(*it)->OnGuiUpdate();
+			}
+
+			//update overlays
+			for (auto it = m_overlays.begin(); it != m_overlays.end(); ++it)
+			{
+				if ((*it)->Enabled())
+					(*it)->OnGuiUpdate();
+			}
+			m_dbgGUILayer->EndFrame();
 			
 
 			m_MainContext->SwapBuffers();
-			
+
+			Input::Mouse::OnUpdate();
 			m_MainWindow->OnUpdate();
 
 			ImplOnNewFrameEnd();

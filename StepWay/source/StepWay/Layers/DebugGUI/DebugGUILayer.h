@@ -20,7 +20,8 @@ namespace StepWay
 
 		void OnAttach() override;
 		void OnDetach() override;
-		void OnUpdate() override;
+		void BeginFrame();
+		void EndFrame();
 		void OnEvent(Event& e) override;
 
 		std::string ToString() const override;

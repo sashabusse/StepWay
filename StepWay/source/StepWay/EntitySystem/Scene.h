@@ -13,12 +13,13 @@ namespace StepWay
 	public:
 		Scene();
 		Entity CreateEntity();
+		Entity CreateEntity(const std::string& name);
 		
-		template<typename... Args>
-		inline void ForEach(std::function<void(Entity&, Args&...)> func)
+		template<typename Args>
+		inline void ForEach(std::function<void(Entity&, Args&)> func)
 		{
 			m_reg.view<Args>().each(
-				[&](entt::entity entity, Args&... args)
+				[&](entt::entity entity, Args& args)
 				{
 					func(Entity(this, entity), args);
 				}
@@ -28,12 +29,14 @@ namespace StepWay
 		void UpdateScene();
 		void RenderScene(Graphics::API::Renderer& renderer, Entity& cam_entt);
 
+
 	private:
 	public:
 	private:
 		entt::registry m_reg;
-
+		
 		friend Entity;
 	};
+
 
 }

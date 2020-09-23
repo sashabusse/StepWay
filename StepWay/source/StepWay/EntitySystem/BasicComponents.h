@@ -3,6 +3,7 @@
 #include "entt.hpp"
 #include "glm/glm.hpp"
 #include "Graphics/API/Mesh.h"
+#include "glm/gtc/matrix_transform.hpp"
 
 
 namespace StepWay
@@ -24,12 +25,34 @@ namespace StepWay
 		glm::mat4 transform = glm::mat4(1.0f);
 	};
 
+	class NameComponent
+	{
+	public:
+		NameComponent() :
+			name("No name") {};
+		NameComponent(const std::string& _name) :
+			name(_name) {};
+		NameComponent(std::string&& _name) :
+			name(_name) {};
+
+		NameComponent(const NameComponent&) = default;
+		NameComponent(NameComponent&&) = default;
+
+		NameComponent& operator= (const NameComponent&) = default;
+		NameComponent& operator= (NameComponent&&) = default;
+
+
+		std::string name;
+	};
+
 
 	using Graphics::API::Mesh;
 	class MeshComponent
 	{
 	public:
-		MeshComponent() = default;
+		MeshComponent() :
+			mesh(),
+			visible(true) {};
 		MeshComponent(const MeshComponent&) = default;
 		MeshComponent(MeshComponent&&) = default;
 
@@ -42,6 +65,7 @@ namespace StepWay
 		MeshComponent(Mesh&& _mesh) :
 			mesh(std::move(_mesh)) {};
 
+		bool visible;
 		Mesh mesh;
 	};
 
@@ -49,8 +73,18 @@ namespace StepWay
 	class CameraComponent
 	{
 	public:
-		CameraComponent() :
-			projection(glm::mat4(1.0f)) {};
+		CameraComponent():
+			m_FOV(60),
+			m_near(0.1),
+			m_far(100),
+			m_AspectRatio(1)
+		{};
+		CameraComponent(float AspectRatio, float FOV, float n, float f) :
+			m_FOV(FOV),
+			m_near(n),
+			m_far(f),
+			m_AspectRatio(AspectRatio)
+		{};
 
 		CameraComponent(const CameraComponent&) = default;
 		CameraComponent(CameraComponent&&) = default;
@@ -58,14 +92,15 @@ namespace StepWay
 		CameraComponent& operator= (const CameraComponent&) = default;
 		CameraComponent& operator= (CameraComponent&&) = default;
 
-
-		CameraComponent(const glm::mat4& _proj) :
-			projection(_proj) {};
-
-		CameraComponent(glm::mat4&& _proj) :
-			projection(std::move(_proj)) {};
-
-		glm::mat4 projection;
+		void SetAspectRatio(float AspectRatio) { m_AspectRatio = AspectRatio; };
+		void SetFOV(float FOV) { m_FOV = FOV; };
+		void SetNear(float n) { m_near = n; };
+		void SetFar(float f) { m_far = f; };
+		glm::mat4 GenerateProjection() { return glm::perspective(glm::radians(m_FOV), m_AspectRatio, m_near, m_far); };
+	public:
+		float m_AspectRatio;
+		float m_FOV;
+		float m_near, m_far;
 	};
 
 	class NativeScript

@@ -10,6 +10,7 @@
 #include "StepWay/Events/Event.h"
 #include "StepWay/Events/KeyEvent.h"
 #include "StepWay/Events/MouseEvents.h"
+#include "StepWay/Events/ECSEvents.h"
 
 //Graphics
 #include "Graphics/API/Context.h"
@@ -31,7 +32,3 @@
 #include "Layers/DebugGUI/DebugTab.h"
 
 #include "Resource/LoadModel.h"
-
-//---------EntryPoint--------------|
-#include "StepWay/EntryPoint.h"//--|
-//---------------------------------|

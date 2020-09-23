@@ -1,7 +1,9 @@
 #include "StepWayPCH.h"
+#include "Application.h"
 #include "Scene.h"
 #include "Entity.h"
 #include "BasicComponents.h"
+#include "Events/ECSEvents.h"
 
 
 
@@ -16,7 +18,16 @@ namespace StepWay
 	{
 		Entity ne(this, m_reg.create());
 		ne.AddComponent<TransformComponent>();
+		Application::GetInstance().OnEvent(EntityCreateEvent(ne));
+		return ne;
+	}
 
+	Entity Scene::CreateEntity(const std::string& name)
+	{
+		Entity ne(this, m_reg.create());
+		ne.AddComponent<TransformComponent>();
+		ne.AddComponent<NameComponent>(name);
+		Application::GetInstance().OnEvent(EntityCreateEvent(ne));
 		return ne;
 	}
 
@@ -40,11 +51,12 @@ namespace StepWay
 		CameraComponent& cam_c = cam_entt.GetComponent<CameraComponent>();
 		TransformComponent& transform_c = cam_entt.GetComponent<TransformComponent>();
 
-		renderer.BeginScene(cam_c.projection, transform_c.transform);
+		renderer.BeginScene(cam_c.GenerateProjection(), transform_c.transform);
 		m_reg.view<MeshComponent, TransformComponent>().each(
 			[&](entt::entity entity, MeshComponent& mesh_c, TransformComponent& transform_c)
 			{
-				renderer.DrawIndexed(mesh_c.mesh, transform_c.transform);
+				if(mesh_c.visible)
+					renderer.DrawIndexed(mesh_c.mesh, transform_c.transform);
 			});
 	}
 

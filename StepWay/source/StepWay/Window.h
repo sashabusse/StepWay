@@ -44,6 +44,7 @@ namespace StepWay
 		//just working zone no borders
 		virtual int GetWidth() const = 0;
 		virtual int GetHeight() const = 0;
+		float GetAspectRatio() const { return GetWidth() * 1.0 / GetHeight(); }
 		virtual std::string GetTitle() const = 0;
 		virtual std::wstring GetWTitle() const = 0;
 
