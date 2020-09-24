@@ -138,8 +138,9 @@ namespace StepWay
 		NativeScriptComponent& operator= (const NativeScriptComponent&) = default;
 		NativeScriptComponent& operator= (NativeScriptComponent&&) = default;
 
-		void OnUpdate() { m_instance->OnUpdate(); };
+		void OnUpdate() { if(m_enabled) m_instance->OnUpdate(); };
 		
+		bool m_enabled = true;
 	private:
 		std::unique_ptr<NativeScript> m_instance;
 	};

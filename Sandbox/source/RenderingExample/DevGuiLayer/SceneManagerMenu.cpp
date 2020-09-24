@@ -104,6 +104,17 @@ void EntityMenu::Show()
 			}
 
 		}
+		if (m_entity.HasComponent<NativeScriptComponent>())
+		{
+			if (ImGui::TreeNode("Native Script"))
+			{
+				NativeScriptComponent& script_c = m_entity.GetComponent<NativeScriptComponent>();
+
+				ImGui::Checkbox("enabled", &(script_c.m_enabled));
+
+				ImGui::TreePop();
+			}
+		}
 
 	}
 	ImGui::PopID();
