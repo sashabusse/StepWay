@@ -9,7 +9,10 @@ class EntityMenu
 public:
 	EntityMenu(Entity& ent, int64 id) :
 		m_entity(ent),
-		m_id(id) {};
+		m_id(id)
+	{
+		memset(m_load_path, 0, sizeof(m_load_path));
+	};
 
 	bool IsValid() { return m_entity.IsValid(); }
 
@@ -18,6 +21,8 @@ private:
 	TransfofmGeneratorMenu m_tr_gen_menu;
 	Entity m_entity;
 	int64 m_id;
+
+	char m_load_path[512];
 };
 
 class SceneManagerMenu

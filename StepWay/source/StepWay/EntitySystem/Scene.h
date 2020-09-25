@@ -34,7 +34,6 @@ namespace StepWay
 	public:
 	private:
 		entt::registry m_reg;
-		
 		friend Entity;
 	};
 

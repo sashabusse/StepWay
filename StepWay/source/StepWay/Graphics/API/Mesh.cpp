@@ -18,6 +18,8 @@ namespace StepWay
 
 			Mesh::~Mesh()
 			{
+				if (m_initialized)
+					ShutDownBuffers();
 			}
 
 			void Mesh::SetUpBuffers()
@@ -35,13 +37,21 @@ namespace StepWay
 				m_VAO->SetUp();
 				m_VAO->Bind();
 				m_VAO->SetVertexBuffer(m_buffer);
+
+				m_initialized = true;
 			}
 
 			void Mesh::ShutDownBuffers()
 			{
-				m_buffer->ShutDown();
-				m_IBO->ShutDown();
-				m_VAO->ShutDown();
+				if (!m_initialized) return;
+				m_initialized = false;
+				if(m_buffer!=nullptr)
+					m_buffer->ShutDown();
+				if(m_IBO!=nullptr)
+					m_IBO->ShutDown();
+				if(m_VAO!=nullptr)
+					m_VAO->ShutDown();
+
 			}
 
 			void Mesh::make_flat_normals()

@@ -13,7 +13,7 @@ void DevGuiLayer::OnGuiUpdate()
 	if (m_MainMenuState.ShowAppStatistics) { ImGui::ShowMetricsWindow(&(m_MainMenuState.ShowAppStatistics)); }
 	if (m_MainMenuState.ShowStyleEditor) { ImGui::Begin("Style Editor", &(m_MainMenuState.ShowStyleEditor)); ImGui::ShowStyleEditor(); ImGui::End(); }
 
-	ImGui::Begin("menu bar", 0, ImGuiWindowFlags_MenuBar);
+	ImGui::Begin("Debug GUI", 0, ImGuiWindowFlags_MenuBar);
 	if (ImGui::BeginMenuBar())
 	{
 		if (ImGui::BeginMenu("Help"))

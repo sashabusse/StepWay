@@ -59,6 +59,8 @@ namespace StepWay
 		KEY_EQUAL,//not done yet
 		KEY_SPACE,
 		KEY_TAB,
+		KEY_SHIFT,
+		KEY_CTRL,
 		KEY_BACKSPACE,
 		KEY_UP,
 		KEY_DOWN,

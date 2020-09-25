@@ -53,6 +53,7 @@ namespace StepWay
 				std::vector<uint16> m_indices;
 
 			private:
+				bool m_initialized = false;
 
 				std::shared_ptr<VertexBuffer> m_buffer;
 				std::shared_ptr<IndexBuffer> m_IBO;

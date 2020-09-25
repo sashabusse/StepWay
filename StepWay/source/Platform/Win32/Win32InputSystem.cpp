@@ -56,6 +56,8 @@ namespace StepWay
 				m_sKeyMap[VK_OEM_MINUS] = KeyboardKey::KEY_MINUS;
 				m_sKeyMap[VK_SPACE] = KeyboardKey::KEY_SPACE;
 				m_sKeyMap[VK_TAB] = KeyboardKey::KEY_TAB;
+				m_sKeyMap[VK_SHIFT] = KeyboardKey::KEY_SHIFT;
+				m_sKeyMap[VK_CONTROL] = KeyboardKey::KEY_CTRL;
 				m_sKeyMap[VK_BACK] = KeyboardKey::KEY_BACKSPACE;
 				m_sKeyMap[VK_UP] = KeyboardKey::KEY_UP;
 				m_sKeyMap[VK_DOWN] = KeyboardKey::KEY_DOWN;

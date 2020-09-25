@@ -81,12 +81,12 @@ bool    ImGui_ImplWin32_Init(void* hwnd)
     io.KeyMap[ImGuiKey_Space] = (int)KeyboardKey::KEY_SPACE;
     io.KeyMap[ImGuiKey_Enter] = (int)KeyboardKey::KEY_ENTER;
     io.KeyMap[ImGuiKey_Escape] = (int)KeyboardKey::KEY_ESCAPE;
-    //io.KeyMap[ImGuiKey_A] = 'A';
-    //io.KeyMap[ImGuiKey_C] = 'C';
-    //io.KeyMap[ImGuiKey_V] = 'V';
-    //io.KeyMap[ImGuiKey_X] = 'X';
-    //io.KeyMap[ImGuiKey_Y] = 'Y';
-    //io.KeyMap[ImGuiKey_Z] = 'Z';
+    io.KeyMap[ImGuiKey_A] = (int)KeyboardKey::KEY_A;
+    io.KeyMap[ImGuiKey_C] = (int)KeyboardKey::KEY_C;
+    io.KeyMap[ImGuiKey_V] = (int)KeyboardKey::KEY_V;
+    io.KeyMap[ImGuiKey_X] = (int)KeyboardKey::KEY_X;
+    io.KeyMap[ImGuiKey_Y] = (int)KeyboardKey::KEY_Y;
+    io.KeyMap[ImGuiKey_Z] = (int)KeyboardKey::KEY_Z;
 
     return true;
 }

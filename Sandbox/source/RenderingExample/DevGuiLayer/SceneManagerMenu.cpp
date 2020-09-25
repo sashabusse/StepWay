@@ -11,8 +11,8 @@ void SceneManagerMenu::OnEntityCreate(Entity& ent)
 void SceneManagerMenu::Draw()
 {
 	//for
-//bool opened = true;
-//ImGui::ShowDemoWindow(&opened);
+bool opened = true;
+ImGui::ShowDemoWindow(&opened);
 
 	// We specify a default position/size in case there's no data in the .ini file. Typically this isn't required! We only do it to make the Demo applications a little more welcoming.
 	//ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiCond_FirstUseEver);
@@ -86,6 +86,17 @@ void EntityMenu::Show()
 			if (ImGui::TreeNode("Mesh"))
 			{
 				ImGui::Checkbox("visible", &mesh_c.visible);
+				ImGui::InputText("path", m_load_path, IM_ARRAYSIZE(m_load_path));
+				if (ImGui::Button("Load"))
+				{
+					mesh_c.mesh = Load3DModel(m_load_path)[0];
+					mesh_c.mesh.SetUpBuffers();
+				}
+				if (ImGui::Button("make flat normals"))
+				{
+					mesh_c.mesh.make_flat_normals();
+					mesh_c.mesh.SetUpBuffers();
+				}
 				ImGui::TreePop();
 			}
 		}
