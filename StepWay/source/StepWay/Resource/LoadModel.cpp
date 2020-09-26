@@ -74,16 +74,21 @@ namespace StepWay
 		}
 		std::shared_ptr<Graphics::API::Mesh> LoadCube(const glm::vec3& pos, const glm::vec3& size)
 		{
-			std::shared_ptr<Mesh> result(new Mesh());
-			glm::vec3 ppp = size + pos;
-			glm::vec3 mpp = glm::vec3({ -size.x, size.y, size.z }) + pos;
-			glm::vec3 pmp = glm::vec3({ size.x, -size.y, size.z }) + pos;
-			glm::vec3 mmp = glm::vec3({ -size.x, -size.y, size.z }) + pos;
+			glm::vec3 n_size = size;
+			n_size.x /= 2;
+			n_size.y /= 2;
+			n_size.z /= 2;
 
-			glm::vec3 ppm = glm::vec3({size.x, size.y, -size.z}) + pos;
-			glm::vec3 mpm = glm::vec3({ -size.x, size.y, -size.z }) + pos;
-			glm::vec3 pmm = glm::vec3({ size.x, -size.y, -size.z }) + pos;
-			glm::vec3 mmm = glm::vec3({ -size.x, -size.y, -size.z }) + pos;
+			std::shared_ptr<Mesh> result(new Mesh());
+			glm::vec3 ppp = n_size + pos;
+			glm::vec3 mpp = glm::vec3({ -n_size.x, n_size.y, n_size.z }) + pos;
+			glm::vec3 pmp = glm::vec3({ n_size.x, -n_size.y, n_size.z }) + pos;
+			glm::vec3 mmp = glm::vec3({ -n_size.x, -n_size.y, n_size.z }) + pos;
+
+			glm::vec3 ppm = glm::vec3({n_size.x, n_size.y, -n_size.z}) + pos;
+			glm::vec3 mpm = glm::vec3({ -n_size.x, n_size.y, -n_size.z }) + pos;
+			glm::vec3 pmm = glm::vec3({ n_size.x, -n_size.y, -n_size.z }) + pos;
+			glm::vec3 mmm = glm::vec3({ -n_size.x, -n_size.y, -n_size.z }) + pos;
 			result->m_vertices = {
 				Vertex(ppp,{0,0,1}),
 				Vertex(mpp,{0,0,1}),
@@ -130,12 +135,16 @@ namespace StepWay
 
 		std::shared_ptr<Graphics::API::Mesh> LoadPlaneXY(const glm::vec3& pos, const glm::vec2& size)
 		{
+			glm::vec2 n_size = size;
+			n_size.x /= 2;
+			n_size.y /= 2;
+
 			std::shared_ptr<Mesh> result(new Mesh());
 			result->m_vertices = {
-				Vertex({size.x, size.y, 0}, {0,0,1}),
-				Vertex({size.x, -size.y, 0}, {0,0,1}),
-				Vertex({-size.x, -size.y, 0}, {0,0,1}),
-				Vertex({-size.x, size.y, 0}, {0,0,1})
+				Vertex({n_size.x, n_size.y, 0}, {0,0,1}),
+				Vertex({n_size.x, -n_size.y, 0}, {0,0,1}),
+				Vertex({-n_size.x, -n_size.y, 0}, {0,0,1}),
+				Vertex({-n_size.x, n_size.y, 0}, {0,0,1})
 			};
 			result->m_indices = {
 				0,1,2,  2,3,0
@@ -145,12 +154,16 @@ namespace StepWay
 
 		std::shared_ptr<Graphics::API::Mesh> LoadPlaneXZ(const glm::vec3& pos, const glm::vec2& size)
 		{
+			glm::vec2 n_size = size;
+			n_size.x /= 2;
+			n_size.y /= 2;
+
 			std::shared_ptr<Mesh> result(new Mesh());
 			result->m_vertices = {
-				Vertex({size.x,  0,  size.y}, {0,1,0}),
-				Vertex({size.x,  0, -size.y}, {0,1,0}),
-				Vertex({-size.x, 0, -size.y}, {0,1,0}),
-				Vertex({-size.x, 0,  size.y}, {0,1,0})
+				Vertex({n_size.x,  0,  n_size.y}, {0,1,0}),
+				Vertex({n_size.x,  0, -n_size.y}, {0,1,0}),
+				Vertex({-n_size.x, 0, -n_size.y}, {0,1,0}),
+				Vertex({-n_size.x, 0,  n_size.y}, {0,1,0})
 			};
 			result->m_indices = {
 				0,1,2,  2,3,0
@@ -160,12 +173,16 @@ namespace StepWay
 
 		std::shared_ptr<Graphics::API::Mesh> LoadPlaneYZ(const glm::vec3& pos, const glm::vec2& size)
 		{
+			glm::vec2 n_size = size;
+			n_size.x /= 2;
+			n_size.y /= 2;
+
 			std::shared_ptr<Mesh> result(new Mesh());
 			result->m_vertices = {
-				Vertex({0, size.x,  size.y}, {1,0,0}),
-				Vertex({0, size.x, -size.y}, {1,0,0}),
-				Vertex({0, -size.x,-size.y}, {1,0,0}),
-				Vertex({0, -size.x, size.y}, {1,0,0})
+				Vertex({0, n_size.x,  n_size.y}, {1,0,0}),
+				Vertex({0, n_size.x, -n_size.y}, {1,0,0}),
+				Vertex({0, -n_size.x,-n_size.y}, {1,0,0}),
+				Vertex({0, -n_size.x, n_size.y}, {1,0,0})
 			};
 			result->m_indices = {
 				0,1,2,  2,3,0

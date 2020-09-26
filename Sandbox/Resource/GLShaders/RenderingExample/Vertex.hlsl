@@ -11,7 +11,7 @@ out vec3 f_normal;
 
 void main()
 {
-	f_normal = vec3(u_model * vec4(v_normal, 1.0));
+	f_normal = vec3(u_model * vec4(v_normal, 0.0));
 	f_pos = vec3(u_model * vec4(position, 1.0));
 	gl_Position = u_VP * u_model * vec4(position, 1);
 }
