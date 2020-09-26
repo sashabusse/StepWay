@@ -10,6 +10,8 @@ public:
 
 	bool ImplSetUp()
 	{
+		SW_CORE_LEVEL_INFO();
+		SW_LEVEL_TRACE();
 		PushOverLay(std::shared_ptr<StepWay::Layer>(new DevGuiLayer()));
 		PushLayer(std::shared_ptr<StepWay::Layer>(new RenderingExample()));
 		return true;

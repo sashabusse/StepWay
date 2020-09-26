@@ -7,14 +7,12 @@
 
 
 
-
-
 class CameraControlScript : public NativeScript
 {
 public:
 	CameraControlScript(Entity& ent) :
 		NativeScript(ent),
-		pos({ 0,0,0.37f }),
+		pos({ 0,0,4.0f }),
 		angle({ 0,0 })
 	{};
 	virtual void OnCreate() override
@@ -93,34 +91,22 @@ void RenderingExample::OnAttach()
 
 
 	//setting up suzzane
-	m_suzzane = m_scene.CreateEntity("suzzane");
-	m_suzzane.AddComponent<MeshComponent>();
-	MeshComponent& mesh_c = m_suzzane.GetComponent<MeshComponent>();
-	glm::mat4& suz_transform = m_suzzane.GetComponent<TransformComponent>().transform;
-	suz_transform = glm::mat4(0.1f);
-	suz_transform[3][3] = 1.0f;
-	suz_transform[3][2] = -0.2f;
+	Entity suzzane = m_scene.CreateEntity("suzzane");
+	suzzane.AddComponent<MeshComponent>();
 	//preparing vertex data---------
-	std::vector<Mesh> meshes = Load3DModel("Resource\\3d_objects\\RenderingExample\\suzanne.obj");
-	mesh_c.mesh = meshes[0];
-	mesh_c.mesh.make_flat_normals();
-	mesh_c.mesh.SetUpBuffers();
+	MeshComponent& mesh_c = suzzane.GetComponent<MeshComponent>();
+	mesh_c.SetMesh(Load3DModel("Resource\\3d_objects\\RenderingExample\\suzanne.obj")[0]);
+	mesh_c.GetMesh().MakeFlatNormals();
+	mesh_c.GetMesh().SetUpBuffers();
 	//----------------------------------
 
 	//setting up ground plane
-	m_ground_ent = m_scene.CreateEntity("ground plane");
-	Mesh& ground_mesh = m_ground_ent.AddComponent<MeshComponent>().mesh;
-	ground_mesh.m_vertices = {
-		Vertex({ -1,0,-1 }, { 0,1,0 }),
-		Vertex({  1,0,-1 }, { 0,1,0 }),
-		Vertex({  1,0, 1 }, { 0,1,0 }),
-		Vertex({ -1,0,1 }, { 0,1,0 })
-	};
-	ground_mesh.m_indices = { 0, 1, 2, 2, 3, 0 };
-	ground_mesh.SetUpBuffers();
+	Entity ground_ent = m_scene.CreateEntity("ground plane");
+	MeshComponent& ground_mesh_c = ground_ent.AddComponent<MeshComponent>();
+	ground_mesh_c.SetMesh(LoadPlaneXZ(glm::vec3(0, -5, 0), glm::vec2(100, 100)));
+	ground_mesh_c.GetMesh().SetUpBuffers();
 
-	glm::mat4& ground_transform = m_ground_ent.GetComponent<TransformComponent>().transform;
-	ground_transform = glm::translate(glm::mat4(1.0f), {0, -0.3, 0});
+	ground_ent.GetComponent<TransformComponent>().transform = glm::translate(glm::mat4(1.0f), { 0, -4, 0 });
 
 	//Setting Up Main Drawing Shader----
 	m_shader = std::shared_ptr<Shader>(Shader::Create(GAPI_TYPE::OPENGL));
@@ -134,7 +120,6 @@ void RenderingExample::OnAttach()
 void RenderingExample::OnDetach()
 {
 	m_shader->ShutDown();
-	m_suzzane.RemoveFrScene();
 }
 
 void RenderingExample::OnUpdate()

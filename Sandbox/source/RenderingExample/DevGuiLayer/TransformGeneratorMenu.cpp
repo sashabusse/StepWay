@@ -6,7 +6,6 @@ void TransformMenu::Draw()
 	ImGui::PushID(m_id);
 	ImGui::Separator();
 	
-	//ImGui::Text(TypeToString(m_type).c_str());
 	const char* m_types[] = { "Translate", "Scale", "Rotate" };
 	ImGui::Combo("Type", (int*)&m_type, m_types, IM_ARRAYSIZE(m_types));
 
@@ -26,10 +25,28 @@ void TransformMenu::Draw()
 	ImGui::SameLine();
 	if (ImGui::Button("Delete"))
 	{
-		//later
+		m_delete = true;
 	}
 	ImGui::Separator();
 	ImGui::PopID();
+}
+
+glm::mat4 TransformMenu::GenerateMatrix()
+{
+	if (!m_enable) return glm::mat4(1.0f);
+	if (m_type == TransformType::TRANSLATE)
+	{
+		return glm::translate(m_data);
+	}
+	else if (m_type == TransformType::SCALE)
+	{
+		return glm::scale(m_data);
+	}
+	else if (m_type == TransformType::ROTATE)
+	{
+		glm::vec3 rot_rad = glm::radians(m_data);
+		return glm::eulerAngleXYZ(rot_rad.x, rot_rad.y, rot_rad.z);
+	}
 };
 
 
@@ -39,29 +56,37 @@ void TransfofmGeneratorMenu::LoadCurrent()
 
 	if (m_mode == 0)
 	{
-		glm::vec3 rot_rad = glm::radians(m_rot);
-
-		glm::mat4 result(1.0f);
-		if (m_en_sc)
-			result = glm::scale(m_scale) * result;
-		if (m_en_rot)
-			result = glm::eulerAngleXYZ(rot_rad.x, rot_rad.y, rot_rad.z) * result;
-		if (m_en_tr)
-			result = glm::translate(m_transl) * result;
-
-		*m_load_to = result;
+		LoadCurrentMode0();
 	}
 	else
 	{
-		glm::mat4 result(1.0f);
-		for (TransformMenu& menu : m_transforms)
-		{
-			result = menu.GenerateMatrix() * result;
-		}
-		*m_load_to = result;
+		LoadCurrentMode1();
 	}
-	
+}
 
+void TransfofmGeneratorMenu::LoadCurrentMode0()
+{
+	glm::vec3 rot_rad = glm::radians(m_rot);
+
+	glm::mat4 result(1.0f);
+	if (m_en_sc)
+		result = glm::scale(m_scale) * result;
+	if (m_en_rot)
+		result = glm::eulerAngleXYZ(rot_rad.x, rot_rad.y, rot_rad.z) * result;
+	if (m_en_tr)
+		result = glm::translate(m_transl) * result;
+
+	*m_load_to = result;
+}
+
+void TransfofmGeneratorMenu::LoadCurrentMode1()
+{
+	glm::mat4 result(1.0f);
+	for (TransformMenu& menu : m_transforms)
+	{
+		result = menu.GenerateMatrix() * result;
+	}
+	*m_load_to = result;
 }
 
 
@@ -114,6 +139,8 @@ void TransfofmGeneratorMenu::Draw()
 
 
 
+
+
 void TransfofmGeneratorMenu::DrawMode0()
 {
 	ImGui::Checkbox("##en_scale", &m_en_sc); ImGui::SameLine();
@@ -128,9 +155,16 @@ void TransfofmGeneratorMenu::DrawMode0()
 
 void TransfofmGeneratorMenu::DrawMode1()
 {
-	for (TransformMenu& tr_menu : m_transforms)
+	auto transforms_it = m_transforms.begin();
+	while (transforms_it != m_transforms.end())
 	{
+		TransformMenu& tr_menu = *transforms_it;
+
 		tr_menu.Draw();
+		if (tr_menu.ShouldDelete())
+			transforms_it = m_transforms.erase(transforms_it);
+		else
+			transforms_it++;
 	}
 
 	const char* types[] = { "Translate", "Scale", "Rotate" };

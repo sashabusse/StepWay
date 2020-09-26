@@ -2,6 +2,7 @@
 #include "Core.h"
 #include "entt.hpp"
 #include "Scene.h"
+#include "UIDGenerator.h"
 
 namespace StepWay
 {
@@ -9,18 +10,18 @@ namespace StepWay
 	class Entity
 	{
 	public:
-		Entity() :
-			m_scene(nullptr),
-			m_id(entt::null) {};
-		Entity(Scene* sc, entt::entity id) :
-			m_scene(sc),
-			m_id(id) {};
+		//copyable
+		Entity(const Entity&);
+		Entity& operator= (const Entity&);
 
-		Entity(const Entity&) = default;
-		Entity(Entity&&) = default;
-		
-		Entity& operator= (const Entity&) = default;
-		Entity& operator= (Entity&&) = default;
+		//moveable
+		Entity(Entity&&);
+		Entity& operator= (Entity&&);
+
+		Entity();
+		Entity(Scene* sc, entt::entity id);
+
+		UID GetUID() { return m_uid; }
 
 		bool IsValid()
 		{
@@ -62,5 +63,7 @@ namespace StepWay
 		Scene* m_scene;
 		entt::entity m_id;
 
+		UID m_uid;
+		static LocalUIDGenerator s_uid_gen;
 	};
 }

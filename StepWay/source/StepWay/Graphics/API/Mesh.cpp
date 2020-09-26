@@ -12,49 +12,111 @@ namespace StepWay
 	{
 		namespace API
 		{
-			Mesh::Mesh()
+			Mesh::Mesh() :
+				m_buf_initialized(false),
+				m_buffer(VertexBuffer::Create(GAPI_TYPE::OPENGL)),
+				m_IBO(IndexBuffer::Create(GAPI_TYPE::OPENGL)),
+				m_VAO(VertexArray::Create(GAPI_TYPE::OPENGL))
 			{
+			}
+
+			Mesh::Mesh(const Mesh& other):
+				m_vertices(other.m_vertices),
+				m_indices(other.m_indices),
+				m_buffer(VertexBuffer::Create(GAPI_TYPE::OPENGL)),
+				m_IBO(IndexBuffer::Create(GAPI_TYPE::OPENGL)),
+				m_VAO(VertexArray::Create(GAPI_TYPE::OPENGL)),
+				m_buf_initialized(false)
+			{
+				if (other.IsBufInitialized())
+					SetUpBuffers();
+				int a = 2;
+			}
+
+			Mesh& Mesh::operator=(const Mesh& other)
+			{
+				if (&other == this) return *this;
+
+				this->m_vertices = other.m_vertices;
+				this->m_indices = other.m_indices;
+				this->m_buffer = std::shared_ptr<VertexBuffer>(VertexBuffer::Create(GAPI_TYPE::OPENGL));
+				this->m_IBO = std::shared_ptr<IndexBuffer>(IndexBuffer::Create(GAPI_TYPE::OPENGL));
+				this->m_VAO = std::shared_ptr<VertexArray>(VertexArray::Create(GAPI_TYPE::OPENGL));
+				m_buf_initialized = false;
+
+				if (other.m_buf_initialized)
+					SetUpBuffers();
+
+				return *this;
+			}
+
+			Mesh::Mesh(Mesh&& other) noexcept :
+				m_vertices(std::move(other.m_vertices)),
+				m_indices(std::move(other.m_indices)),
+				m_buffer(std::move(other.m_buffer)),
+				m_IBO(std::move(other.m_IBO)),
+				m_VAO(std::move(other.m_VAO)),
+				m_buf_initialized(other.m_buf_initialized)
+			{
+				//reinitialize other
+				other.m_buffer = std::shared_ptr<VertexBuffer>(VertexBuffer::Create(GAPI_TYPE::OPENGL));
+				other.m_IBO = std::shared_ptr<IndexBuffer>(IndexBuffer::Create(GAPI_TYPE::OPENGL));
+				other.m_VAO = std::shared_ptr<VertexArray>(VertexArray::Create(GAPI_TYPE::OPENGL));
+				
+				other.m_buf_initialized = false;
+			}
+
+			Mesh& Mesh::operator=(Mesh&& other) noexcept
+			{
+				this->m_vertices = std::move(other.m_vertices);
+				this->m_indices = std::move(other.m_indices);
+				this->m_buffer = std::move(other.m_buffer);
+				this->m_IBO = std::move(other.m_IBO);
+				this->m_VAO = std::move(other.m_VAO);
+				this->m_buf_initialized = other.m_buf_initialized;
+			
+				//reinitialize other
+				other.m_buffer = std::shared_ptr<VertexBuffer>(VertexBuffer::Create(GAPI_TYPE::OPENGL));
+				other.m_IBO = std::shared_ptr<IndexBuffer>(IndexBuffer::Create(GAPI_TYPE::OPENGL));
+				other.m_VAO = std::shared_ptr<VertexArray>(VertexArray::Create(GAPI_TYPE::OPENGL));
+
+				other.m_buf_initialized = false;
+
+				return *this;
 			}
 
 			Mesh::~Mesh()
 			{
-				if (m_initialized)
-					ShutDownBuffers();
 			}
 
 			void Mesh::SetUpBuffers()
 			{
-				m_buffer = std::shared_ptr<VertexBuffer>(VertexBuffer::Create(GAPI_TYPE::OPENGL));
 				m_buffer->SetUp(m_vertices);
-				m_buffer->Bind();
 				m_buffer->SetLayout({ ShaderDataType::FLOAT3, ShaderDataType::FLOAT3 });
 
-				m_IBO = std::shared_ptr<IndexBuffer>(IndexBuffer::Create(GAPI_TYPE::OPENGL));
 				m_IBO->SetUp(&m_indices[0], m_indices.size());
-				m_IBO->Bind();
 
-				m_VAO = std::shared_ptr<VertexArray>(VertexArray::Create(GAPI_TYPE::OPENGL));
-				m_VAO->SetUp();
-				m_VAO->Bind();
+				if(!m_VAO->IsInitialized())
+					m_VAO->SetUp();
+
 				m_VAO->SetVertexBuffer(m_buffer);
+				m_VAO->SetIndexBuffer(m_IBO);
 
-				m_initialized = true;
+				m_buf_initialized = true;
 			}
 
 			void Mesh::ShutDownBuffers()
 			{
-				if (!m_initialized) return;
-				m_initialized = false;
-				if(m_buffer!=nullptr)
-					m_buffer->ShutDown();
-				if(m_IBO!=nullptr)
-					m_IBO->ShutDown();
-				if(m_VAO!=nullptr)
-					m_VAO->ShutDown();
+				SW_CORE_ASSERT(m_buf_initialized, "shuting down not initialized buffers in mesh");
+				m_buffer->ShutDown();
+				m_IBO->ShutDown();
+				m_VAO->ShutDown();
+
+				m_buf_initialized = false;
 
 			}
 
-			void Mesh::make_flat_normals()
+			void Mesh::MakeFlatNormals()
 			{
 				std::vector<Vertex> nv;
 				std::vector<uint16> ni;

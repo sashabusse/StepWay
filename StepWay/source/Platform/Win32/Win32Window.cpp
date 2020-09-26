@@ -57,9 +57,7 @@ namespace StepWay
 
 				if (!RegisterClassExW(&wndclass))
 				{
-					SW_CORE_WARNING("Failed to Register Window Class");
-					DBG_BREAK();
-					return false;
+					SW_CORE_ASSERT(false, "Failed to Register Window Class")
 				}
 			}
 

@@ -31,7 +31,7 @@ namespace StepWay
 	int InputSystem::MakeID() const
 	{
 		static int last = 0;
-		if (last == 10000)throw "WTF!!? Why so much devices!?";
+		SW_CORE_ASSERT(last < 10000, "WTF!!? Why so much devices!?");
 		return ++last;
 	}
 

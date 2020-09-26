@@ -16,13 +16,18 @@ namespace StepWay
 				//maybe smth more appropriate here
 				GLVertexBuffer();
 
+				//load reload data
 				virtual void SetUp(void* data, int size) override;
+				//release buffer (raise errorr if not initialized)
 				virtual void ShutDown() override;
+
+				virtual ~GLVertexBuffer() { if (IsInitialized()) ShutDown(); };
+
+				virtual bool IsInitialized() override;
 
 				virtual void Bind() override;
 				virtual void UnBind() override;
 
-				virtual ~GLVertexBuffer() override;
 			private:
 				uint32 m_buffer;
 			};
@@ -34,12 +39,15 @@ namespace StepWay
 
 				virtual void SetUp(uint16* indices, int count) override;
 				virtual void ShutDown() override;
+				
+				virtual ~GLIndexBuffer() { if (IsInitialized()) ShutDown(); };
+
+				virtual bool IsInitialized() override;
+
 				virtual int GetCount()const override { return m_count; };
 
 				virtual void Bind();
 				virtual void UnBind();
-
-				virtual ~GLIndexBuffer() {};
 			private:
 			public:
 			private:

@@ -14,7 +14,7 @@ void main()
 	float ambient_strength = 0.1;
 	vec3 ambient = ambient_strength * light_color;
 
-	vec3 light_pos = vec3(0.0, 1.5, -1.0);
+	vec3 light_pos = vec3(0.0, 4, 4);
 
 	vec3 norm = normalize(f_normal);
 	vec3 light_dir = normalize(light_pos - f_pos);

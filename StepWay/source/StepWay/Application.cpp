@@ -52,7 +52,7 @@ namespace StepWay
 
 		if (!m_MainWindow->SetUp(prop))
 		{
-			SW_CORE_ERROR("failed to Init Window");
+			SW_CORE_ASSERT(false, "failed to Init Window");
 			return false;
 		}
 		m_MainWindow->SetEventCallback(SW_BIND_METH_1(Application::OnEvent));
@@ -99,13 +99,13 @@ namespace StepWay
 
 
 		m_MemoryManager.ShutDown();
-		SW_TRACE("Successful App Destruction");
+		SW_CORE_INFO("Successful App Destruction");
 	}
 
 
 	void Application::Run()
 	{
-		SW_CORE_TRACE("Entering Main Loop");
+		SW_CORE_INFO("Entering Main Loop");
 		while (m_IsRunning)
 		{
 			ImplOnNewFrameStart();
@@ -159,7 +159,7 @@ namespace StepWay
 		dispatcher.Dispatch<WindowDestroyEvent>(SW_BIND_METH_1(Application::OnMainWindowClose));
 		dispatcher.Dispatch<WindowResizeEndEvent>(SW_BIND_METH_1_TO(Graphics::API::GraphicsContext::OnWindowResize, &Application::GetContext()));
 
-		SW_CORE_WARNING(e.ToString());
+		SW_CORE_TRACE(e.ToString());
 
 		//Messaging overlays
 		for (auto it = m_overlays.end(); it != m_overlays.begin();)

@@ -19,7 +19,7 @@ namespace StepWay
 				case GL_INVALID_OPERATION:  return "GL_INVALID_OPERATION";
 				case GL_OUT_OF_MEMORY:  return "GL_OUT_OF_MEMORY";
 				}
-				SW_CORE_ASSERT(false, "Unknown GL error")
+				SW_CORE_ASSERT(false, "Unknown GL error");
 				return std::string();
 			}
 			

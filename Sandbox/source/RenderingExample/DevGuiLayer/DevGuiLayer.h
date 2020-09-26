@@ -11,7 +11,6 @@ public:
 
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
-	//virtual void OnUpdate() override;
 	virtual void OnGuiUpdate() override;
 	virtual void OnEvent(StepWay::Event& e) override;
 

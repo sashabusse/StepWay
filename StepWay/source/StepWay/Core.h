@@ -15,8 +15,11 @@
 	#error StepWay works ony under windows
 #endif
 
-
-#define DBG_BREAK __debugbreak
+#ifdef SW_DEBUG
+#define DBG_BREAK() __debugbreak()
+#else
+#define DBG_BREAK()
+#endif
 
 #define SW_ASSERT(cond, ...)\
  {if(!(cond)){SW_ERROR("Assertion failed on condition: {}",#cond);\
@@ -24,11 +27,13 @@
 			SW_ERROR("assertion message(arg):");\
 			SW_ERROR(__VA_ARGS__);DBG_BREAK();}}
 
+
 #define SW_CORE_ASSERT(cond, ...)\
  {if(!(cond)){SW_CORE_ERROR("Assertion failed on condition: {}",#cond);\
 			SW_CORE_ERROR("In function {2}\n\t\t{0}:{1}",__FILE__, __LINE__, __FUNCTION__);\
 			SW_CORE_ERROR("assertion message(arg):");\
 			SW_CORE_ERROR(__VA_ARGS__);DBG_BREAK();}}
+
 
 #define SW_BIND_METH(meth, ...) std::bind(&meth,this,__VA_ARGS__)
 #define SW_BIND_METH_TO(meth, inst, ...) std::bind(&meth, inst, __VA_ARGS__)

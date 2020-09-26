@@ -38,11 +38,11 @@ namespace StepWay
 		{
 			m_Layers.erase(it);
 			layer->OnDetach();
-			SW_CORE_INFO("Layer Poped: " + layer->ToString());
+			SW_CORE_TRACE("Layer Poped: " + layer->ToString());
 		}
 		else
 		{
-			SW_CORE_WARNING("trying to Pop layer that doesnt belong to this layerStack: " + layer->ToString());
+			SW_CORE_ASSERT(false, "trying to Pop layer that doesnt belong to this layerStack: " + layer->ToString());
 		}
 	}
 

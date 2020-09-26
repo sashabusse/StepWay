@@ -1,7 +1,7 @@
 #pragma once
 #include "Graphics/API/RenderingCommands.h"
 #include "entt.hpp"
-
+#include "UIDGenerator.h"
 
 
 namespace StepWay
@@ -12,6 +12,8 @@ namespace StepWay
 	{
 	public:
 		Scene();
+		UID GetUID() { return m_uid; };
+
 		Entity CreateEntity();
 		Entity CreateEntity(const std::string& name);
 		
@@ -33,7 +35,10 @@ namespace StepWay
 	private:
 	public:
 	private:
+		UID m_uid;
 		entt::registry m_reg;
+
+		static LocalUIDGenerator s_uid_gen;
 		friend Entity;
 	};
 

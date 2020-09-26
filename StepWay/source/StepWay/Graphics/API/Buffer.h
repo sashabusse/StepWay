@@ -71,9 +71,22 @@ namespace StepWay
 			class VertexBuffer
 			{
 			public:
-				VertexBuffer() : m_layout({}) {};
+				//not copyable
+				VertexBuffer(VertexBuffer&) = delete;
+				VertexBuffer(const VertexBuffer&) = delete;
+				VertexBuffer& operator=(VertexBuffer&) = delete;
+				VertexBuffer& operator=(const VertexBuffer&) = delete;
 
-				virtual void SetUp(void* data,int size) = 0;
+				//not moveable
+				VertexBuffer(VertexBuffer&&) = delete;
+				VertexBuffer& operator=(VertexBuffer&&) = delete;
+
+				VertexBuffer() : m_layout({}) {};
+				//should release(shut down) all the resources
+				virtual ~VertexBuffer() {};
+
+				//should load reload data
+				virtual void SetUp(void* data, int size) = 0;
 				template<typename T>
 				void SetUp(std::vector<T>& data)
 				{
@@ -81,12 +94,13 @@ namespace StepWay
 					SetUp(&data[0], data.size() * sizeof(data[0]));
 				};
 
+				//should release buffer (raise error if not Setted Up)
 				virtual void ShutDown() = 0;
+
+				virtual bool IsInitialized() = 0;
 
 				virtual void Bind() = 0;
 				virtual void UnBind() = 0;
-
-				virtual ~VertexBuffer() {};
 
 				void SetLayout(const BufferLayout& layout) { m_layout = layout; }
 				BufferLayout& GetLayout() { return m_layout; }
@@ -103,8 +117,26 @@ namespace StepWay
 			class IndexBuffer
 			{
 			public:
-				virtual void SetUp(uint16* indices,int count) = 0;
+				//not copyable
+				IndexBuffer(IndexBuffer&) = delete;
+				IndexBuffer(const IndexBuffer&) = delete;
+				IndexBuffer& operator=(IndexBuffer&) = delete;
+				IndexBuffer& operator=(const IndexBuffer&) = delete;
+
+				//not moveable
+				IndexBuffer(IndexBuffer&&) = delete;
+				IndexBuffer& operator=(IndexBuffer&&) = delete;
+
+				IndexBuffer() {};
+				//should release(shut down) all the resources
+				virtual ~IndexBuffer() {}
+
+				//load reload indices
+				virtual void SetUp(uint16* indices, int count) = 0;
+				//release buffer
 				virtual void ShutDown() = 0;
+
+				virtual bool IsInitialized() = 0;
 
 				virtual void Bind() = 0;
 				virtual void UnBind() = 0;
@@ -112,8 +144,6 @@ namespace StepWay
 				virtual int GetCount()const = 0;
 
 				static IndexBuffer* Create(GAPI_TYPE api);
-
-				virtual ~IndexBuffer() {};
 			private:
 			public:
 			private:

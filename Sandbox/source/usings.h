@@ -5,6 +5,7 @@
 //Core
 using StepWay::Application;
 using StepWay::Layer;
+using StepWay::UID;
 
 //Graphics
 using StepWay::Graphics::API::GAPI_TYPE;
@@ -36,13 +37,20 @@ using StepWay::Input::MouseKey;
 using StepWay::Input::Keyboard;
 using StepWay::Input::KeyboardKey;
 
+//Resource Loaders
 using StepWay::ResourceLoaders::Load3DModel;
+using StepWay::ResourceLoaders::LoadCube;
+using StepWay::ResourceLoaders::LoadPlaneXY;
+using StepWay::ResourceLoaders::LoadPlaneXZ;
+using StepWay::ResourceLoaders::LoadPlaneYZ;
 
-
+//Events
 using StepWay::Event;
 using StepWay::EventType;
 using StepWay::EntityCreateEvent;
+using StepWay::EntityDestroyEvent;
 using StepWay::SceneCreateEvent;
+using StepWay::SceneDestroyEvent;
 
 //DBG should be deleted
 using StepWay::DebugGUILayer;

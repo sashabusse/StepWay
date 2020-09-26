@@ -10,7 +10,11 @@
 
 namespace StepWay
 {
-	Scene::Scene()
+
+	LocalUIDGenerator Scene::s_uid_gen;
+
+	Scene::Scene():
+		m_uid(s_uid_gen.NextID())
 	{
 	}
 
@@ -55,8 +59,8 @@ namespace StepWay
 		m_reg.view<MeshComponent, TransformComponent>().each(
 			[&](entt::entity entity, MeshComponent& mesh_c, TransformComponent& transform_c)
 			{
-				if(mesh_c.visible)
-					renderer.DrawIndexed(mesh_c.mesh, transform_c.transform);
+				if (mesh_c.visible)
+					renderer.DrawIndexed(mesh_c.GetMesh() , transform_c.transform);
 			});
 	}
 

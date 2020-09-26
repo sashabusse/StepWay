@@ -84,13 +84,15 @@ namespace StepWay
 			glm::ivec2 Win32InputSystem::GetCursorPosition()
 			{
 				POINT pt;
-				SW_CORE_ASSERT(GetCursorPos(&pt), "Can't get cursor pos");
+				bool succes = GetCursorPos(&pt);
+				SW_CORE_ASSERT(succes, "Can't get cursor pos");
 				return glm::ivec2(pt.x, pt.y);
 			}
 
 			void Win32InputSystem::SetCursorPosition(glm::ivec2& pos)
 			{
-				SW_CORE_ASSERT(SetCursorPos(pos.x, pos.y), "Cant't set cursor position");
+				bool succes = SetCursorPos(pos.x, pos.y);
+				SW_CORE_ASSERT(succes, "Cant't set cursor position");
 			}
 
 			void Win32InputSystem::HideCursor(bool b)

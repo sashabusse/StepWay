@@ -13,7 +13,7 @@ StepWay::IResourceBundle * StepWay::IResourceBundle::CreateResourceBundle(const 
 		return SW_NEW DebugResourceBundle(path);
 		break;
 	default:
-		SW_ASSERT(false,"wrong BankType, no one of existing matches")
+		SW_ASSERT(false, "wrong BankType, no one of existing matches");
 		break;
 	}
 	return nullptr;

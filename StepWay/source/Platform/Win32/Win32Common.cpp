@@ -34,9 +34,7 @@ namespace StepWay
 
 					if (!RegisterClassExW(&wndclass))
 					{
-						SW_CORE_WARNING("Failed to Register Window Class");
-						DBG_BREAK();
-						return NULL;
+						SW_CORE_ASSERT(false, "Failed to Register Window Class")
 					}
 				}
 
@@ -46,12 +44,8 @@ namespace StepWay
 					100,//height
 					NULL, NULL, NULL, NULL);
 
-				if (wnd == NULL)
-				{
-					SW_CORE_WARNING("failed to create window");
-					DBG_BREAK();
-					return NULL;
-				}
+				SW_CORE_ASSERT(wnd != NULL, "failed to create window");
+				
 				return wnd;
 			}
 

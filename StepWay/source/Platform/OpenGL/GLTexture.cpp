@@ -308,7 +308,7 @@ namespace StepWay
 					gl_data_type = GL_FLOAT;
 					break;
 				default:
-					SW_ASSERT(false, "WRONG PIXEL FORMAT")
+					SW_ASSERT(false, "WRONG PIXEL FORMAT");
 					break;
 				}
 			}

@@ -14,18 +14,26 @@ namespace StepWay
 
 			void GLVertexArray::SetUp()
 			{
+				SW_CORE_ASSERT(m_VAO == NULL, "Re SetUp of VAO");
+
 				glGenVertexArrays(1, &m_VAO);
 				GL_CHECK_ERRORS();
 			}
 
 			void GLVertexArray::ShutDown()
 			{
+				SW_CORE_ASSERT(m_VAO != NULL, "trying to shut down NULL VAO");
+
 				glDeleteVertexArrays(1, &m_VAO);
 				GL_CHECK_ERRORS();
+
+				m_VAO = NULL;
 			}
 
 			void GLVertexArray::Bind()
 			{
+				SW_CORE_ASSERT(m_VAO != NULL, "trying to bind NULL VAO");
+
 				glBindVertexArray(m_VAO);
 				GL_CHECK_ERRORS();
 			}
@@ -36,10 +44,10 @@ namespace StepWay
 				GL_CHECK_ERRORS();
 			}
 
-			void GLVertexArray::SetVertexBuffer(std::shared_ptr<API::VertexBuffer> pBuffer)
+			void GLVertexArray::SetVertexBuffer(std::shared_ptr<API::VertexBuffer> pBuffer)//need rework and more testing
 			{
 				m_VertexBuffer = pBuffer;
-				glBindVertexArray(m_VAO);
+				Bind();
 				int i = 0;
 				for (auto& element : m_VertexBuffer->GetLayout())
 				{

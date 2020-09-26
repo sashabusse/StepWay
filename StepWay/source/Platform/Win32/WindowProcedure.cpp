@@ -90,8 +90,7 @@ namespace StepWay
 					//Raw Move
 					if (rawMouse.lLastX != 0 || rawMouse.lLastY != 0)
 					{
-						Input::Mouse::OnRawMouseMove(
-							(float)rawMouse.lLastX, (float)rawMouse.lLastY);
+						Input::Mouse::OnRawMouseMove((float)rawMouse.lLastX, (float)rawMouse.lLastY);
 					}
 
 

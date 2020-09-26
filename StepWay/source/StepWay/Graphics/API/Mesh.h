@@ -13,6 +13,7 @@ namespace StepWay
 	{
 		namespace API
 		{
+
 			struct Vertex {
 				Vertex() :
 					position({ 0,0,0 }),
@@ -28,17 +29,22 @@ namespace StepWay
 			{
 			public:
 				Mesh();
-				Mesh(const Mesh& other) = default;
-				Mesh(Mesh&& other) = default;
-				Mesh& operator= (Mesh&& other) = default;
-				Mesh& operator= (const Mesh& other) = default;
+
+				//copy
+				Mesh(const Mesh& other);
+				Mesh& operator= (const Mesh & other);
+
+				//move
+				Mesh(Mesh&& other) noexcept;
+				Mesh& operator= (Mesh&& other) noexcept;
 
 				~Mesh();
 
 				void SetUpBuffers();
 				void ShutDownBuffers();
+				bool IsBufInitialized() const { return m_buf_initialized; };
 
-				void make_flat_normals();
+				void MakeFlatNormals();
 
 				inline std::shared_ptr<VertexArray> GetVAO() { return m_VAO; };
 				inline std::shared_ptr<IndexBuffer> GetIBO() { return m_IBO; };
@@ -53,7 +59,7 @@ namespace StepWay
 				std::vector<uint16> m_indices;
 
 			private:
-				bool m_initialized = false;
+				bool m_buf_initialized;
 
 				std::shared_ptr<VertexBuffer> m_buffer;
 				std::shared_ptr<IndexBuffer> m_IBO;

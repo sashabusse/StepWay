@@ -11,14 +11,16 @@ namespace StepWay
 	class TransformComponent
 	{
 	public:
-		TransformComponent() :
-			transform(glm::mat4(1.0f)) {};
+		//copy
 		TransformComponent(const TransformComponent&) = default;
-		TransformComponent(TransformComponent&&) = default;
-		
 		TransformComponent& operator= (const TransformComponent&) = default;
+
+		//move
+		TransformComponent(TransformComponent&&) = default;
 		TransformComponent& operator= (TransformComponent&&) = default;
 
+		TransformComponent() :
+			transform(glm::mat4(1.0f)) {};
 		TransformComponent(const glm::mat4& _transform) :
 			transform(_transform) {};
 
@@ -50,23 +52,25 @@ namespace StepWay
 	class MeshComponent
 	{
 	public:
-		MeshComponent() :
-			mesh(),
-			visible(true) {};
 		MeshComponent(const MeshComponent&) = default;
 		MeshComponent(MeshComponent&&) = default;
 
 		MeshComponent& operator= (const MeshComponent&) = default;
 		MeshComponent& operator= (MeshComponent&&) = default;
 
-		//should be move instead of copy
-		MeshComponent(const Mesh & _mesh) :
-			mesh(_mesh) {};
-		MeshComponent(Mesh&& _mesh) :
-			mesh(std::move(_mesh)) {};
+		MeshComponent() :
+			mesh(new Mesh),
+			visible(true) {};
+		MeshComponent(std::shared_ptr<Mesh> _mesh) :
+			mesh(_mesh),
+			visible(true) {};
+
+		Mesh& GetMesh() { return *mesh; }
+		void SetMesh(std::shared_ptr<Mesh> _mesh) { mesh = _mesh; };
 
 		bool visible;
-		Mesh mesh;
+	private:
+		std::shared_ptr<Mesh> mesh;
 	};
 
 
