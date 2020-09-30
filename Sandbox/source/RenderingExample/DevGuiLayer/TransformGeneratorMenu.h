@@ -21,7 +21,7 @@ public:
 		if (type == TransformType::ROTATE) return "Rotate";
 	}
 
-	TransformMenu(TransformType type, int64 id) :
+	TransformMenu(TransformType type, UID id) :
 		m_type(type), m_id(id), m_data({ 0,0,0 }), m_enable(true), m_delete(false)
 	{
 		if (type == TransformType::TRANSLATE || type == TransformType::ROTATE)
@@ -38,7 +38,7 @@ public:
 private:
 	glm::vec3 m_data;
 	TransformType m_type;
-	int64 m_id;
+	UID m_id;
 	bool m_enable = true;
 	bool m_delete = false;
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include "TransformGeneratorMenu.h"
+#include "imgui.h"
 
 void TransformMenu::Draw()
 {
@@ -171,9 +172,8 @@ void TransfofmGeneratorMenu::DrawMode1()
 	ImGui::Combo("type", &m_nxt_type, types, IM_ARRAYSIZE(types));
 	if (ImGui::Button("Add Transform"))
 	{
-		static int64 id = 0;
-		m_transforms.push_back(TransformMenu((TransformMenu::TransformType)m_nxt_type, id));
-		id++;
+		static LocalUIDGenerator uid_gen;
+		m_transforms.push_back(TransformMenu((TransformMenu::TransformType)m_nxt_type, uid_gen.NextID()));
 	}
 
 }

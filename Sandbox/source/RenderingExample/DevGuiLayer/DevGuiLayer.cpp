@@ -1,4 +1,6 @@
 #include "DevGuiLayer.h"
+#include "Platform\Win32\DragNDropManager.h"
+#include "imgui.h"
 
 void DevGuiLayer::OnAttach()
 {
@@ -10,10 +12,15 @@ void DevGuiLayer::OnDetach()
 
 void DevGuiLayer::OnGuiUpdate()
 {
+	bool opened = true;
+	ImGui::ShowDemoWindow(&opened);
+
 	//statistics
 	if (m_MainMenuState.ShowAppStatistics) { ImGui::ShowMetricsWindow(&(m_MainMenuState.ShowAppStatistics)); }
 	//style settings
 	if (m_MainMenuState.ShowStyleEditor) { ImGui::Begin("Style Editor", &(m_MainMenuState.ShowStyleEditor)); ImGui::ShowStyleEditor(); ImGui::End(); }
+	//Log console
+	if (m_MainMenuState.ShowLogConsole) { m_log_console.Draw(&m_MainMenuState.ShowLogConsole); }
 
 	//main debug window
 	ImGui::Begin("Debug GUI", 0, ImGuiWindowFlags_MenuBar);
@@ -25,6 +32,7 @@ void DevGuiLayer::OnGuiUpdate()
 		{
 			ImGui::MenuItem("Metrics", NULL, &(m_MainMenuState.ShowAppStatistics));
 			ImGui::MenuItem("Style Editor", NULL, &(m_MainMenuState.ShowStyleEditor));
+			ImGui::MenuItem("Log Console", NULL, &(m_MainMenuState.ShowLogConsole));
 			ImGui::EndMenu();
 		}
 
@@ -40,7 +48,12 @@ void DevGuiLayer::OnGuiUpdate()
 		}
 		ImGui::EndMenuBar();
 	}
+
+	ImGui::InputFloat("X", &ImGui::GetIO().MousePos.x);
+	ImGui::InputFloat("Y", &ImGui::GetIO().MousePos.y);
+
 	ImGui::End();
+
 
 	//Draw all the scene managers
 	for (SceneManagerMenu& sc_menu : m_scene_managers)
@@ -53,9 +66,6 @@ void DevGuiLayer::OnGuiUpdate()
 
 void DevGuiLayer::OnEvent(StepWay::Event& e)
 {
-
-	//bool opened = true;
-	//ImGui::ShowDemoWindow(&opened);
 
 	if (e.GetEventType() == EventType::SCENE_CREATED)
 	{

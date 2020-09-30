@@ -141,7 +141,7 @@ static void ImGui_ImplWin32_UpdateMousePos()
     }
 
     // Set mouse position
-    io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
+    //io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
     POINT pos;
     if (HWND active_window = ::GetForegroundWindow())
         if (active_window == g_hWnd || ::IsChild(active_window, g_hWnd))

@@ -23,6 +23,8 @@ int main()
 	StepWay::Log::Init();
 	StepWay::Graphics::API::RenderingCommands::Init();
 
+	
+
 	StepWay::Application* app = StepWay::CreateApplication();
 	if (!app->SetUp())
 	{

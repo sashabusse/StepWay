@@ -78,7 +78,7 @@ namespace StepWay
 			m_BorderSize = { prop.luX - newRect.left,prop.luY - newRect.top };
 
 			m_wnd = CreateWindowExW(NULL, SW_DEFAULT_WND_CLASS_NAME, 
-				Utility::StrToWstr(m_title).c_str(), WS_OVERLAPPEDWINDOW,
+				Utility::Utf8ToUtf16(m_title).c_str(), WS_OVERLAPPEDWINDOW,
 				newRect.left, newRect.top,//position
 				newRect.right - newRect.left,//width
 				newRect.bottom - newRect.top,//height
@@ -92,6 +92,10 @@ namespace StepWay
 			ShowWindow(m_wnd, SW_NORMAL);
 			UpdateWindow(m_wnd);
 
+			//register drag and drop
+			HRESULT res = RegisterDragDrop(m_wnd, &m_drag_manager);
+			SW_CORE_ASSERT(res == S_OK, "failed to register drag and drop");
+
 			return true;
 		}
 
@@ -99,6 +103,7 @@ namespace StepWay
 		//Delete binding and destroys window
 		void Win32Window::ShutDown()
 		{
+			RevokeDragDrop(m_wnd);
 			ReleaseDC(m_wnd,m_DC);
 			Close();
 		}
@@ -124,7 +129,7 @@ namespace StepWay
 
 		std::wstring Win32Window::GetWTitle() const
 		{
-			return Utility::StrToWstr(m_title);
+			return Utility::Utf8ToUtf16(m_title);
 		}
 
 		int Win32Window::GetX() const
@@ -249,7 +254,7 @@ namespace StepWay
 		void Win32Window::PollEvents()
 		{
 			MSG msg;
-			while (PeekMessageW(&msg, m_wnd, NULL, NULL, PM_REMOVE))
+			while (PeekMessageW(&msg, NULL, NULL, NULL, PM_REMOVE))
 			{
 				TranslateMessage(&msg);
 				DispatchMessageW(&msg);

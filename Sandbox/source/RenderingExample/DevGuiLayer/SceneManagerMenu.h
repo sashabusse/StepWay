@@ -13,12 +13,17 @@ public:
 
 	void Draw();
 private:
+	void DrawName();
 	void DrawTransform();
 	void DrawMesh();
 	void DrawCamera();
 	void DrawNativeScript();
 private:
 	Entity m_entity;
+	int m_add_comp_select;
+
+	//Tag
+	char m_name_inp[512];
 
 	//Transform Menu
 	TransfofmGeneratorMenu m_tr_gen_menu;

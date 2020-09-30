@@ -1,11 +1,8 @@
 #pragma once
 #include "Layers/Layer.h"
-#include "Core.h"
 #include "Window.h"
 #include "Graphics/API/Context.h"
-#include "imgui.h"
-#include "DebugTab.h"
-#include <functional>
+#include "Input/InputDefs.h"
 
 namespace StepWay
 {
@@ -26,37 +23,35 @@ namespace StepWay
 
 		std::string ToString() const override;
 		std::wstring ToWString() const override;
-
-		void AddTab(const DbgTab& tab);
 		
-
 	private:
 		void OS_SetUp();
 		void OS_ShutDown();
 		void OS_NewFrame();
-
+		
 		void OnMouseButtonPress(Event& e);
+		void SetMouseButtonPress(Input::MouseKey keyCode);
 		void OnMouseButtonRelease(Event& e);
+		void SetMouseButtonRelease(Input::MouseKey keyCode);
 		void OnMouseScroll(Event& e);
+
 		void OnKeyPress(Event& e);
 		void OnKeyRelease(Event& e);
 		void OnCharInput(Event& e);
 
-		void ShowDebugWindow(bool* p_opened);
+		void OnDragEnter(Event& e);
+		void OnDragLeave(Event& e);
+		void OnDragOver(Event& e);
+		void OnDrop(Event& e);
+
 	private:
 		Window* m_pWindow;
 		GraphicsContext* m_Context;
-
-
-		bool m_ShowDebugWindow;
-		ImGuiWindowFlags m_window_flags;
-		struct MainMenuState
-		{
-			bool ShowAppStatistics;
-			bool ShowStyleEditor;
-		} m_MainMenuState;
-
-		std::vector<DbgTab> m_Tabs;
+		
+		//drag and drop
+		bool m_external_dragging;
+		std::vector<std::wstring> m_dragged_filenames;
+		std::vector<std::wstring>* m_p_dragged_filenames;
 	};
 
 

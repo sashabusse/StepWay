@@ -58,7 +58,8 @@ namespace StepWay
 					const Mesh& mesh,
 					const glm::mat4& model)
 				{
-					DrawIndexed(mesh.GetVAO(), mesh.GetIBO(), model);
+					if(mesh.IsBufInitialized())
+						DrawIndexed(mesh.GetVAO(), mesh.GetIBO(), model);
 				}
 				inline void DrawIndexed(
 					const std::shared_ptr<API::VertexArray> VAO,

@@ -1,4 +1,5 @@
 #include "SceneManagerMenu.h"
+#include "imgui.h"
 #pragma once
 
 void SceneManagerMenu::OnEvent(StepWay::Event& e)
@@ -48,6 +49,12 @@ void SceneManagerMenu::Draw()
 		}
 	}
 
+	//add new entity
+	if (ImGui::Button("Add Entity"))
+	{
+		m_scene.CreateEntity();
+	}
+
 	ImGui::End();
 
 	ImGui::PopID();
@@ -57,6 +64,7 @@ void SceneManagerMenu::Draw()
 
 EntityMenu::EntityMenu(Entity& ent):
 	m_entity(ent),
+	m_add_comp_select(0),
 	//Mesh
 	m_primitive_type(0),
 	m_cube_pos({0,0,0}),
@@ -65,26 +73,90 @@ EntityMenu::EntityMenu(Entity& ent):
 	m_plane_pos({0,0,0}),
 	m_plane_size({1,1})
 {
+	memset(m_name_inp, 0, sizeof(m_name_inp));
 	memset(m_load_path, 0, sizeof(m_load_path));
+
+	if (m_entity.HasComponent<NameComponent>())
+	{
+		std::string& name = m_entity.GetComponent<NameComponent>().name;
+		SW_CORE_ASSERT(name.size() < 500, "too long name of entity");
+		strcpy(m_name_inp, name.c_str());
+	}
 };
 
 void EntityMenu::Draw()
 {
 	ImGui::PushID(m_entity.GetUID());
 
-	std::string name = std::string("Entity") + std::to_string(m_entity.GetUID());
+	std::string name = std::string("Entity ") + std::to_string(m_entity.GetUID());
 	if (m_entity.HasComponent<NameComponent>())
 		name = m_entity.GetComponent<NameComponent>().name;
 
-	if (ImGui::CollapsingHeader(name.c_str()))
+	if (ImGui::CollapsingHeader((name+"###collapse").c_str()))
 	{
+		DrawName();
 		DrawTransform();
 		DrawMesh();
 		DrawCamera();
 		DrawNativeScript();
 
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		std::vector<char*> comp_available;
+
+		if (!m_entity.HasComponent<NameComponent>())
+			comp_available.push_back("Name");
+		if (!m_entity.HasComponent<MeshComponent>())
+			comp_available.push_back("Mesh");
+		if (!m_entity.HasComponent<CameraComponent>())
+			comp_available.push_back("Camera");
+
+		ImGui::Text("Add Component");
+		ImGui::Combo("##add component", &m_add_comp_select, &comp_available[0], comp_available.size());
+		ImGui::SameLine();
+		if (ImGui::Button("Add"))
+		{
+			if (comp_available[m_add_comp_select] == "Name")
+			{
+				m_entity.AddComponent<NameComponent>();
+			}
+			else if (comp_available[m_add_comp_select] == "Mesh")
+			{
+				m_entity.AddComponent<MeshComponent>();
+			}
+			else if (comp_available[m_add_comp_select] == "Camera")
+			{
+				m_entity.AddComponent<CameraComponent>();
+			}
+		}
+		ImGui::Spacing(); ImGui::Spacing();
 	}
+
+
 	ImGui::PopID();
+}
+
+void EntityMenu::DrawName()
+{
+	if (m_entity.HasComponent<NameComponent>())
+	{
+		if (ImGui::TreeNode("Name"))
+		{
+			NameComponent& name_c = m_entity.GetComponent<NameComponent>();
+
+			ImGui::InputText("##Name Input", m_name_inp, IM_ARRAYSIZE(m_name_inp));
+			ImGui::SameLine();
+			if (ImGui::Button("Set Name"))
+			{
+				name_c.name = m_name_inp;
+			}
+
+			ImGui::TreePop();
+			ImGui::Separator();
+		}
+
+	}
 }
 
 void EntityMenu::DrawTransform()
@@ -128,11 +200,28 @@ void EntityMenu::DrawMesh()
 
 			ImGui::Text("Load From File");
 			ImGui::InputText("##path", m_load_path, IM_ARRAYSIZE(m_load_path));
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("FILES"))
+				{
+					std::vector<std::wstring>* dropped_fnames = *(std::vector<std::wstring>**)payload->Data;
+					strcpy(m_load_path, StepWay::Utility::Utf16ToUtf8((*dropped_fnames)[0]).c_str());
+				}
+
+				ImGui::EndDragDropTarget();
+			}
+
 			ImGui::SameLine();
 			if (ImGui::Button("Load"))
 			{
 				mesh_c.SetMesh(Load3DModel(m_load_path)[0]);
 				mesh_c.GetMesh().SetUpBuffers();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("..."))
+			{
+				std::vector<std::string> fnames = Application::GetFileSystem().FileChooseDialog();
+				strcpy(m_load_path, fnames[0].c_str());
 			}
 
 			ImGui::Separator();
@@ -156,7 +245,7 @@ void EntityMenu::DrawMesh()
 				}
 				ImGui::PopID();
 			}
-			else
+			else//Plane
 			{
 				ImGui::PushID("Plane");
 

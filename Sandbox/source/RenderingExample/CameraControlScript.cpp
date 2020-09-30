@@ -18,19 +18,19 @@ void CameraControlScript::OnUpdate()
 	glm::vec2 offset({ 0,0 });
 	if (Keyboard::IsKeyPressed(KeyboardKey::KEY_W))
 	{
-		offset.x += 1.0 / 200.0;
+		offset.x += 1.0 / 100.0;
 	}
 	if (Keyboard::IsKeyPressed(KeyboardKey::KEY_S))
 	{
-		offset.x -= 1.0 / 200.0;
+		offset.x -= 1.0 / 100.0;
 	}
 	if (Keyboard::IsKeyPressed(KeyboardKey::KEY_A))
 	{
-		offset.y -= 1.0 / 200.0;
+		offset.y -= 1.0 / 100.0;
 	}
 	if (Keyboard::IsKeyPressed(KeyboardKey::KEY_D))
 	{
-		offset.y += 1.0 / 200.0;
+		offset.y += 1.0 / 100.0;
 	}
 
 	glm::vec2 mouse_delt({ 0,0 });

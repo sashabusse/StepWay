@@ -2,8 +2,10 @@
 #include "DebugGUILayer.h"
 #include "Events/MouseEvents.h"
 #include "Events/KeyEvent.h"
-#include "imgui.h"
+#include "Events/DragNDropEvents.h"
 #include "OpenGL/imgui_impl_opengl3.h"
+#include "imgui.h"
+#include <algorithm>
 
 static char* glsl_version = "#version 130";
 
@@ -13,12 +15,10 @@ namespace StepWay
 
 	DebugGUILayer::DebugGUILayer(Window * window, GraphicsContext* Context) :
 		m_Context(Context),
-		m_ShowDebugWindow(true),
 		m_pWindow(window),
-		m_window_flags(0)
+		m_external_dragging(false),
+		m_p_dragged_filenames(&m_dragged_filenames)
 	{
-		m_MainMenuState.ShowAppStatistics = false;
-		m_MainMenuState.ShowStyleEditor = false;
 	}
 
 	DebugGUILayer::~DebugGUILayer()
@@ -31,6 +31,10 @@ namespace StepWay
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+
+		//Load font
+		io.Fonts->AddFontFromFileTTF("..\\Resource\\fonts\\Roboto-Regular.ttf", 13, NULL, io.Fonts->GetGlyphRangesCyrillic());
+		io.Fonts->Build();
 
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
@@ -46,15 +50,6 @@ namespace StepWay
 			SW_CORE_ASSERT(false, "no realization of debug gui for such GAPI type");
 		}
 		
-		m_window_flags |= ImGuiWindowFlags_MenuBar;
-		//if (no_titlebar)        m_window_flags |= ImGuiWindowFlags_NoTitleBar;
-		//if (no_scrollbar)       m_window_flags |= ImGuiWindowFlags_NoScrollbar;
-		//if (no_move)            m_window_flags |= ImGuiWindowFlags_NoMove;
-		//if (no_resize)          m_window_flags |= ImGuiWindowFlags_NoResize;
-		//if (no_collapse)        m_window_flags |= ImGuiWindowFlags_NoCollapse;
-		//if (no_nav)             m_window_flags |= ImGuiWindowFlags_NoNav;
-		//if (no_background)      m_window_flags |= ImGuiWindowFlags_NoBackground;
-		//if (no_bring_to_front)  m_window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 	}
 
 	void DebugGUILayer::OnDetach()
@@ -83,6 +78,19 @@ namespace StepWay
 		}
 		OS_NewFrame();
 		ImGui::NewFrame();
+
+		//sourcing external drag and drop
+		if (m_external_dragging)
+		{
+			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceExtern))
+			{
+				ImGui::SetDragDropPayload("FILES", &m_p_dragged_filenames, sizeof(m_p_dragged_filenames));
+				ImGui::BeginTooltip();
+				ImGui::Text("FILES");
+				ImGui::EndTooltip();
+				ImGui::EndDragDropSource();
+			}
+		}
 	}
 
 	void DebugGUILayer::EndFrame()
@@ -107,24 +115,32 @@ namespace StepWay
 		EventDispatcher dispatcher(e);
 
 		dispatcher.Dispatch<MouseButtonPressEvent>(SW_BIND_METH_1(DebugGUILayer::OnMouseButtonPress));
-
 		dispatcher.Dispatch<MouseButtonReleaseEvent>(SW_BIND_METH_1(DebugGUILayer::OnMouseButtonRelease));
-
 		dispatcher.Dispatch<MouseScrollEvent>(SW_BIND_METH_1(DebugGUILayer::OnMouseScroll));
 
 		dispatcher.Dispatch<KeyPressEvent>(SW_BIND_METH_1(DebugGUILayer::OnKeyPress));
-
 		dispatcher.Dispatch<KeyReleaseEvent>(SW_BIND_METH_1(DebugGUILayer::OnKeyRelease));
 
 		dispatcher.Dispatch<CharInputEvent>(SW_BIND_METH_1(DebugGUILayer::OnCharInput));
+
+		//dragNdrop
+		dispatcher.Dispatch<DragEnterEvent>(SW_BIND_METH_1(DebugGUILayer::OnDragEnter));
+		dispatcher.Dispatch<DragLeaveEvent>(SW_BIND_METH_1(DebugGUILayer::OnDragLeave));
+		dispatcher.Dispatch<DragOverEvent>(SW_BIND_METH_1(DebugGUILayer::OnDragOver));
+		dispatcher.Dispatch<DropEvent>(SW_BIND_METH_1(DebugGUILayer::OnDrop));
 	}
 
 
 	void DebugGUILayer::OnMouseButtonPress(Event& e)
 	{
-		ImGuiIO& io = ImGui::GetIO();
 		MouseButtonPressEvent* pPressEvent = (MouseButtonPressEvent*)(&e);
-		Input::MouseKey keyCode = pPressEvent->GetKeyCode();
+		SetMouseButtonPress(pPressEvent->GetKeyCode());
+	}
+
+	void DebugGUILayer::SetMouseButtonPress(MouseKey keyCode)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		
 		int button = 0;
 		if (keyCode == MouseKey::L_BUTTON) { button = 0; }
 		if (keyCode == MouseKey::R_BUTTON) { button = 1; }
@@ -138,11 +154,14 @@ namespace StepWay
 
 	void DebugGUILayer::OnMouseButtonRelease(Event& e)
 	{
+		MouseButtonReleaseEvent* pReleaseEvent = (MouseButtonReleaseEvent*)(&e);
+		SetMouseButtonRelease(pReleaseEvent->GetKeyCode());
+	}
+
+	void DebugGUILayer::SetMouseButtonRelease(MouseKey keyCode)
+	{
 		ImGuiIO& io = ImGui::GetIO();
 
-		MouseButtonReleaseEvent* pReleaseEvent = (MouseButtonReleaseEvent*)(&e);
-		Input::MouseKey keyCode = pReleaseEvent->GetKeyCode();
-		
 		int button = 0;
 		if (keyCode == MouseKey::L_BUTTON) { button = 0; }
 		if (keyCode == MouseKey::R_BUTTON) { button = 1; }
@@ -152,7 +171,6 @@ namespace StepWay
 		if (!ImGui::IsAnyMouseDown() && m_pWindow->HaveInputCapture())
 			m_pWindow->ReleaseInputCapture();
 	}
-
 
 	void DebugGUILayer::OnMouseScroll(Event& e)
 	{
@@ -187,6 +205,38 @@ namespace StepWay
 		// You can also use ToAscii()+GetKeyboardState() to retrieve characters.
 		if (ChEvent->GetWChar() > 0 && ChEvent->GetWChar() < 0x10000)
 			io.AddInputCharacter(ChEvent->GetWChar());
+	}
+
+	void DebugGUILayer::OnDragEnter(Event& e)
+	{
+		//saying about click happened
+		SetMouseButtonPress(MouseKey::L_BUTTON);
+		m_external_dragging = true;
+	}
+
+	void DebugGUILayer::OnDragLeave(Event& e)
+	{
+		//here may be error and drop occur when leaving the area
+		//saying about click released
+		SetMouseButtonRelease(MouseKey::L_BUTTON);
+		m_external_dragging = false;
+	}
+
+	void DebugGUILayer::OnDragOver(Event& e)
+	{
+		DragOverEvent* doe = (DragOverEvent*)&e;
+		//make change pos
+		ImGuiIO& io = ImGui::GetIO();
+		io.MousePos = ImVec2(doe->GetX(), doe->GetY());
+	}
+
+	void DebugGUILayer::OnDrop(Event& e)
+	{
+		DropEvent* de = (DropEvent*)&e;
+		m_dragged_filenames = (de->GetFilenames());
+		//saying about click released
+		SetMouseButtonRelease(MouseKey::L_BUTTON);
+		m_external_dragging = false;
 	}
 
 	
@@ -234,11 +284,6 @@ namespace StepWay
 	std::wstring DebugGUILayer::ToWString() const
 	{
 		return L"DebugGUILayer(by imgui)";
-	}
-
-	void DebugGUILayer::AddTab(const DbgTab & tab)
-	{
-		m_Tabs.push_back(tab);
 	}
 
 }

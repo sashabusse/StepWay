@@ -1,6 +1,7 @@
 #pragma once
 #include "../../usings.h"
 #include "SceneManagerMenu.h"
+#include "LogConsole.h"
 
 
 
@@ -31,8 +32,10 @@ private:
 	{
 		bool ShowAppStatistics = false;
 		bool ShowStyleEditor = false;
+		bool ShowLogConsole = false;
 	} m_MainMenuState;
 
 	std::list<SceneManagerMenu> m_scene_managers;
+	LogConsole m_log_console;
 	
 };

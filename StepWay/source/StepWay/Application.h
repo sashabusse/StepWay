@@ -8,7 +8,8 @@
 #include "Layers/DebugGUI/DebugGUILayer.h"
 #include "Graphics/API/Context.h"
 #include "Input/InputSystem.h"
-
+#include "FileSystem.h"
+#include "OS.h"
 
 namespace StepWay
 {
@@ -23,6 +24,7 @@ namespace StepWay
 		static Window& GetWindow() { return m_Instance->GetMainWindow(); }
 		static Graphics::API::GraphicsContext& GetContext() { return m_Instance->GetMainContext(); }
 		static Input::InputSystem& GetInputSystem() { return m_Instance->GetMainInputSystem(); }
+		static FileSystem& GetFileSystem() { return *(m_Instance->m_file_system); }
 	public:
 		Application();
 		bool SetUp();
@@ -56,6 +58,8 @@ namespace StepWay
 		Window* m_MainWindow;
 		Graphics::API::GraphicsContext* m_MainContext;
 		Input::InputSystem* m_InputSystem;
+		FileSystem* m_file_system;
+		OS* m_OS;
 		MemoryManager m_MemoryManager;
 
 		LayerStack m_layers;

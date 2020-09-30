@@ -4,14 +4,14 @@
 namespace StepWay
 {	namespace Utility
 	{
-	static std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+	static std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
-	std::string WStrToStr(const std::wstring& wstr)
+	std::string Utf16ToUtf8(const std::wstring& wstr)
 	{
 		return converter.to_bytes(wstr);
 	}
 
-	std::wstring StrToWstr(const std::string& str)
+	std::wstring Utf8ToUtf16(const std::string& str)
 	{
 		return converter.from_bytes(str);
 	}

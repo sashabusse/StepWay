@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <string>
 #include "Window.h"
+#include "DragNDropManager.h"
 
 
 
@@ -92,6 +93,9 @@ namespace StepWay
 			//windows specific
 			HWND m_wnd;
 			HDC m_DC;
+
+			//drag n drop
+			DragNDropManager m_drag_manager;
 
 		};
 

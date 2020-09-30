@@ -34,7 +34,12 @@ namespace StepWay
 	{
 		m_IsRunning = false;
 
-		m_MemoryManager.SetUp();//rename it
+		m_OS = OS::Create();
+		m_OS->SetUp();
+
+		m_MemoryManager.SetUp();
+
+		m_file_system = FileSystem::Create();
 
 		m_InputSystem = Input::InputSystem::Create();
 		m_InputSystem->SetUp();
@@ -97,8 +102,13 @@ namespace StepWay
 		m_InputSystem->ShutDown();
 		Input::InputSystem::Destroy(m_InputSystem);
 
+		delete m_file_system;
 
 		m_MemoryManager.ShutDown();
+
+		m_OS->ShutDown();
+		delete m_OS;
+
 		SW_CORE_INFO("Successful App Destruction");
 	}
 

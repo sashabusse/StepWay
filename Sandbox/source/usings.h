@@ -1,10 +1,12 @@
 #pragma once
 
 #include "StepWay.h"
+#include "Utility.h"
 
 //Core
 using StepWay::Application;
 using StepWay::Layer;
+using StepWay::LocalUIDGenerator;
 using StepWay::UID;
 
 //Graphics
@@ -52,23 +54,5 @@ using StepWay::EntityDestroyEvent;
 using StepWay::SceneCreateEvent;
 using StepWay::SceneDestroyEvent;
 
-//DBG should be deleted
-using StepWay::DebugGUILayer;
-using StepWay::DbgTab;
-using StepWay::DbgWidget;
-using StepWay::DbgSliderf;
-using StepWay::DbgSlider2f;
-using StepWay::DbgSlider3f;
-using StepWay::DbgSlider4f;
-using StepWay::DbgSlideri;
-using StepWay::DbgSlider2i;
-using StepWay::DbgSlider3i;
-using StepWay::DbgSlider4i;
-using StepWay::DbgInputf;
-using StepWay::DbgInput2f;
-using StepWay::DbgInput3f;
-using StepWay::DbgInput4f;
-using StepWay::DbgCheckBox;
-using StepWay::DbgColor4f;
 
 
