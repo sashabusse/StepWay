@@ -1,5 +1,6 @@
 #include "SceneManagerMenu.h"
 #include "imgui.h"
+#include "misc/cpp/imgui_stdlib.h"
 #pragma once
 
 void SceneManagerMenu::OnEvent(StepWay::Event& e)
@@ -73,14 +74,12 @@ EntityMenu::EntityMenu(Entity& ent):
 	m_plane_pos({0,0,0}),
 	m_plane_size({1,1})
 {
-	memset(m_name_inp, 0, sizeof(m_name_inp));
-	memset(m_load_path, 0, sizeof(m_load_path));
 
 	if (m_entity.HasComponent<NameComponent>())
 	{
 		std::string& name = m_entity.GetComponent<NameComponent>().name;
 		SW_CORE_ASSERT(name.size() < 500, "too long name of entity");
-		strcpy(m_name_inp, name.c_str());
+		m_name_inp = name;
 	}
 };
 
@@ -145,7 +144,7 @@ void EntityMenu::DrawName()
 		{
 			NameComponent& name_c = m_entity.GetComponent<NameComponent>();
 
-			ImGui::InputText("##Name Input", m_name_inp, IM_ARRAYSIZE(m_name_inp));
+			ImGui::InputText("##Name Input", &m_name_inp);
 			ImGui::SameLine();
 			if (ImGui::Button("Set Name"))
 			{
@@ -199,13 +198,13 @@ void EntityMenu::DrawMesh()
 			ImGui::Separator();
 
 			ImGui::Text("Load From File");
-			ImGui::InputText("##path", m_load_path, IM_ARRAYSIZE(m_load_path));
+			ImGui::InputText("##path", &m_load_path);
 			if (ImGui::BeginDragDropTarget())
 			{
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("FILES"))
 				{
 					std::vector<std::wstring>* dropped_fnames = *(std::vector<std::wstring>**)payload->Data;
-					strcpy(m_load_path, StepWay::Utility::Utf16ToUtf8((*dropped_fnames)[0]).c_str());
+					m_load_path = StepWay::Utility::Utf16ToUtf8((*dropped_fnames)[0]);
 				}
 
 				ImGui::EndDragDropTarget();
@@ -221,7 +220,7 @@ void EntityMenu::DrawMesh()
 			if (ImGui::Button("..."))
 			{
 				std::vector<std::string> fnames = Application::GetFileSystem().FileChooseDialog();
-				strcpy(m_load_path, fnames[0].c_str());
+				m_load_path = fnames[0];
 			}
 
 			ImGui::Separator();

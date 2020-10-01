@@ -23,13 +23,13 @@ private:
 	int m_add_comp_select;
 
 	//Tag
-	char m_name_inp[512];
+	std::string m_name_inp;
 
 	//Transform Menu
 	TransfofmGeneratorMenu m_tr_gen_menu;
 
 	//Mesh
-	char m_load_path[512];
+	std::string m_load_path;
 	int m_primitive_type;
 	glm::vec3 m_cube_pos;
 	glm::vec3 m_cube_size;
