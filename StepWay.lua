@@ -62,14 +62,16 @@ project "StepWay"
 		"%{AddIncludeDirs.glm}",
 		"%{AddIncludeDirs.stb_image}",
 		"%{AddIncludeDirs.entt}",
-		"%{AddIncludeDirs.assimp}"
+		"%{AddIncludeDirs.assimp}",
+		"%{AddIncludeDirs.expression_evaluation"
 		
 	}
 	-- Links---------------------------------------------------------------------------------------
 	links
 	{
 		"glad",
-		"imgui"
+		"imgui",
+		"expression_evaluation"
 	}
 	filter("system:windows")
 		links

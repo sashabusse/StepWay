@@ -45,12 +45,14 @@ workspace "StepWay"
 	AddIncludeDirs["stb_image"] = "StepWay/vendor/stb_image/"
 	AddIncludeDirs["entt"] = "StepWay/vendor/entt/"
 	AddIncludeDirs["assimp"] = "StepWay/vendor/Assimp/include"
+	AddIncludeDirs["expression_evaluation"] = "StepWay/vendor/expression_evaluation/"
 	
 	include "StepWay.lua"
 	include "Sandbox.lua"
 	--include "Tests/Tests.lua"
 	include "StepWay/vendor/glad.lua"
 	include "StepWay/vendor/imgui.lua"
+	include "StepWay/vendor/expression_evaluation.lua"
 	
 	--Projects are defined in such order
 	--[[

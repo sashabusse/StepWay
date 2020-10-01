@@ -1,13 +1,36 @@
 #pragma once
 #include "TransformGeneratorMenu.h"
 #include "imgui.h"
+#include "misc/cpp/imgui_stdlib.h"
+#include "expression_evaluation.h"
+
+TransformMenu::TransformMenu(TransformType type, UID id) :
+	m_type(type), m_id(id), m_data({ 0,0,0 }),
+	m_enable(true), m_delete(false)
+{
+	if (type == TransformType::TRANSLATE || type == TransformType::ROTATE)
+		m_data = glm::vec3({ 0,0,0 });
+	else if (type == TransformType::SCALE)
+		m_data = glm::vec3({ 1,1,1 });
+	for (int i = 0; i < 4; i++) 
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			if (i == j)
+				m_matrix_eval[i][j] = "1.0";
+			else
+				m_matrix_eval[i][j] = "0.0";
+		}
+
+	}
+};
 
 void TransformMenu::Draw()
 {
 	ImGui::PushID(m_id);
 	ImGui::Separator();
 	
-	const char* m_types[] = { "Translate", "Scale", "Rotate" };
+	const char* m_types[] = { "Translate", "Scale", "Rotate", "Matrix" };
 	ImGui::Combo("Type", (int*)&m_type, m_types, IM_ARRAYSIZE(m_types));
 
 	if (m_type == TransformType::TRANSLATE)
@@ -21,6 +44,20 @@ void TransformMenu::Draw()
 	else if (m_type == TransformType::ROTATE)
 	{
 		ImGui::DragFloat3("##data", &m_data.x, 1.0f, -180, 180, "%.2f");
+	}
+	else if (m_type == TransformType::MATRIX)
+	{
+		ImGui::PushItemWidth(60);
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				std::string input_name = std::string("##") + std::to_string(i) + std::to_string(j);
+				ImGui::InputText(input_name.c_str(), &m_matrix_eval[i][j]);
+				if (j != 3) ImGui::SameLine();
+			}
+		}
+		ImGui::PopItemWidth();
 	}
 	ImGui::Checkbox("Enable", &m_enable);
 	ImGui::SameLine();
@@ -47,6 +84,18 @@ glm::mat4 TransformMenu::GenerateMatrix()
 	{
 		glm::vec3 rot_rad = glm::radians(m_data);
 		return glm::eulerAngleXYZ(rot_rad.x, rot_rad.y, rot_rad.z);
+	}
+	else if (m_type == TransformType::MATRIX)
+	{
+		glm::mat4 result;
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				result[i][j] = ExprEval::Evaluate(m_matrix_eval[i][j]);
+			}
+		}
+		return result;
 	}
 };
 
@@ -168,7 +217,7 @@ void TransfofmGeneratorMenu::DrawMode1()
 			transforms_it++;
 	}
 
-	const char* types[] = { "Translate", "Scale", "Rotate" };
+	const char* types[] = { "Translate", "Scale", "Rotate", "Matrix" };
 	ImGui::Combo("type", &m_nxt_type, types, IM_ARRAYSIZE(types));
 	if (ImGui::Button("Add Transform"))
 	{

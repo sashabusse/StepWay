@@ -11,7 +11,8 @@ public:
 	{
 		TRANSLATE = 0, 
 		SCALE,
-		ROTATE
+		ROTATE,
+		MATRIX
 	};
 
 	static std::string TypeToString(TransformType type)
@@ -19,16 +20,12 @@ public:
 		if (type == TransformType::TRANSLATE) return "Translate";
 		if (type == TransformType::SCALE) return "Scale";
 		if (type == TransformType::ROTATE) return "Rotate";
+		if (type == TransformType::MATRIX) return "Matrix";
+		SW_CORE_ASSERT(false, "wrong transform type");
+		return std::string();
 	}
 
-	TransformMenu(TransformType type, UID id) :
-		m_type(type), m_id(id), m_data({ 0,0,0 }), m_enable(true), m_delete(false)
-	{
-		if (type == TransformType::TRANSLATE || type == TransformType::ROTATE)
-			m_data = glm::vec3({ 0,0,0 });
-		else if (type == TransformType::SCALE)
-			m_data = glm::vec3({ 1,1,1 });
-	};
+	TransformMenu(TransformType type, UID id);
 	
 	void Draw();
 	void SetType(TransformType type) { m_type = type; };
@@ -37,6 +34,7 @@ public:
 
 private:
 	glm::vec3 m_data;
+	std::string m_matrix_eval[4][4];
 	TransformType m_type;
 	UID m_id;
 	bool m_enable = true;

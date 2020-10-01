@@ -1,5 +1,5 @@
-project "imgui"
-	location "imgui"
+project "expression_evaluation"
+	location "expression_evaluation"
 	
 	targetname  "%{prj.name}"
 	targetdir ("../../bin/" .. outputdirname .. "/%{prj.name}/")
@@ -14,14 +14,14 @@ project "imgui"
 
 	files
 	{
-		"imgui/*.cpp",
-		"imgui/misc/cpp/*.cpp",
-		"imgui/*.h"
+		"expression_evaluation/*.cpp",
+		"expression_evaluation/*.hpp",
+		"expression_evaluation/*.h"
 	}
 
 	includedirs
 	{		
-		"imgui/"
+		"expression_evaluation/"
 	}
 	
 	links
@@ -31,7 +31,12 @@ project "imgui"
 	defines
 	{
 	}
-
+	
+	buildoptions 
+	{
+	"/bigobj" 
+	}
+	
 	filter("configurations:Debug")
 		runtime "Debug"
 		symbols "On"

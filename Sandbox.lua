@@ -40,6 +40,7 @@ project "Sandbox"
 		"%{AddIncludeDirs.glm}",
 		"%{AddIncludeDirs.stb_image}",
 		"%{AddIncludeDirs.entt}",
+		"%{AddIncludeDirs.expression_evaluation}",
 		"StepWay/source/",
 		"StepWay/source/StepWay/"
 	}
