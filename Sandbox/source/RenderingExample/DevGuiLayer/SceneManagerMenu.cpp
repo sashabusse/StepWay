@@ -101,6 +101,8 @@ void EntityMenu::Draw()
 
 		ImGui::Separator();
 		ImGui::Spacing();
+		
+		ImGui::Text("Add Component");
 
 		std::vector<char*> comp_available;
 
@@ -110,23 +112,27 @@ void EntityMenu::Draw()
 			comp_available.push_back("Mesh");
 		if (!m_entity.HasComponent<CameraComponent>())
 			comp_available.push_back("Camera");
-
-		ImGui::Text("Add Component");
+		
 		ImGui::Combo("##add component", &m_add_comp_select, &comp_available[0], comp_available.size());
+
 		ImGui::SameLine();
 		if (ImGui::Button("Add"))
 		{
-			if (comp_available[m_add_comp_select] == "Name")
+			if (m_add_comp_select < comp_available.size())
 			{
-				m_entity.AddComponent<NameComponent>();
-			}
-			else if (comp_available[m_add_comp_select] == "Mesh")
-			{
-				m_entity.AddComponent<MeshComponent>();
-			}
-			else if (comp_available[m_add_comp_select] == "Camera")
-			{
-				m_entity.AddComponent<CameraComponent>();
+				if (comp_available[m_add_comp_select] == "Name")
+				{
+					m_entity.AddComponent<NameComponent>();
+				}
+				else if (comp_available[m_add_comp_select] == "Mesh")
+				{
+					m_entity.AddComponent<MeshComponent>();
+				}
+				else if (comp_available[m_add_comp_select] == "Camera")
+				{
+					m_entity.AddComponent<CameraComponent>();
+				}
+				m_add_comp_select = 0;
 			}
 		}
 		ImGui::Spacing(); ImGui::Spacing();
