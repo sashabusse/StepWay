@@ -48,9 +48,6 @@ namespace StepWay
 			style.WindowRounding = 0.0f;
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
-		//Load font
-		io.Fonts->AddFontFromFileTTF("..\\Resource\\fonts\\Roboto-Regular.ttf", 13, NULL, io.Fonts->GetGlyphRangesCyrillic());
-		io.Fonts->Build();
 		
 		// Setup Platform/Renderer bindings
 		OS_SetUp();
