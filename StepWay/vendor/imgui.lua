@@ -16,12 +16,15 @@ project "imgui"
 	{
 		"imgui/*.cpp",
 		"imgui/misc/cpp/*.cpp",
-		"imgui/*.h"
+		"imgui/*.h",
+		"implot/*.cpp",
+		"implot/*.h"
 	}
 
 	includedirs
 	{		
-		"imgui/"
+		"imgui/",
+		"implot/"
 	}
 	
 	links

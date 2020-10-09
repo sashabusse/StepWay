@@ -36,6 +36,7 @@ project "Sandbox"
 	{
 		"%{AddIncludeDirs.spdlog}",
 		"%{AddIncludeDirs.imgui}",
+		"%{AddIncludeDirs.implot}",
 		"%{AddIncludeDirs.glad}",
 		"%{AddIncludeDirs.glm}",
 		"%{AddIncludeDirs.stb_image}",

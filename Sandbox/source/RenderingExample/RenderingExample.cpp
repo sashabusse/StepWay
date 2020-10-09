@@ -1,7 +1,6 @@
 #include "RenderingExample.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
-#include "glad/glad.h"
 #include <memory>
 
 #include "CameraControlScript.h"

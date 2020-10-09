@@ -69,6 +69,9 @@ namespace StepWay
 				virtual void SetWrapModeS(WrapMode mode) = 0;
 				virtual void SetWrapModeT(WrapMode mode) = 0;
 
+				//To delete when it will be possible to push Texture class to the imgui
+				virtual void* GetNativeTexture() = 0;
+
 				static Texture* Create(GAPI_TYPE api);
 				virtual ~Texture() {};
 			private:

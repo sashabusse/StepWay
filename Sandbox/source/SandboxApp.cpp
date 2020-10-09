@@ -1,7 +1,12 @@
 #include "StepWay.h"
 #include "EntryPoint.h"
-#include "RenderingExample/RenderingExample.h"
-#include "RenderingExample/DevGuiLayer/DevGuiLayer.h"
+
+//Rendering Example
+//#include "RenderingExample/RenderingExample.h"
+//#include "RenderingExample/DevGuiLayer/DevGuiLayer.h"
+
+//Wavelet Transform
+#include "WaveletTransform/MainLayer.h"
 
 class SandboxApp :public StepWay::Application
 {
@@ -12,8 +17,13 @@ public:
 	{
 		SW_CORE_LEVEL_INFO();
 		SW_LEVEL_TRACE();
-		PushOverLay(std::shared_ptr<StepWay::Layer>(new DevGuiLayer()));
-		PushLayer(std::shared_ptr<StepWay::Layer>(new RenderingExample()));
+		//Rendering Example Layers
+		//PushOverLay(std::shared_ptr<StepWay::Layer>(new DevGuiLayer()));
+		//PushLayer(std::shared_ptr<StepWay::Layer>(new RenderingExample()));
+
+		//Wavelet Transform 
+		PushOverLay(std::shared_ptr<StepWay::Layer>(new MainLayer()));
+
 		return true;
 	};
 	void ImplShutDown()

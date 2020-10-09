@@ -1,0 +1,2 @@
+what need to be done if remake implementation
+1. mouse coordinates for drag and drop

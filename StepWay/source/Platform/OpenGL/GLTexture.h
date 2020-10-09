@@ -34,6 +34,9 @@ namespace StepWay
 				void SetWrapModeS(WrapMode mode) override;
 				void SetWrapModeT(WrapMode mode) override;
 
+				//to delete later 
+				virtual void* GetNativeTexture() override { return (void*)(intptr_t)m_id; };
+
 				virtual ~GLTexture() {};
 			private:
 				void loadImageByName(std::string filename);

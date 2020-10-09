@@ -40,6 +40,7 @@ workspace "StepWay"
 	AddIncludeDirs = {}
 	AddIncludeDirs["spdlog"] =  "StepWay/vendor/spdlog/include/"
 	AddIncludeDirs["imgui"] = "StepWay/vendor/imgui/"
+	AddIncludeDirs["implot"] = "StepWay/vendor/implot/"
 	AddIncludeDirs["glad"] = "StepWay/vendor/glad/include/"
 	AddIncludeDirs["glm"] = "StepWay/vendor/glm/"
 	AddIncludeDirs["stb_image"] = "StepWay/vendor/stb_image/"

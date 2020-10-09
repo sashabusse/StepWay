@@ -5,6 +5,7 @@
 #include "Events/DragNDropEvents.h"
 #include "OpenGL/imgui_impl_opengl3.h"
 #include "imgui.h"
+#include "implot.h"
 #include <algorithm>
 
 static char* glsl_version = "#version 130";
@@ -29,15 +30,27 @@ namespace StepWay
 	{
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		ImPlot::CreateContext();
+		ImGuiIO& io = ImGui::GetIO();
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-
-		//Load font
-		io.Fonts->AddFontFromFileTTF("..\\Resource\\fonts\\Roboto-Regular.ttf", 13, NULL, io.Fonts->GetGlyphRangesCyrillic());
-		io.Fonts->Build();
+		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Enable Docking
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    // Enable Multi-Viewport / Platform Windows
+		//io.ConfigViewportsNoAutoMerge = true;
+		//io.ConfigViewportsNoTaskBarIcon = true;
 
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
+		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+		ImGuiStyle& style = ImGui::GetStyle();
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			style.WindowRounding = 0.0f;
+			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+		}
+		//Load font
+		io.Fonts->AddFontFromFileTTF("..\\Resource\\fonts\\Roboto-Regular.ttf", 13, NULL, io.Fonts->GetGlyphRangesCyrillic());
+		io.Fonts->Build();
 		
 		// Setup Platform/Renderer bindings
 		OS_SetUp();
@@ -62,6 +75,8 @@ namespace StepWay
 		{
 			SW_CORE_ASSERT(false, "something wrong with gui Detaching");
 		}
+		OS_ShutDown();
+		ImPlot::DestroyContext();
 		ImGui::DestroyContext();
 
 	}
@@ -96,16 +111,26 @@ namespace StepWay
 	void DebugGUILayer::EndFrame()
 	{
 		ImGui::Render();
-		m_Context->MakeCurrent();
+		//m_Context->MakeCurrent();
 
 		if (m_Context->GetGAPI_TYPE() == Graphics::API::GAPI_TYPE::OPENGL)
 		{
-			//glViewport(0, 0, display_w, display_h);
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		}
 		else
 		{
 			SW_CORE_ASSERT(false, "something wrong with gui render");
+		}
+
+		// Update and Render additional Platform Windows
+		// (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
+		//  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
+		ImGuiIO& io = ImGui::GetIO();
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+			m_Context->MakeCurrent();
 		}
 	}
 

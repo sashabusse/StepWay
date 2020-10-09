@@ -58,6 +58,7 @@ project "StepWay"
 		"StepWay/source/Platform",
 		"%{AddIncludeDirs.spdlog}",
 		"%{AddIncludeDirs.imgui}",
+		"%{AddIncludeDirs.implot}",
 		"%{AddIncludeDirs.glad}",
 		"%{AddIncludeDirs.glm}",
 		"%{AddIncludeDirs.stb_image}",
